@@ -8,7 +8,7 @@ import (
 
 	gc "launchpad.net/gocheck"
 
-	"github.com/juju/juju/names"
+	"github.com/juju/names"
 )
 
 type machineSuite struct{}
