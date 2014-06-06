@@ -28,20 +28,9 @@ var validKinds = map[string]bool{
 	NetworkTagKind:  true,
 }
 
-var tagSuffixToId = map[string]func(string) string{
-	UnitTagKind:     unitTagSuffixToId,
-	MachineTagKind:  machineTagSuffixToId,
-	RelationTagKind: relationTagSuffixToKey,
-}
-
-var verifyId = map[string]func(string) bool{
-	UnitTagKind:     IsUnit,
-	MachineTagKind:  IsMachine,
-	ServiceTagKind:  IsService,
-	UserTagKind:     IsUser,
-	EnvironTagKind:  IsEnvironment,
-	RelationTagKind: IsRelation,
-	NetworkTagKind:  IsNetwork,
+// A Tag tags things that are taggable.
+type Tag interface {
+	fmt.Stringer // all Tags should be able to print themselves
 }
 
 // TagKind returns one of the *TagKind constants for the given tag, or
@@ -78,11 +67,43 @@ func ParseTag(tag, expectKind string) (kind, id string, err error) {
 	if expectKind != "" && kind != expectKind {
 		return "", "", invalidTagError(tag, expectKind)
 	}
-	if toId := tagSuffixToId[kind]; toId != nil {
-		id = toId(id)
+	switch kind {
+	case UnitTagKind:
+		id = unitTagSuffixToId(id)
+	case MachineTagKind:
+		id = machineTagSuffixToId(id)
+	case RelationTagKind:
+		id = relationTagSuffixToKey(id)
 	}
-	if verify := verifyId[kind]; verify != nil && !verify(id) {
-		return "", "", invalidTagError(tag, kind)
+	switch kind {
+	case UnitTagKind:
+		if !IsUnit(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case MachineTagKind:
+		if !IsMachine(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case ServiceTagKind:
+		if !IsService(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case UserTagKind:
+		if !IsUser(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case EnvironTagKind:
+		if !IsEnvironment(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case RelationTagKind:
+		if !IsRelation(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case NetworkTagKind:
+		if !IsNetwork(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
 	}
 	return kind, id, nil
 }
