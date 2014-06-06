@@ -8,16 +8,6 @@ import (
 	"strings"
 )
 
-var validKinds = map[string]bool{
-	UnitTagKind:     true,
-	MachineTagKind:  true,
-	ServiceTagKind:  true,
-	EnvironTagKind:  true,
-	UserTagKind:     true,
-	RelationTagKind: true,
-	NetworkTagKind:  true,
-}
-
 // A Tag tags things that are taggable.
 type Tag interface {
 	fmt.Stringer // all Tags should be able to print themselves
@@ -27,10 +17,18 @@ type Tag interface {
 // an error if none matches.
 func TagKind(tag string) (string, error) {
 	i := strings.Index(tag, "-")
-	if i <= 0 || !validKinds[tag[:i]] {
+	if i <= 0 || !validKinds(tag[:i]) {
 		return "", fmt.Errorf("%q is not a valid tag", tag)
 	}
 	return tag[:i], nil
+}
+
+func validKinds(kind string) bool {
+	switch kind {
+	case UnitTagKind, MachineTagKind, ServiceTagKind, EnvironTagKind, UserTagKind, RelationTagKind, NetworkTagKind:
+		return true
+	}
+	return false
 }
 
 func splitTag(tag string) (kind, rest string, err error) {
