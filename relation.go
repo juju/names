@@ -28,15 +28,21 @@ func IsRelation(key string) bool {
 	return validRelation.MatchString(key) || validPeerRelation.MatchString(key)
 }
 
+type relationTag struct {
+	key string
+}
+
+func (t relationTag) String() string { return RelationTagKind + "-" + t.key }
+
 // RelationTag returns the tag for the relation with the given key.
-func RelationTag(relationKey string) string {
+func RelationTag(relationKey string) Tag {
 	if !IsRelation(relationKey) {
 		panic(fmt.Sprintf("%q is not a valid relation key", relationKey))
 	}
 	// Replace both ":" with "." and the " " with "#".
 	relationKey = strings.Replace(relationKey, ":", ".", 2)
 	relationKey = strings.Replace(relationKey, " ", "#", 1)
-	return RelationTagKind + "-" + relationKey
+	return relationTag{key: relationKey}
 }
 
 func relationTagSuffixToKey(s string) string {

@@ -42,7 +42,7 @@ func (s *networkSuite) TestNetworkNames(c *gc.C) {
 		c.Check(names.IsNetwork(test.pattern), gc.Equals, test.valid)
 		if test.valid {
 			expectTag := fmt.Sprintf("%s-%s", names.NetworkTagKind, test.pattern)
-			c.Check(names.NetworkTag(test.pattern), gc.Equals, expectTag)
+			c.Check(names.NetworkTag(test.pattern).String(), gc.Equals, expectTag)
 		} else {
 			expectErr := fmt.Sprintf("%q is not a valid network name", test.pattern)
 			testNetworkTag := func() { names.NetworkTag(test.pattern) }

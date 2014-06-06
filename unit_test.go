@@ -16,7 +16,7 @@ type unitSuite struct{}
 var _ = gc.Suite(&unitSuite{})
 
 func (s *unitSuite) TestUnitTag(c *gc.C) {
-	c.Assert(names.UnitTag("wordpress/2"), gc.Equals, "unit-wordpress-2")
+	c.Assert(names.UnitTag("wordpress/2").String(), gc.Equals, "unit-wordpress-2")
 }
 
 var unitNameTests = []struct {

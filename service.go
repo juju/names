@@ -17,11 +17,15 @@ const (
 var validService = regexp.MustCompile("^" + ServiceSnippet + "$")
 
 // IsService returns whether name is a valid service name.
-func IsService(name string) bool {
-	return validService.MatchString(name)
+var IsService = validService.MatchString
+
+type serviceTag struct {
+	name string
 }
 
+func (t serviceTag) String() string { return ServiceTagKind + "-" + t.name }
+
 // ServiceTag returns the tag for the service with the given name.
-func ServiceTag(serviceName string) string {
-	return ServiceTagKind + "-" + serviceName
+func ServiceTag(serviceName string) Tag {
+	return serviceTag{name: serviceName}
 }

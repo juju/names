@@ -19,9 +19,7 @@ const (
 var validMachine = regexp.MustCompile("^" + MachineSnippet + "$")
 
 // IsMachine returns whether id is a valid machine id.
-func IsMachine(id string) bool {
-	return validMachine.MatchString(id)
-}
+var IsMachine = validMachine.MatchString
 
 // IsContainerMachine returns whether id is a valid container machine id.
 func IsContainerMachine(id string) bool {
@@ -32,10 +30,11 @@ type machineTag struct {
 	id string
 }
 
-func (t machineTag) String() string { return strings.Replace(MachineTagKind+"-"+t.id, "/", "-", -1) }
+func (t machineTag) String() string { return MachineTagKind + "-" + t.id }
 
 // MachineTag returns the tag for the machine with the given id.
 func MachineTag(id string) Tag {
+	id = strings.Replace(id, "/", "-", -1)
 	return machineTag{id: id}
 }
 

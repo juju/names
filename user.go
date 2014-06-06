@@ -12,11 +12,17 @@ const UserTagKind = "user"
 var validName = regexp.MustCompile("^[a-zA-Z][a-zA-Z0-9.-]*[a-zA-Z0-9]$")
 
 // IsUser returns whether id is a valid user id.
-func IsUser(name string) bool {
-	return validName.MatchString(name)
+var IsUser = validName.MatchString
+
+type userTag struct {
+	name string
+}
+
+func (t userTag) String() string {
+	return UserTagKind + "-" + t.name
 }
 
 // UserTag returns the tag for the user with the given name.
-func UserTag(userName string) string {
-	return UserTagKind + "-" + userName
+func UserTag(userName string) Tag {
+	return userTag{name: userName}
 }
