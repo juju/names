@@ -28,12 +28,15 @@ func IsContainerMachine(id string) bool {
 	return validMachine.MatchString(id) && strings.Contains(id, "/")
 }
 
+type machineTag struct {
+	id string
+}
+
+func (t machineTag) String() string { return strings.Replace(MachineTagKind+"-"+t.id, "/", "-", -1) }
+
 // MachineTag returns the tag for the machine with the given id.
-func MachineTag(id string) string {
-	tag := MachineTagKind + "-" + id
-	// Containers require "/" to be replaced by "-".
-	tag = strings.Replace(tag, "/", "-", -1)
-	return tag
+func MachineTag(id string) Tag {
+	return machineTag{id: id}
 }
 
 func machineTagSuffixToId(s string) string {

@@ -14,9 +14,11 @@ type environTag struct {
 }
 
 // EnvironTag returns the tag of an environment with the given environment UUID.
-func EnvironTag(uuid string) string {
-	return EnvironTagKind + "-" + uuid
+func EnvironTag(uuid string) Tag {
+	return environTag{uuid: uuid}
 }
+
+func (t environTag) String() string { return EnvironTagKind + "-" + t.uuid }
 
 // IsEnvironment returns whether id is a valid environment UUID.
 func IsEnvironment(id string) bool {
