@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+const MachineTagKind = "machine"
+
 const (
 	ContainerTypeSnippet = "[a-z]+"
 	ContainerSnippet     = "(/" + ContainerTypeSnippet + "/" + NumberSnippet + ")"

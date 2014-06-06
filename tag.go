@@ -8,16 +8,6 @@ import (
 	"strings"
 )
 
-const (
-	UnitTagKind     = "unit"
-	MachineTagKind  = "machine"
-	ServiceTagKind  = "service"
-	EnvironTagKind  = "environment"
-	UserTagKind     = "user"
-	RelationTagKind = "relation"
-	NetworkTagKind  = "network"
-)
-
 var validKinds = map[string]bool{
 	UnitTagKind:     true,
 	MachineTagKind:  true,

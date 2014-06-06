@@ -8,6 +8,8 @@ import (
 	"regexp"
 )
 
+const NetworkTagKind = "network"
+
 var validNetwork = regexp.MustCompile("^([a-z0-9]+(-[a-z0-9]+)*)$")
 
 // IsNetwork reports whether name is a valid network name.

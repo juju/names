@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const UnitTagKind = "unit"
+
 var validUnit = regexp.MustCompile("^" + ServiceSnippet + "/" + NumberSnippet + "$")
 
 // UnitTag returns the tag for the unit with the given name.

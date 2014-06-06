@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+const EnvironTagKind = "environment"
+
 type environTag struct {
 	uuid string
 }

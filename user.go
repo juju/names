@@ -7,6 +7,8 @@ import (
 	"regexp"
 )
 
+const UserTagKind = "user"
+
 var validName = regexp.MustCompile("^[a-zA-Z][a-zA-Z0-9.-]*[a-zA-Z0-9]$")
 
 // IsUser returns whether id is a valid user id.

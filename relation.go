@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const RelationTagKind = "relation"
+
 const RelationSnippet = "[a-z][a-z0-9]*([_-][a-z0-9]+)*"
 
 // Relation keys have the format "service1:relName1 service2:relName2".
