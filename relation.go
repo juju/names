@@ -34,7 +34,7 @@ func RelationTag(relationKey string) string {
 	// Replace both ":" with "." and the " " with "#".
 	relationKey = strings.Replace(relationKey, ":", ".", 2)
 	relationKey = strings.Replace(relationKey, " ", "#", 1)
-	return makeTag(RelationTagKind, relationKey)
+	return RelationTagKind + "-" + relationKey
 }
 
 func relationTagSuffixToKey(s string) string {

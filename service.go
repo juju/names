@@ -21,5 +21,5 @@ func IsService(name string) bool {
 
 // ServiceTag returns the tag for the service with the given name.
 func ServiceTag(serviceName string) string {
-	return makeTag(ServiceTagKind, serviceName)
+	return ServiceTagKind + "-" + serviceName
 }

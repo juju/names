@@ -20,7 +20,7 @@ func UnitTag(unitName string) string {
 		panic(fmt.Sprintf("%q is not a valid unit name", unitName))
 	}
 	unitName = unitName[:i] + "-" + unitName[i+1:]
-	return makeTag(UnitTagKind, unitName)
+	return UnitTagKind + "-" + unitName
 }
 
 // IsUnit returns whether name is a valid unit name.

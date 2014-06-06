@@ -16,5 +16,5 @@ func IsUser(name string) bool {
 
 // UserTag returns the tag for the user with the given name.
 func UserTag(userName string) string {
-	return makeTag(UserTagKind, userName)
+	return UserTagKind + "-" + userName
 }

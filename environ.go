@@ -7,9 +7,13 @@ import (
 	"strings"
 )
 
+type environTag struct {
+	uuid string
+}
+
 // EnvironTag returns the tag of an environment with the given environment UUID.
 func EnvironTag(uuid string) string {
-	return makeTag(EnvironTagKind, uuid)
+	return EnvironTagKind + "-" + uuid
 }
 
 // IsEnvironment returns whether id is a valid environment UUID.

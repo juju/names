@@ -51,10 +51,6 @@ func splitTag(tag string) (kind, rest string, err error) {
 	return kind, tag[len(kind)+1:], nil
 }
 
-func makeTag(kind, rest string) string {
-	return kind + "-" + rest
-}
-
 // ParseTag parses a tag into its kind and identifier
 // components. It returns an error if the tag is malformed,
 // or if expectKind is not empty and the kind is

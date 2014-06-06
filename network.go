@@ -20,5 +20,5 @@ func NetworkTag(name string) string {
 	if !IsNetwork(name) {
 		panic(fmt.Sprintf("%q is not a valid network name", name))
 	}
-	return makeTag(NetworkTagKind, name)
+	return NetworkTagKind + "-" + name
 }

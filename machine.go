@@ -28,7 +28,7 @@ func IsContainerMachine(id string) bool {
 
 // MachineTag returns the tag for the machine with the given id.
 func MachineTag(id string) string {
-	tag := makeTag(MachineTagKind, id)
+	tag := MachineTagKind + "-" + id
 	// Containers require "/" to be replaced by "-".
 	tag = strings.Replace(tag, "/", "-", -1)
 	return tag
