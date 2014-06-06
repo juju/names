@@ -20,9 +20,9 @@ func Test(t *stdtesting.T) {
 }
 
 func (s *machineSuite) TestMachineTag(c *gc.C) {
-	c.Assert(names.MachineTag("10").String(), gc.Equals, "machine-10")
+	c.Assert(names.NewMachineTag("10").String(), gc.Equals, "machine-10")
 	// Check a container id.
-	c.Assert(names.MachineTag("10/lxc/1").String(), gc.Equals, "machine-10-lxc-1")
+	c.Assert(names.NewMachineTag("10/lxc/1").String(), gc.Equals, "machine-10-lxc-1")
 }
 
 var machineIdTests = []struct {

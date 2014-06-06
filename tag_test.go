@@ -133,11 +133,11 @@ var parseTagTests = []struct {
 }}
 
 var makeTag = map[string]func(string) names.Tag{
-	names.MachineTagKind:  names.MachineTag,
+	names.MachineTagKind:  names.NewMachineTag,
 	names.UnitTagKind:     names.UnitTag,
 	names.ServiceTagKind:  names.ServiceTag,
 	names.RelationTagKind: names.RelationTag,
-	names.EnvironTagKind:  names.EnvironTag,
+	names.EnvironTagKind:  names.NewEnvironTag,
 	names.UserTagKind:     names.UserTag,
 	names.NetworkTagKind:  names.NetworkTag,
 }

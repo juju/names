@@ -8,13 +8,12 @@ var tagEqualityTests = []struct {
 	expected Tag
 	want     Tag
 }{
-	{EnvironTag("fred"), environTag{uuid: "fred"}},
-	{MachineTag("0"), machineTag{id: "0"}},
-	{MachineTag("10/lxc/1"), machineTag{id: "10-lxc-1"}},
+	{NewMachineTag("0"), MachineTag{id: "0"}},
+	{NewMachineTag("10/lxc/1"), MachineTag{id: "10-lxc-1"}},
 	{UnitTag("mysql/1"), unitTag{name: "mysql-1"}},
 	{ServiceTag("ceph"), serviceTag{name: "ceph"}},
 	{RelationTag("wordpress:haproxy"), relationTag{key: "wordpress.haproxy"}},
-	{EnvironTag("local"), environTag{uuid: "local"}},
+	{NewEnvironTag("local"), EnvironTag{uuid: "local"}},
 	{UserTag("admin"), userTag{name: "admin"}},
 	{NetworkTag("eth0"), networkTag{name: "eth0"}},
 }
