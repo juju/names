@@ -10,12 +10,12 @@ var tagEqualityTests = []struct {
 }{
 	{NewMachineTag("0"), MachineTag{id: "0"}},
 	{NewMachineTag("10/lxc/1"), MachineTag{id: "10-lxc-1"}},
-	{UnitTag("mysql/1"), unitTag{name: "mysql-1"}},
-	{ServiceTag("ceph"), serviceTag{name: "ceph"}},
-	{RelationTag("wordpress:haproxy"), relationTag{key: "wordpress.haproxy"}},
+	{NewUnitTag("mysql/1"), UnitTag{name: "mysql-1"}},
+	{NewServiceTag("ceph"), ServiceTag{name: "ceph"}},
+	{NewRelationTag("wordpress:haproxy"), RelationTag{key: "wordpress.haproxy"}},
 	{NewEnvironTag("local"), EnvironTag{uuid: "local"}},
-	{UserTag("admin"), userTag{name: "admin"}},
-	{NetworkTag("eth0"), networkTag{name: "eth0"}},
+	{NewUserTag("admin"), UserTag{name: "admin"}},
+	{NewNetworkTag("eth0"), NetworkTag{name: "eth0"}},
 }
 
 type equalitySuite struct{}

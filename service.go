@@ -19,13 +19,13 @@ var validService = regexp.MustCompile("^" + ServiceSnippet + "$")
 // IsService returns whether name is a valid service name.
 var IsService = validService.MatchString
 
-type serviceTag struct {
+type ServiceTag struct {
 	name string
 }
 
-func (t serviceTag) String() string { return ServiceTagKind + "-" + t.name }
+func (t ServiceTag) String() string { return ServiceTagKind + "-" + t.name }
 
-// ServiceTag returns the tag for the service with the given name.
-func ServiceTag(serviceName string) Tag {
-	return serviceTag{name: serviceName}
+// NewServiceTag returns the tag for the service with the given name.
+func NewServiceTag(serviceName string) Tag {
+	return ServiceTag{name: serviceName}
 }

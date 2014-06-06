@@ -13,24 +13,24 @@ const UnitTagKind = "unit"
 
 var validUnit = regexp.MustCompile("^" + ServiceSnippet + "/" + NumberSnippet + "$")
 
-type unitTag struct {
+type UnitTag struct {
 	name string
 }
 
-func (t unitTag) String() string {
+func (t UnitTag) String() string {
 	return UnitTagKind + "-" + t.name
 }
 
-// UnitTag returns the tag for the unit with the given name.
+// NewUnitTag returns the tag for the unit with the given name.
 // It will panic if the given unit name is not valid.
-func UnitTag(unitName string) Tag {
+func NewUnitTag(unitName string) Tag {
 	// Replace only the last "/" with "-".
 	i := strings.LastIndex(unitName, "/")
 	if i <= 0 || !IsUnit(unitName) {
 		panic(fmt.Sprintf("%q is not a valid unit name", unitName))
 	}
 	unitName = unitName[:i] + "-" + unitName[i+1:]
-	return unitTag{name: unitName}
+	return UnitTag{name: unitName}
 }
 
 // IsUnit returns whether name is a valid unit name.
