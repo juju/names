@@ -132,14 +132,14 @@ var parseTagTests = []struct {
 	resultErr:  `"foo" is not a valid tag`,
 }}
 
-var makeTag = map[string]func(id string) string{
-	names.MachineTagKind:  names.MachineTag,
-	names.UnitTagKind:     names.UnitTag,
-	names.ServiceTagKind:  names.ServiceTag,
-	names.RelationTagKind: names.RelationTag,
-	names.EnvironTagKind:  names.EnvironTag,
-	names.UserTagKind:     names.UserTag,
-	names.NetworkTagKind:  names.NetworkTag,
+var makeTag = map[string]func(string) names.Tag{
+	names.MachineTagKind:  names.NewMachineTag,
+	names.UnitTagKind:     names.NewUnitTag,
+	names.ServiceTagKind:  names.NewServiceTag,
+	names.RelationTagKind: names.NewRelationTag,
+	names.EnvironTagKind:  names.NewEnvironTag,
+	names.UserTagKind:     names.NewUserTag,
+	names.NetworkTagKind:  names.NewNetworkTag,
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
@@ -172,7 +172,7 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 			}
 			// Check that it's reversible.
 			if f := makeTag[kind]; f != nil {
-				reversed := f(id)
+				reversed := f(id).String()
 				c.Assert(reversed, gc.Equals, test.tag)
 			}
 			// Check that it parses ok without an expectKind.

@@ -7,6 +7,8 @@ import (
 	"regexp"
 )
 
+const ServiceTagKind = "service"
+
 const (
 	ServiceSnippet = "([a-z][a-z0-9]*(-[a-z0-9]*[a-z][a-z0-9]*)*)"
 	NumberSnippet  = "(0|[1-9][0-9]*)"
@@ -19,7 +21,13 @@ func IsService(name string) bool {
 	return validService.MatchString(name)
 }
 
-// ServiceTag returns the tag for the service with the given name.
-func ServiceTag(serviceName string) string {
-	return makeTag(ServiceTagKind, serviceName)
+type ServiceTag struct {
+	name string
+}
+
+func (t ServiceTag) String() string { return ServiceTagKind + "-" + t.name }
+
+// NewServiceTag returns the tag for the service with the given name.
+func NewServiceTag(serviceName string) Tag {
+	return ServiceTag{name: serviceName}
 }

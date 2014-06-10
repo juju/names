@@ -7,10 +7,18 @@ import (
 	"strings"
 )
 
-// EnvironTag returns the tag of an environment with the given environment UUID.
-func EnvironTag(uuid string) string {
-	return makeTag(EnvironTagKind, uuid)
+const EnvironTagKind = "environment"
+
+type EnvironTag struct {
+	uuid string
 }
+
+// NewEnvironTag returns the tag of an environment with the given environment UUID.
+func NewEnvironTag(uuid string) Tag {
+	return EnvironTag{uuid: uuid}
+}
+
+func (t EnvironTag) String() string { return EnvironTagKind + "-" + t.uuid }
 
 // IsEnvironment returns whether id is a valid environment UUID.
 func IsEnvironment(id string) bool {

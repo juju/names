@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+const MachineTagKind = "machine"
+
 const (
 	ContainerTypeSnippet = "[a-z]+"
 	ContainerSnippet     = "(/" + ContainerTypeSnippet + "/" + NumberSnippet + ")"
@@ -26,12 +28,16 @@ func IsContainerMachine(id string) bool {
 	return validMachine.MatchString(id) && strings.Contains(id, "/")
 }
 
-// MachineTag returns the tag for the machine with the given id.
-func MachineTag(id string) string {
-	tag := makeTag(MachineTagKind, id)
-	// Containers require "/" to be replaced by "-".
-	tag = strings.Replace(tag, "/", "-", -1)
-	return tag
+type MachineTag struct {
+	id string
+}
+
+func (t MachineTag) String() string { return MachineTagKind + "-" + t.id }
+
+// NewMachineTag returns the tag for the machine with the given id.
+func NewMachineTag(id string) Tag {
+	id = strings.Replace(id, "/", "-", -1)
+	return MachineTag{id: id}
 }
 
 func machineTagSuffixToId(s string) string {

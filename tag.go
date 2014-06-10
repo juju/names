@@ -8,50 +8,27 @@ import (
 	"strings"
 )
 
-const (
-	UnitTagKind     = "unit"
-	MachineTagKind  = "machine"
-	ServiceTagKind  = "service"
-	EnvironTagKind  = "environment"
-	UserTagKind     = "user"
-	RelationTagKind = "relation"
-	NetworkTagKind  = "network"
-)
-
-var validKinds = map[string]bool{
-	UnitTagKind:     true,
-	MachineTagKind:  true,
-	ServiceTagKind:  true,
-	EnvironTagKind:  true,
-	UserTagKind:     true,
-	RelationTagKind: true,
-	NetworkTagKind:  true,
-}
-
-var tagSuffixToId = map[string]func(string) string{
-	UnitTagKind:     unitTagSuffixToId,
-	MachineTagKind:  machineTagSuffixToId,
-	RelationTagKind: relationTagSuffixToKey,
-}
-
-var verifyId = map[string]func(string) bool{
-	UnitTagKind:     IsUnit,
-	MachineTagKind:  IsMachine,
-	ServiceTagKind:  IsService,
-	UserTagKind:     IsUser,
-	EnvironTagKind:  IsEnvironment,
-	RelationTagKind: IsRelation,
-	NetworkTagKind:  IsNetwork,
+// A Tag tags things that are taggable.
+type Tag interface {
+	fmt.Stringer // all Tags should be able to print themselves
 }
 
 // TagKind returns one of the *TagKind constants for the given tag, or
 // an error if none matches.
 func TagKind(tag string) (string, error) {
 	i := strings.Index(tag, "-")
-	if i <= 0 || !validKinds[tag[:i]] {
+	if i <= 0 || !validKinds(tag[:i]) {
 		return "", fmt.Errorf("%q is not a valid tag", tag)
 	}
 	return tag[:i], nil
+}
+
+func validKinds(kind string) bool {
+	switch kind {
+	case UnitTagKind, MachineTagKind, ServiceTagKind, EnvironTagKind, UserTagKind, RelationTagKind, NetworkTagKind:
+		return true
+	}
+	return false
 }
 
 func splitTag(tag string) (kind, rest string, err error) {
@@ -60,10 +37,6 @@ func splitTag(tag string) (kind, rest string, err error) {
 		return "", "", err
 	}
 	return kind, tag[len(kind)+1:], nil
-}
-
-func makeTag(kind, rest string) string {
-	return kind + "-" + rest
 }
 
 // ParseTag parses a tag into its kind and identifier
@@ -78,11 +51,43 @@ func ParseTag(tag, expectKind string) (kind, id string, err error) {
 	if expectKind != "" && kind != expectKind {
 		return "", "", invalidTagError(tag, expectKind)
 	}
-	if toId := tagSuffixToId[kind]; toId != nil {
-		id = toId(id)
+	switch kind {
+	case UnitTagKind:
+		id = unitTagSuffixToId(id)
+	case MachineTagKind:
+		id = machineTagSuffixToId(id)
+	case RelationTagKind:
+		id = relationTagSuffixToKey(id)
 	}
-	if verify := verifyId[kind]; verify != nil && !verify(id) {
-		return "", "", invalidTagError(tag, kind)
+	switch kind {
+	case UnitTagKind:
+		if !IsUnit(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case MachineTagKind:
+		if !IsMachine(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case ServiceTagKind:
+		if !IsService(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case UserTagKind:
+		if !IsUser(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case EnvironTagKind:
+		if !IsEnvironment(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case RelationTagKind:
+		if !IsRelation(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
+	case NetworkTagKind:
+		if !IsNetwork(id) {
+			return "", "", invalidTagError(tag, kind)
+		}
 	}
 	return kind, id, nil
 }

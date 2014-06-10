@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+const RelationTagKind = "relation"
+
 const RelationSnippet = "[a-z][a-z0-9]*([_-][a-z0-9]+)*"
 
 // Relation keys have the format "service1:relName1 service2:relName2".
@@ -26,15 +28,21 @@ func IsRelation(key string) bool {
 	return validRelation.MatchString(key) || validPeerRelation.MatchString(key)
 }
 
-// RelationTag returns the tag for the relation with the given key.
-func RelationTag(relationKey string) string {
+type RelationTag struct {
+	key string
+}
+
+func (t RelationTag) String() string { return RelationTagKind + "-" + t.key }
+
+// NewRelationTag returns the tag for the relation with the given key.
+func NewRelationTag(relationKey string) Tag {
 	if !IsRelation(relationKey) {
 		panic(fmt.Sprintf("%q is not a valid relation key", relationKey))
 	}
 	// Replace both ":" with "." and the " " with "#".
 	relationKey = strings.Replace(relationKey, ":", ".", 2)
 	relationKey = strings.Replace(relationKey, " ", "#", 1)
-	return makeTag(RelationTagKind, relationKey)
+	return RelationTag{key: relationKey}
 }
 
 func relationTagSuffixToKey(s string) string {

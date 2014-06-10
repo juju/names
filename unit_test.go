@@ -16,7 +16,7 @@ type unitSuite struct{}
 var _ = gc.Suite(&unitSuite{})
 
 func (s *unitSuite) TestUnitTag(c *gc.C) {
-	c.Assert(names.UnitTag("wordpress/2"), gc.Equals, "unit-wordpress-2")
+	c.Assert(names.NewUnitTag("wordpress/2").String(), gc.Equals, "unit-wordpress-2")
 }
 
 var unitNameTests = []struct {
@@ -48,7 +48,7 @@ func (s *unitSuite) TestInvalidUnitTagFormats(c *gc.C) {
 		if !test.valid {
 			c.Logf("test %d: %q", i, test.pattern)
 			expect := fmt.Sprintf("%q is not a valid unit name", test.pattern)
-			testUnitTag := func() { names.UnitTag(test.pattern) }
+			testUnitTag := func() { names.NewUnitTag(test.pattern) }
 			c.Assert(testUnitTag, gc.PanicMatches, expect)
 		}
 	}
