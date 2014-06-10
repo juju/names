@@ -15,7 +15,7 @@ type Tag interface {
 
 // TagKind returns one of the *TagKind constants for the given tag, or
 // an error if none matches.
-func tagKind(tag string) (string, error) {
+func TagKind(tag string) (string, error) {
 	i := strings.Index(tag, "-")
 	if i <= 0 || !validKinds(tag[:i]) {
 		return "", fmt.Errorf("%q is not a valid tag", tag)
@@ -32,7 +32,7 @@ func validKinds(kind string) bool {
 }
 
 func splitTag(tag string) (kind, rest string, err error) {
-	kind, err = tagKind(tag)
+	kind, err = TagKind(tag)
 	if err != nil {
 		return "", "", err
 	}
