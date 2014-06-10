@@ -19,7 +19,9 @@ const (
 var validMachine = regexp.MustCompile("^" + MachineSnippet + "$")
 
 // IsMachine returns whether id is a valid machine id.
-var IsMachine = validMachine.MatchString
+func IsMachine(id string) bool {
+	return validMachine.MatchString(id)
+}
 
 // IsContainerMachine returns whether id is a valid container machine id.
 func IsContainerMachine(id string) bool {

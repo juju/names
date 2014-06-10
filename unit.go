@@ -34,7 +34,9 @@ func NewUnitTag(unitName string) Tag {
 }
 
 // IsUnit returns whether name is a valid unit name.
-var IsUnit = validUnit.MatchString
+func IsUnit(name string) bool {
+	return validUnit.MatchString(name)
+}
 
 // UnitService returns the name of the service that the unit is
 // associated with. It panics if unitName is not a valid unit name.
