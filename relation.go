@@ -32,7 +32,9 @@ type RelationTag struct {
 	key string
 }
 
-func (t RelationTag) String() string { return RelationTagKind + "-" + t.key }
+func (t RelationTag) String() string { return t.Kind() + "-" + t.key }
+func (t RelationTag) Kind() string   { return RelationTagKind }
+func (t RelationTag) Id() string     { return relationTagSuffixToKey(t.key) }
 
 // NewRelationTag returns the tag for the relation with the given key.
 func NewRelationTag(relationKey string) Tag {
