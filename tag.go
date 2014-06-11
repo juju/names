@@ -68,39 +68,46 @@ func ParseTag(tag, expectKind string) (Tag, string, error) {
 		if !IsUnit(id) {
 			return nil, "", invalidTagError(tag, kind)
 		}
-		return NewUnitTag(id), id, nil
+		tag := NewUnitTag(id)
+		return tag, tag.Id(), nil
 	case MachineTagKind:
 		id = machineTagSuffixToId(id)
 		if !IsMachine(id) {
 			return nil, "", invalidTagError(tag, kind)
 		}
-		return NewMachineTag(id), id, nil
+		tag := NewMachineTag(id)
+		return tag, tag.Id(), nil
 	case ServiceTagKind:
 		if !IsService(id) {
 			return nil, "", invalidTagError(tag, kind)
 		}
-		return NewServiceTag(id), id, nil
+		tag := NewServiceTag(id)
+		return tag, tag.Id(), nil
 	case UserTagKind:
 		if !IsUser(id) {
 			return nil, "", invalidTagError(tag, kind)
 		}
-		return NewUserTag(id), id, nil
+		tag := NewUserTag(id)
+		return tag, tag.Id(), nil
 	case EnvironTagKind:
 		if !IsEnvironment(id) {
 			return nil, "", invalidTagError(tag, kind)
 		}
-		return NewEnvironTag(id), id, nil
+		tag := NewEnvironTag(id)
+		return tag, tag.Id(), nil
 	case RelationTagKind:
 		id = relationTagSuffixToKey(id)
 		if !IsRelation(id) {
 			return nil, "", invalidTagError(tag, kind)
 		}
-		return NewRelationTag(id), id, nil
+		tag := NewRelationTag(id)
+		return tag, tag.Id(), nil
 	case NetworkTagKind:
 		if !IsNetwork(id) {
 			return nil, "", invalidTagError(tag, kind)
 		}
-		return NewNetworkTag(id), id, nil
+		tag := NewNetworkTag(id)
+		return tag, tag.Id(), nil
 	default:
 		return nil, "", invalidTagError(tag, expectKind)
 	}

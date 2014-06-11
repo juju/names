@@ -32,9 +32,9 @@ type MachineTag struct {
 	id string
 }
 
-func (t MachineTag) String() string { return t.Kind() + "-" + t.Id() }
+func (t MachineTag) String() string { return t.Kind() + "-" + t.id }
 func (t MachineTag) Kind() string   { return MachineTagKind }
-func (t MachineTag) Id() string     { return t.id }
+func (t MachineTag) Id() string     { return machineTagSuffixToId(t.id) }
 
 // NewMachineTag returns the tag for the machine with the given id.
 func NewMachineTag(id string) Tag {

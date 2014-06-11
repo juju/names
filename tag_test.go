@@ -184,3 +184,46 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 		}
 	}
 }
+
+// Temporary test that asserts that tag.Id() from ParseTag matches the id result.
+// This will be removed when ParseTag is refactored to return (Tag, error)
+func (*tagSuite) TestParseTagNew(c *gc.C) {
+	for i, test := range parseTagTests {
+		c.Logf("test %d: %q expectKind %q", i, test.tag, test.expectKind)
+		tag, _, err := names.ParseTag(test.tag, test.expectKind)
+		if test.resultErr != "" {
+			c.Assert(err, gc.ErrorMatches, test.resultErr)
+			c.Assert(tag, gc.IsNil)
+
+			// If the tag has a valid kind which matches the
+			// expected kind, test that using an empty
+			// expectKind does not change the error message.
+			if tagKind, err := names.TagKind(test.tag); err == nil && tagKind == test.expectKind {
+				tag, _, err := names.ParseTag(test.tag, "")
+				c.Assert(err, gc.ErrorMatches, test.resultErr)
+				c.Assert(tag, gc.IsNil)
+			}
+		} else {
+			kind, id := tag.Kind(), tag.Id()
+			c.Assert(err, gc.IsNil)
+			c.Assert(id, gc.Equals, test.resultId)
+			if test.expectKind != "" {
+				c.Assert(kind, gc.Equals, test.expectKind)
+			} else {
+				expectKind, err := names.TagKind(test.tag)
+				c.Assert(err, gc.IsNil)
+				c.Assert(kind, gc.Equals, expectKind)
+			}
+			// Check that it's reversible.
+			if f := makeTag[kind]; f != nil {
+				reversed := f(id).String()
+				c.Assert(reversed, gc.Equals, test.tag)
+			}
+			// Check that it parses ok without an expectKind.
+			tag, id1, err1 := names.ParseTag(test.tag, "")
+			c.Assert(err1, gc.IsNil)
+			c.Assert(tag.Kind(), gc.Equals, test.expectKind)
+			c.Assert(id1, gc.Equals, id)
+		}
+	}
+}
