@@ -10,6 +10,17 @@ import (
 
 // A Tag tags things that are taggable.
 type Tag interface {
+	// Kind returns the kind of the tag.
+	// This method is for legacy compatibility, callers should
+	// use equality or type assertions to verify the Kind, or type
+	// of a Tag.
+	Kind() string
+
+	// Id returns an identifier for this Tag.
+	// The contents and format of the identifier are specific
+	// to the implementer of the Tag.
+	Id() string
+
 	fmt.Stringer // all Tags should be able to print themselves
 }
 
@@ -31,8 +42,8 @@ func validKinds(kind string) bool {
 	return false
 }
 
-func splitTag(tag string) (kind, rest string, err error) {
-	kind, err = TagKind(tag)
+func splitTag(tag string) (string, string, error) {
+	kind, err := TagKind(tag)
 	if err != nil {
 		return "", "", err
 	}
@@ -43,53 +54,56 @@ func splitTag(tag string) (kind, rest string, err error) {
 // components. It returns an error if the tag is malformed,
 // or if expectKind is not empty and the kind is
 // not as expected.
-func ParseTag(tag, expectKind string) (kind, id string, err error) {
-	kind, id, err = splitTag(tag)
+func ParseTag(tag, expectKind string) (Tag, string, error) {
+	kind, id, err := splitTag(tag)
 	if err != nil {
-		return "", "", invalidTagError(tag, expectKind)
+		return nil, "", invalidTagError(tag, expectKind)
 	}
 	if expectKind != "" && kind != expectKind {
-		return "", "", invalidTagError(tag, expectKind)
+		return nil, "", invalidTagError(tag, expectKind)
 	}
 	switch kind {
 	case UnitTagKind:
 		id = unitTagSuffixToId(id)
+		if !IsUnit(id) {
+			return nil, "", invalidTagError(tag, kind)
+		}
+		return NewUnitTag(id), id, nil
 	case MachineTagKind:
 		id = machineTagSuffixToId(id)
-	case RelationTagKind:
-		id = relationTagSuffixToKey(id)
-	}
-	switch kind {
-	case UnitTagKind:
-		if !IsUnit(id) {
-			return "", "", invalidTagError(tag, kind)
-		}
-	case MachineTagKind:
 		if !IsMachine(id) {
-			return "", "", invalidTagError(tag, kind)
+			return nil, "", invalidTagError(tag, kind)
 		}
+		return NewMachineTag(id), id, nil
 	case ServiceTagKind:
 		if !IsService(id) {
-			return "", "", invalidTagError(tag, kind)
+			return nil, "", invalidTagError(tag, kind)
 		}
+		return NewServiceTag(id), id, nil
 	case UserTagKind:
 		if !IsUser(id) {
-			return "", "", invalidTagError(tag, kind)
+			return nil, "", invalidTagError(tag, kind)
 		}
+		return NewUserTag(id), id, nil
 	case EnvironTagKind:
 		if !IsEnvironment(id) {
-			return "", "", invalidTagError(tag, kind)
+			return nil, "", invalidTagError(tag, kind)
 		}
+		return NewEnvironTag(id), id, nil
 	case RelationTagKind:
+		id = relationTagSuffixToKey(id)
 		if !IsRelation(id) {
-			return "", "", invalidTagError(tag, kind)
+			return nil, "", invalidTagError(tag, kind)
 		}
+		return NewRelationTag(id), id, nil
 	case NetworkTagKind:
 		if !IsNetwork(id) {
-			return "", "", invalidTagError(tag, kind)
+			return nil, "", invalidTagError(tag, kind)
 		}
+		return NewNetworkTag(id), id, nil
+	default:
+		return nil, "", invalidTagError(tag, expectKind)
 	}
-	return kind, id, nil
 }
 
 func invalidTagError(tag, kind string) error {

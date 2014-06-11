@@ -148,7 +148,7 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 		kind, id, err := names.ParseTag(test.tag, test.expectKind)
 		if test.resultErr != "" {
 			c.Assert(err, gc.ErrorMatches, test.resultErr)
-			c.Assert(kind, gc.Equals, "")
+			c.Assert(kind, gc.IsNil)
 			c.Assert(id, gc.Equals, "")
 
 			// If the tag has a valid kind which matches the
@@ -157,10 +157,11 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 			if tagKind, err := names.TagKind(test.tag); err == nil && tagKind == test.expectKind {
 				kind, id, err := names.ParseTag(test.tag, "")
 				c.Assert(err, gc.ErrorMatches, test.resultErr)
-				c.Assert(kind, gc.Equals, "")
+				c.Assert(kind, gc.IsNil)
 				c.Assert(id, gc.Equals, "")
 			}
 		} else {
+			kind := kind.Kind()
 			c.Assert(err, gc.IsNil)
 			c.Assert(id, gc.Equals, test.resultId)
 			if test.expectKind != "" {
@@ -176,9 +177,9 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 				c.Assert(reversed, gc.Equals, test.tag)
 			}
 			// Check that it parses ok without an expectKind.
-			kind1, id1, err1 := names.ParseTag(test.tag, "")
+			tag, id1, err1 := names.ParseTag(test.tag, "")
 			c.Assert(err1, gc.IsNil)
-			c.Assert(kind1, gc.Equals, test.expectKind)
+			c.Assert(tag.Kind(), gc.Equals, test.expectKind)
 			c.Assert(id1, gc.Equals, id)
 		}
 	}

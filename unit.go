@@ -17,9 +17,9 @@ type UnitTag struct {
 	name string
 }
 
-func (t UnitTag) String() string {
-	return UnitTagKind + "-" + t.name
-}
+func (t UnitTag) String() string { return t.Kind() + "-" + t.Id() }
+func (t UnitTag) Kind() string   { return UnitTagKind }
+func (t UnitTag) Id() string     { return t.name }
 
 // NewUnitTag returns the tag for the unit with the given name.
 // It will panic if the given unit name is not valid.
