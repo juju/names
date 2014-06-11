@@ -145,10 +145,10 @@ var makeTag = map[string]func(string) names.Tag{
 func (*tagSuite) TestParseTag(c *gc.C) {
 	for i, test := range parseTagTests {
 		c.Logf("test %d: %q expectKind %q", i, test.tag, test.expectKind)
-		kind, id, err := names.ParseTag(test.tag, test.expectKind)
+		tag, id, err := names.ParseTag(test.tag, test.expectKind)
 		if test.resultErr != "" {
 			c.Assert(err, gc.ErrorMatches, test.resultErr)
-			c.Assert(kind, gc.IsNil)
+			c.Assert(tag, gc.IsNil)
 			c.Assert(id, gc.Equals, "")
 
 			// If the tag has a valid kind which matches the
@@ -161,7 +161,7 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 				c.Assert(id, gc.Equals, "")
 			}
 		} else {
-			kind := kind.Kind()
+			kind := tag.Kind()
 			c.Assert(err, gc.IsNil)
 			c.Assert(id, gc.Equals, test.resultId)
 			if test.expectKind != "" {
