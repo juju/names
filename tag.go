@@ -68,13 +68,13 @@ func ParseTag(tag, expectKind string) (Tag, error) {
 		if !IsUnit(id) {
 			return nil, invalidTagError(tag, kind)
 		}
-		return  NewUnitTag(id), nil
+		return NewUnitTag(id), nil
 	case MachineTagKind:
 		id = machineTagSuffixToId(id)
 		if !IsMachine(id) {
 			return nil, invalidTagError(tag, kind)
 		}
-		return  NewMachineTag(id), nil
+		return NewMachineTag(id), nil
 	case ServiceTagKind:
 		if !IsService(id) {
 			return nil, invalidTagError(tag, kind)
