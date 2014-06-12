@@ -20,9 +20,9 @@ type UserTag struct {
 	name string
 }
 
-func (t UserTag) String() string {
-	return UserTagKind + "-" + t.name
-}
+func (t UserTag) String() string { return t.Kind() + "-" + t.Id() }
+func (t UserTag) Kind() string   { return UserTagKind }
+func (t UserTag) Id() string     { return t.name }
 
 // NewUserTag returns the tag for the user with the given name.
 func NewUserTag(userName string) Tag {

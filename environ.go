@@ -18,7 +18,9 @@ func NewEnvironTag(uuid string) Tag {
 	return EnvironTag{uuid: uuid}
 }
 
-func (t EnvironTag) String() string { return EnvironTagKind + "-" + t.uuid }
+func (t EnvironTag) String() string { return t.Kind() + "-" + t.Id() }
+func (t EnvironTag) Kind() string   { return EnvironTagKind }
+func (t EnvironTag) Id() string     { return t.uuid }
 
 // IsEnvironment returns whether id is a valid environment UUID.
 func IsEnvironment(id string) bool {

@@ -21,9 +21,9 @@ type NetworkTag struct {
 	name string
 }
 
-func (t NetworkTag) String() string {
-	return NetworkTagKind + "-" + t.name
-}
+func (t NetworkTag) String() string { return t.Kind() + "-" + t.Id() }
+func (t NetworkTag) Kind() string   { return NetworkTagKind }
+func (t NetworkTag) Id() string     { return t.name }
 
 // NewNetworkTag returns the tag of a network with the given name.
 func NewNetworkTag(name string) Tag {

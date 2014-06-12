@@ -25,7 +25,9 @@ type ServiceTag struct {
 	name string
 }
 
-func (t ServiceTag) String() string { return ServiceTagKind + "-" + t.name }
+func (t ServiceTag) String() string { return t.Kind() + "-" + t.Id() }
+func (t ServiceTag) Kind() string   { return ServiceTagKind }
+func (t ServiceTag) Id() string     { return t.name }
 
 // NewServiceTag returns the tag for the service with the given name.
 func NewServiceTag(serviceName string) Tag {
