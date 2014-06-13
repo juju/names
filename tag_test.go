@@ -48,88 +48,107 @@ func (*tagSuite) TestTagKind(c *gc.C) {
 var parseTagTests = []struct {
 	tag        string
 	expectKind string
+	expectType interface{}
 	resultId   string
 	resultErr  string
 }{{
 	tag:        "machine-10",
 	expectKind: names.MachineTagKind,
+	expectType: names.MachineTag{},
 	resultId:   "10",
 }, {
 	tag:        "machine-10-lxc-1",
 	expectKind: names.MachineTagKind,
+	expectType: names.MachineTag{},
 	resultId:   "10/lxc/1",
 }, {
 	tag:        "foo",
 	expectKind: names.MachineTagKind,
+	expectType: names.MachineTag{},
 	resultErr:  `"foo" is not a valid machine tag`,
 }, {
 	tag:        "machine-#",
 	expectKind: names.MachineTagKind,
+	expectType: names.MachineTag{},
 	resultErr:  `"machine-#" is not a valid machine tag`,
 }, {
 	tag:        "unit-wordpress-0",
 	expectKind: names.UnitTagKind,
+	expectType: names.UnitTag{},
 	resultId:   "wordpress/0",
 }, {
 	tag:        "unit-rabbitmq-server-0",
 	expectKind: names.UnitTagKind,
+	expectType: names.UnitTag{},
 	resultId:   "rabbitmq-server/0",
 }, {
 	tag:        "foo",
 	expectKind: names.UnitTagKind,
+	expectType: names.UnitTag{},
 	resultErr:  `"foo" is not a valid unit tag`,
 }, {
 	tag:        "unit-#",
 	expectKind: names.UnitTagKind,
+	expectType: names.UnitTag{},
 	resultErr:  `"unit-#" is not a valid unit tag`,
 }, {
 	tag:        "service-wordpress",
 	expectKind: names.ServiceTagKind,
+	expectType: names.ServiceTag{},
 	resultId:   "wordpress",
 }, {
 	tag:        "service-#",
 	expectKind: names.ServiceTagKind,
+	expectType: names.ServiceTag{},
 	resultErr:  `"service-#" is not a valid service tag`,
 }, {
 	tag:        "unit-wordpress-0",
-	expectKind: "machine",
+	expectKind: names.MachineTagKind,
+	expectType: names.MachineTag{},
 	resultErr:  `"unit-wordpress-0" is not a valid machine tag`,
 }, {
 	tag:        "environment-foo",
 	expectKind: names.EnvironTagKind,
+	expectType: names.EnvironTag{},
 	resultId:   "foo",
 }, {
 	tag:        "relation-my-svc1.myrel1#other-svc.other-rel2",
 	expectKind: names.RelationTagKind,
+	expectType: names.RelationTag{},
 	resultId:   "my-svc1:myrel1 other-svc:other-rel2",
 }, {
 	tag:        "relation-riak.ring",
 	expectKind: names.RelationTagKind,
+	expectType: names.RelationTag{},
 	resultId:   "riak:ring",
 }, {
 	tag:        "environment-/",
 	expectKind: names.EnvironTagKind,
+	expectType: names.EnvironTag{},
 	resultErr:  `"environment-/" is not a valid environment tag`,
 }, {
 	tag:        "user-foo",
 	expectKind: names.UserTagKind,
+	expectType: names.UserTag{},
 	resultId:   "foo",
 }, {
 	tag:        "user-/",
 	expectKind: names.UserTagKind,
+	expectType: names.UserTag{},
 	resultErr:  `"user-/" is not a valid user tag`,
 }, {
 	tag:        "network-",
 	expectKind: names.NetworkTagKind,
+	expectType: names.NetworkTag{},
 	resultErr:  `"network-" is not a valid network tag`,
 }, {
 	tag:        "network-mynet1",
 	expectKind: names.NetworkTagKind,
+	expectType: names.NetworkTag{},
 	resultId:   "mynet1",
 }, {
-	tag:        "foo",
-	expectKind: "",
-	resultErr:  `"foo" is not a valid tag`,
+	tag:       "foo",
+	resultErr: `"foo" is not a valid tag`,
 }}
 
 var makeTag = map[string]func(string) names.Tag{
@@ -167,7 +186,8 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 			} else {
 				expectKind, err := names.TagKind(test.tag)
 				c.Assert(err, gc.IsNil)
-				c.Assert(kind, gc.Equals, expectKind)
+				c.Assert(kind, gc.Equals, expectKind) // will be removed in the next branch
+				c.Assert(tag, gc.FitsTypeOf, test.expectType)
 			}
 			// Check that it's reversible.
 			if f := makeTag[kind]; f != nil {
@@ -175,9 +195,10 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 				c.Assert(reversed, gc.Equals, test.tag)
 			}
 			// Check that it parses ok without an expectKind.
-			tag, err1 := names.ParseTag(test.tag, "")
-			c.Assert(err1, gc.IsNil)
-			c.Assert(tag.Kind(), gc.Equals, test.expectKind)
+			tag, err := names.ParseTag(test.tag, "")
+			c.Assert(err, gc.IsNil)
+			c.Assert(tag, gc.FitsTypeOf, test.expectType)
+			c.Assert(tag.Kind(), gc.Equals, test.expectKind) // will be removed in the next branch
 			c.Assert(tag.Id(), gc.Equals, id)
 		}
 	}

@@ -50,10 +50,9 @@ func splitTag(tag string) (string, string, error) {
 	return kind, tag[len(kind)+1:], nil
 }
 
-// ParseTag parses a tag into its kind and identifier
-// components. It returns an error if the tag is malformed,
-// or if expectKind is not empty and the kind is
-// not as expected.
+// ParseTag parses a string representation into a Tag.
+// It returns an error if the tag is malformed, or if expectKind is not empty
+// and the kind is not as expected.
 func ParseTag(tag, expectKind string) (Tag, error) {
 	kind, id, err := splitTag(tag)
 	if err != nil {
