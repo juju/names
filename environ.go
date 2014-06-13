@@ -18,6 +18,19 @@ func NewEnvironTag(uuid string) Tag {
 	return EnvironTag{uuid: uuid}
 }
 
+// ParseEnvironTag parses an environ tag string.
+func ParseEnvironTag(environTag string) (EnvironTag, error) {
+	tag, err := ParseTag(environTag)
+	if err != nil {
+		return EnvironTag{}, err
+	}
+	et, ok := tag.(EnvironTag)
+	if !ok {
+		return EnvironTag{}, invalidTagError(environTag, EnvironTagKind)
+	}
+	return et, nil
+}
+
 func (t EnvironTag) String() string { return t.Kind() + "-" + t.Id() }
 func (t EnvironTag) Kind() string   { return EnvironTagKind }
 func (t EnvironTag) Id() string     { return t.uuid }

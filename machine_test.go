@@ -60,3 +60,37 @@ func (s *machineSuite) TestMachineIdFormats(c *gc.C) {
 		c.Assert(names.IsContainerMachine(test.pattern), gc.Equals, test.container)
 	}
 }
+
+var parseMachineTagTests = []struct {
+	tag      string
+	expected names.Tag
+	err      error
+}{{
+	tag: "",
+	err: names.InvalidTagError("", ""),
+}, {
+	tag:      "machine-0",
+	expected: names.NewMachineTag("0"),
+}, {
+	tag: "machine-one",
+	err: names.InvalidTagError("machine-one", names.MachineTagKind),
+}, {
+	tag: "dave",
+	err: names.InvalidTagError("dave", ""),
+}, {
+	tag: "user-one",
+	err: names.InvalidTagError("user-one", names.MachineTagKind),
+}}
+
+func (s *machineSuite) TestParseMachineTag(c *gc.C) {
+	for i, t := range parseMachineTagTests {
+		c.Logf("test %d: %s", i, t.tag)
+		got, err := names.ParseMachineTag(t.tag)
+		if err != nil || t.err != nil {
+			c.Check(err, gc.DeepEquals, t.err)
+			continue
+		}
+		c.Check(got, gc.FitsTypeOf, t.expected)
+		c.Check(got, gc.Equals, t.expected)
+	}
+}
