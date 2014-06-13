@@ -51,15 +51,10 @@ func splitTag(tag string) (string, string, error) {
 }
 
 // ParseTag parses a string representation into a Tag.
-// It returns an error if the tag is malformed, or if expectKind is not empty
-// and the kind is not as expected.
-func ParseTag(tag, expectKind string) (Tag, error) {
+func ParseTag(tag string) (Tag, error) {
 	kind, id, err := splitTag(tag)
 	if err != nil {
-		return nil, invalidTagError(tag, expectKind)
-	}
-	if expectKind != "" && kind != expectKind {
-		return nil, invalidTagError(tag, expectKind)
+		return nil, invalidTagError(tag, "")
 	}
 	switch kind {
 	case UnitTagKind:
@@ -101,7 +96,7 @@ func ParseTag(tag, expectKind string) (Tag, error) {
 		}
 		return NewNetworkTag(id), nil
 	default:
-		return nil, invalidTagError(tag, expectKind)
+		return nil, invalidTagError(tag, "")
 	}
 }
 

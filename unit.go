@@ -33,6 +33,19 @@ func NewUnitTag(unitName string) Tag {
 	return UnitTag{name: unitName}
 }
 
+// ParseUnitTag parses a unit tag string.
+func ParseUnitTag(unitTag string) (UnitTag, error) {
+	tag, err := ParseTag(unitTag) 
+	if err != nil {
+		return UnitTag{}, err
+	}
+	ut, ok := tag.(UnitTag)
+	if !ok {
+		return UnitTag{}, invalidTagError(unitTag, UnitTagKind) 
+	}
+	return ut, nil
+}
+
 // IsUnit returns whether name is a valid unit name.
 func IsUnit(name string) bool {
 	return validUnit.MatchString(name)

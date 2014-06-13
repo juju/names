@@ -61,3 +61,7 @@ func (s *userSuite) TestIsUser(c *gc.C) {
 		c.Assert(names.IsUser(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
 	}
 }
+
+func (s *userSuite) TestParseUserTag(c *gc.C) {
+	
+}

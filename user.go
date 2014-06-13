@@ -28,3 +28,16 @@ func (t UserTag) Id() string     { return t.name }
 func NewUserTag(userName string) Tag {
 	return UserTag{name: userName}
 }
+
+// ParseUserTag parser a tag string.
+func ParseUserTag(tag string) (UserTag, error) {
+	t, err := ParseTag(tag)
+	if err != nil {
+		return UserTag{}, nil
+	}
+	ut, ok := t.(UserTag)
+	if !ok {
+               return UserTag{}, invalidTagError(tag, UserTagKind)
+	}
+	return ut, nil
+}
