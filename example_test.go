@@ -6,11 +6,14 @@ package names
 import "fmt"
 
 func ExampleParseTag() {
-	tag, _ := ParseTag("user-100")
+	tag, err := ParseTag("user-100")
+	if err != nil {
+		panic(err)
+	}
 	switch tag := tag.(type) {
 	case UserTag:
 		fmt.Printf("User tag, id: %s\n", tag.Id())
 	default:
-		fmt.Printf("Unknown tag, type %T", tag)
+		fmt.Printf("Unknown tag, type %T\n", tag)
 	}
 }
