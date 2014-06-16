@@ -53,11 +53,11 @@ func ParseRelationTag(relationTag string) (RelationTag, error) {
 	if err != nil {
 		return RelationTag{}, err
 	}
-	ut, ok := tag.(RelationTag)
+	rt, ok := tag.(RelationTag)
 	if !ok {
 		return RelationTag{}, invalidTagError(relationTag, RelationTagKind)
 	}
-	return ut, nil
+	return rt, nil
 }
 
 func relationTagSuffixToKey(s string) string {

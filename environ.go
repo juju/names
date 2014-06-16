@@ -18,7 +18,7 @@ func NewEnvironTag(uuid string) Tag {
 	return EnvironTag{uuid: uuid}
 }
 
-// ParseEnvironTag parses a relation tag string.
+// ParseEnvironTag parses an environ tag string.
 func ParseEnvironTag(environTag string) (EnvironTag, error) {
 	tag, err := ParseTag(environTag)
 	if err != nil {

@@ -66,3 +66,37 @@ func (s *serviceSuite) TestUnitService(c *gc.C) {
 		}
 	}
 }
+
+var parseUnitTagTests = []struct {
+	tag      string
+	expected names.Tag
+	err      error
+}{{
+	tag: "",
+	err: names.InvalidTagError("", ""),
+}, {
+	tag:      "unit-dave/0",
+	expected: names.NewUnitTag("dave/0"),
+}, {
+	tag: "dave",
+	err: names.InvalidTagError("dave", ""),
+}, {
+	tag: "unit-dave",
+	err: names.InvalidTagError("unit-dave", names.UnitTagKind), // not a valid unit name either
+}, {
+	tag: "service-dave",
+	err: names.InvalidTagError("service-dave", names.UnitTagKind),
+}}
+
+func (s *unitSuite) TestParseUnitTag(c *gc.C) {
+	for i, t := range parseUnitTagTests {
+		c.Logf("test %d: %s", i, t.tag)
+		got, err := names.ParseUnitTag(t.tag)
+		if err != nil || t.err != nil {
+			c.Check(err, gc.DeepEquals, t.err)
+			continue
+		}
+		c.Check(got, gc.FitsTypeOf, t.expected)
+		c.Check(got, gc.Equals, t.expected)
+	}
+}

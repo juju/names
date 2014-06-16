@@ -59,3 +59,37 @@ func (s *relationSuite) TestRelationKeyFormats(c *gc.C) {
 		}
 	}
 }
+
+var parseRelationTagTests = []struct {
+	tag      string
+	expected names.Tag
+	err      error
+}{{
+	tag: "",
+	err: names.InvalidTagError("", ""),
+}, {
+	tag:      "relation-wordpress:db mysql:db",
+	expected: names.NewRelationTag("wordpress:db mysql:db"),
+}, {
+	tag:      "relation-wordpress:mysql",
+	expected: names.NewRelationTag("wordpress:mysql"),
+}, {
+	tag: "dave",
+	err: names.InvalidTagError("dave", ""),
+}, {
+	tag: "service-dave",
+	err: names.InvalidTagError("service-dave", names.RelationTagKind),
+}}
+
+func (s *relationSuite) TestParseRelationTag(c *gc.C) {
+	for i, t := range parseRelationTagTests {
+		c.Logf("test %d: %s", i, t.tag)
+		got, err := names.ParseRelationTag(t.tag)
+		if err != nil || t.err != nil {
+			c.Check(err, gc.DeepEquals, t.err)
+			continue
+		}
+		c.Check(got, gc.FitsTypeOf, t.expected)
+		c.Check(got, gc.Equals, t.expected)
+	}
+}

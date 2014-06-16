@@ -29,11 +29,11 @@ func NewUserTag(userName string) Tag {
 	return UserTag{name: userName}
 }
 
-// ParseUserTag parser a tag string.
+// ParseUserTag parser a user tag string.
 func ParseUserTag(tag string) (UserTag, error) {
 	t, err := ParseTag(tag)
 	if err != nil {
-		return UserTag{}, nil
+		return UserTag{}, err
 	}
 	ut, ok := t.(UserTag)
 	if !ok {

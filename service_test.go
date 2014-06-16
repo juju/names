@@ -50,3 +50,40 @@ func (s *serviceSuite) TestServiceNameFormats(c *gc.C) {
 		assertService(test.pattern, test.valid)
 	}
 }
+
+var parseServiceTagTests = []struct {
+	tag      string
+	expected names.Tag
+	err      error
+}{{
+	tag: "",
+	err: names.InvalidTagError("", ""),
+}, {
+	tag:      "service-dave",
+	expected: names.NewServiceTag("dave"),
+}, {
+	tag: "dave",
+	err: names.InvalidTagError("dave", ""),
+}, {
+	tag: "service-dave/0",
+	err: names.InvalidTagError("service-dave/0", names.ServiceTagKind),
+}, {
+	tag: "service",
+	err: names.InvalidTagError("service", ""),
+}, {
+	tag: "user-dave",
+	err: names.InvalidTagError("user-dave", names.ServiceTagKind),
+}}
+
+func (s *serviceSuite) TestParseServiceTag(c *gc.C) {
+	for i, t := range parseServiceTagTests {
+		c.Logf("test %d: %s", i, t.tag)
+		got, err := names.ParseServiceTag(t.tag)
+		if err != nil || t.err != nil {
+			c.Check(err, gc.DeepEquals, t.err)
+			continue
+		}
+		c.Check(got, gc.FitsTypeOf, t.expected)
+		c.Check(got, gc.Equals, t.expected)
+	}
+}
