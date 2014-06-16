@@ -35,13 +35,13 @@ func NewUnitTag(unitName string) Tag {
 
 // ParseUnitTag parses a unit tag string.
 func ParseUnitTag(unitTag string) (UnitTag, error) {
-	tag, err := ParseTag(unitTag) 
+	tag, err := ParseTag(unitTag)
 	if err != nil {
 		return UnitTag{}, err
 	}
 	ut, ok := tag.(UnitTag)
 	if !ok {
-		return UnitTag{}, invalidTagError(unitTag, UnitTagKind) 
+		return UnitTag{}, invalidTagError(unitTag, UnitTagKind)
 	}
 	return ut, nil
 }

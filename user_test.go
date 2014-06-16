@@ -63,5 +63,5 @@ func (s *userSuite) TestIsUser(c *gc.C) {
 }
 
 func (s *userSuite) TestParseUserTag(c *gc.C) {
-	
+
 }

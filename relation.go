@@ -47,6 +47,19 @@ func NewRelationTag(relationKey string) Tag {
 	return RelationTag{key: relationKey}
 }
 
+// ParseRelationTag parses a relation tag string.
+func ParseRelationTag(relationTag string) (RelationTag, error) {
+	tag, err := ParseTag(relationTag)
+	if err != nil {
+		return RelationTag{}, err
+	}
+	ut, ok := tag.(RelationTag)
+	if !ok {
+		return RelationTag{}, invalidTagError(relationTag, RelationTagKind)
+	}
+	return ut, nil
+}
+
 func relationTagSuffixToKey(s string) string {
 	// Replace both "." with ":" and the "#" with " ".
 	s = strings.Replace(s, ".", ":", 2)

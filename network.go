@@ -32,3 +32,16 @@ func NewNetworkTag(name string) Tag {
 	}
 	return NetworkTag{name: name}
 }
+
+// ParseNetworkTag parses a network tag string.
+func ParseNetworkTag(networkTag string) (NetworkTag, error) {
+	tag, err := ParseTag(networkTag)
+	if err != nil {
+		return NetworkTag{}, err
+	}
+	nt, ok := tag.(NetworkTag)
+	if !ok {
+		return NetworkTag{}, invalidTagError(networkTag, NetworkTagKind)
+	}
+	return nt, nil
+}

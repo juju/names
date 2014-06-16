@@ -44,15 +44,15 @@ func NewMachineTag(id string) Tag {
 
 // ParseMachineTag parses a machine tag string.
 func ParseMachineTag(machineTag string) (MachineTag, error) {
-        tag, err := ParseTag(machineTag) 
-        if err != nil {
-                return MachineTag{}, err
-        }
-        mt, ok := tag.(MachineTag)
-        if !ok {
-                return MachineTag{}, invalidTagError(machineTag, MachineTagKind) 
-        }
-        return mt, nil
+	tag, err := ParseTag(machineTag)
+	if err != nil {
+		return MachineTag{}, err
+	}
+	mt, ok := tag.(MachineTag)
+	if !ok {
+		return MachineTag{}, invalidTagError(machineTag, MachineTagKind)
+	}
+	return mt, nil
 }
 
 func machineTagSuffixToId(s string) string {

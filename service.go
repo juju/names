@@ -36,13 +36,13 @@ func NewServiceTag(serviceName string) Tag {
 
 // ParseServiceTag parses a service tag string.
 func ParseServiceTag(serviceTag string) (ServiceTag, error) {
-        tag, err := ParseTag(serviceTag) 
-        if err != nil {
-                return ServiceTag{}, err
-        }
-        st, ok := tag.(ServiceTag)
-        if !ok {
-                return ServiceTag{}, invalidTagError(serviceTag, ServiceTagKind) 
-        }
-        return st, nil
+	tag, err := ParseTag(serviceTag)
+	if err != nil {
+		return ServiceTag{}, err
+	}
+	st, ok := tag.(ServiceTag)
+	if !ok {
+		return ServiceTag{}, invalidTagError(serviceTag, ServiceTagKind)
+	}
+	return st, nil
 }
