@@ -50,3 +50,40 @@ func (s *networkSuite) TestNetworkNames(c *gc.C) {
 		}
 	}
 }
+
+var parseNetworkTagTests = []struct {
+	tag      string
+	expected names.Tag
+	err      error
+}{{
+	tag: "",
+	err: names.InvalidTagError("", ""),
+}, {
+	tag:      "network-dave",
+	expected: names.NewNetworkTag("dave"),
+}, {
+	tag: "dave",
+	err: names.InvalidTagError("dave", ""),
+}, {
+	tag: "network-dave/0",
+	err: names.InvalidTagError("network-dave/0", names.NetworkTagKind),
+}, {
+	tag: "network",
+	err: names.InvalidTagError("network", ""),
+}, {
+	tag: "user-dave",
+	err: names.InvalidTagError("user-dave", names.NetworkTagKind),
+}}
+
+func (s *networkSuite) TestParseNetworkTag(c *gc.C) {
+	for i, t := range parseNetworkTagTests {
+		c.Logf("test %d: %s", i, t.tag)
+		got, err := names.ParseNetworkTag(t.tag)
+		if err != nil || t.err != nil {
+			c.Check(err, gc.DeepEquals, t.err)
+			continue
+		}
+		c.Check(got, gc.FitsTypeOf, t.expected)
+		c.Check(got, gc.Equals, t.expected)
+	}
+}

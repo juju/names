@@ -62,11 +62,6 @@ var parseTagTests = []struct {
 	expectType: names.MachineTag{},
 	resultId:   "10/lxc/1",
 }, {
-	tag:        "foo",
-	expectKind: names.MachineTagKind,
-	expectType: names.MachineTag{},
-	resultErr:  `"foo" is not a valid machine tag`,
-}, {
 	tag:        "machine-#",
 	expectKind: names.MachineTagKind,
 	expectType: names.MachineTag{},
@@ -82,11 +77,6 @@ var parseTagTests = []struct {
 	expectType: names.UnitTag{},
 	resultId:   "rabbitmq-server/0",
 }, {
-	tag:        "foo",
-	expectKind: names.UnitTagKind,
-	expectType: names.UnitTag{},
-	resultErr:  `"foo" is not a valid unit tag`,
-}, {
 	tag:        "unit-#",
 	expectKind: names.UnitTagKind,
 	expectType: names.UnitTag{},
@@ -101,11 +91,6 @@ var parseTagTests = []struct {
 	expectKind: names.ServiceTagKind,
 	expectType: names.ServiceTag{},
 	resultErr:  `"service-#" is not a valid service tag`,
-}, {
-	tag:        "unit-wordpress-0",
-	expectKind: names.MachineTagKind,
-	expectType: names.MachineTag{},
-	resultErr:  `"unit-wordpress-0" is not a valid machine tag`,
 }, {
 	tag:        "environment-foo",
 	expectKind: names.EnvironTagKind,
@@ -164,7 +149,7 @@ var makeTag = map[string]func(string) names.Tag{
 func (*tagSuite) TestParseTag(c *gc.C) {
 	for i, test := range parseTagTests {
 		c.Logf("test %d: %q expectKind %q", i, test.tag, test.expectKind)
-		tag, err := names.ParseTag(test.tag, test.expectKind)
+		tag, err := names.ParseTag(test.tag)
 		if test.resultErr != "" {
 			c.Assert(err, gc.ErrorMatches, test.resultErr)
 			c.Assert(tag, gc.IsNil)
@@ -173,7 +158,7 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 			// expected kind, test that using an empty
 			// expectKind does not change the error message.
 			if tagKind, err := names.TagKind(test.tag); err == nil && tagKind == test.expectKind {
-				tag, err := names.ParseTag(test.tag, "")
+				tag, err := names.ParseTag(test.tag)
 				c.Assert(err, gc.ErrorMatches, test.resultErr)
 				c.Assert(tag, gc.IsNil)
 			}
@@ -195,7 +180,7 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 				c.Assert(reversed, gc.Equals, test.tag)
 			}
 			// Check that it parses ok without an expectKind.
-			tag, err := names.ParseTag(test.tag, "")
+			tag, err := names.ParseTag(test.tag)
 			c.Assert(err, gc.IsNil)
 			c.Assert(tag, gc.FitsTypeOf, test.expectType)
 			c.Assert(tag.Kind(), gc.Equals, test.expectKind) // will be removed in the next branch
