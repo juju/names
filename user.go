@@ -25,7 +25,7 @@ func (t UserTag) Kind() string   { return UserTagKind }
 func (t UserTag) Id() string     { return t.name }
 
 // NewUserTag returns the tag for the user with the given name.
-func NewUserTag(userName string) Tag {
+func NewUserTag(userName string) UserTag {
 	return UserTag{name: userName}
 }
 

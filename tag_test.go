@@ -137,13 +137,13 @@ var parseTagTests = []struct {
 }}
 
 var makeTag = map[string]func(string) names.Tag{
-	names.MachineTagKind:  names.NewMachineTag,
-	names.UnitTagKind:     names.NewUnitTag,
-	names.ServiceTagKind:  names.NewServiceTag,
-	names.RelationTagKind: names.NewRelationTag,
-	names.EnvironTagKind:  names.NewEnvironTag,
-	names.UserTagKind:     names.NewUserTag,
-	names.NetworkTagKind:  names.NewNetworkTag,
+	names.MachineTagKind:  func(tag string) names.Tag { return names.NewMachineTag(tag) },
+	names.UnitTagKind:     func(tag string) names.Tag { return names.NewUnitTag(tag) },
+	names.ServiceTagKind:  func(tag string) names.Tag { return names.NewServiceTag(tag) },
+	names.RelationTagKind: func(tag string) names.Tag { return names.NewRelationTag(tag) },
+	names.EnvironTagKind:  func(tag string) names.Tag { return names.NewEnvironTag(tag) },
+	names.UserTagKind:     func(tag string) names.Tag { return names.NewUserTag(tag) },
+	names.NetworkTagKind:  func(tag string) names.Tag { return names.NewNetworkTag(tag) },
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
