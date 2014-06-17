@@ -1,4 +1,4 @@
-// Copyright 2013 Canonical Ltd.
+// Copyright 2014 Canonical Ltd.
 // Licensed under the AGPLv3, see LICENCE file for details.
 
 package names_test
@@ -29,6 +29,8 @@ var tagKindTests = []struct {
 	{tag: "unit", err: `"unit" is not a valid tag`},
 	{tag: "network", err: `"network" is not a valid tag`},
 	{tag: "network-42", kind: names.NetworkTagKind},
+	{tag: "action-service-foo" + names.ActionMarker + "0", kind: names.ActionTagKind},
+	{tag: "action-wordpress/42" + names.ActionMarker + "0", kind: names.ActionTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -132,6 +134,21 @@ var parseTagTests = []struct {
 	expectType: names.NetworkTag{},
 	resultId:   "mynet1",
 }, {
+	tag:        "action-wordpress-" + names.ActionMarker + "333",
+	expectKind: names.ActionTagKind,
+	expectType: names.ActionTag{},
+	resultErr:  `"action-wordpress-` + names.ActionMarker + `333" is not a valid action tag`,
+}, {
+	tag:        "action-wordpress" + names.ActionMarker + "333",
+	expectKind: names.ActionTagKind,
+	expectType: names.ActionTag{},
+	resultId:   "wordpress" + names.ActionMarker + "333",
+}, {
+	tag:        "action-wordpress/0" + names.ActionMarker + "333",
+	expectKind: names.ActionTagKind,
+	expectType: names.ActionTag{},
+	resultId:   "wordpress/0" + names.ActionMarker + "333",
+}, {
 	tag:       "foo",
 	resultErr: `"foo" is not a valid tag`,
 }}
@@ -144,6 +161,7 @@ var makeTag = map[string]func(string) names.Tag{
 	names.EnvironTagKind:  names.NewEnvironTag,
 	names.UserTagKind:     names.NewUserTag,
 	names.NetworkTagKind:  names.NewNetworkTag,
+	names.ActionTagKind:   names.NewActionTag,
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
@@ -163,6 +181,7 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 				c.Assert(tag, gc.IsNil)
 			}
 		} else {
+			c.Assert(err, gc.IsNil)
 			kind, id := tag.Kind(), tag.Id()
 			c.Assert(err, gc.IsNil)
 			c.Assert(id, gc.Equals, test.resultId)

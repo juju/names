@@ -16,6 +16,7 @@ var tagEqualityTests = []struct {
 	{NewEnvironTag("local"), EnvironTag{uuid: "local"}},
 	{NewUserTag("admin"), UserTag{name: "admin"}},
 	{NewNetworkTag("eth0"), NetworkTag{name: "eth0"}},
+	{NewActionTag("foo" + ActionMarker + "321"), ActionTag{name: "foo" + ActionMarker + "321"}},
 }
 
 type equalitySuite struct{}
