@@ -13,7 +13,7 @@ const (
 
 	// ActionMarker is the identifier used to join filterable
 	// prefixes for Action Id's with unique suffixes
-	ActionMarker  = "_a_"
+	ActionMarker = "_a_"
 )
 
 const (
@@ -22,32 +22,32 @@ const (
 
 var validAction = regexp.MustCompile("^" + validActionNameRegex + "$")
 
-// IsAction returns whether name is a valid action name.
-// Valid action names include the names.ActionMarker token that delimits
+// IsAction returns whether actionId is a valid actionId
+// Valid action ids include the names.ActionMarker token that delimits
 // a prefix that can be used for filtering, and a suffix that should be
-// unique.  The prefix should match the name rules for units and services
-func IsAction(name string) bool {
-	return validAction.MatchString(name)
+// unique.  The prefix should matchIx the name rules for units and services
+func IsAction(actionId string) bool {
+	return validAction.MatchString(actionId)
 }
 
 // ActionTag is a Tag type for representing Action entities, which
 // are records of queued actions for a given service or unit
 type ActionTag struct {
-	name string
+	id string
 }
 
 // String returns a string that shows the type and id of an ActionTag
 func (t ActionTag) String() string { return t.Kind() + "-" + t.Id() }
 
 // Kind exposes the ActionTagKind value to identify what kind of Tag this is
-func (t ActionTag) Kind() string   { return ActionTagKind }
+func (t ActionTag) Kind() string { return ActionTagKind }
 
-// Id returns the name of the Action this Tag represents
-func (t ActionTag) Id() string     { return t.name }
+// Id returns the id of the Action this Tag represents
+func (t ActionTag) Id() string { return t.id }
 
-// NewActionTag returns the tag for the action with the given name.
-func NewActionTag(actionName string) Tag {
-	return ActionTag{name: actionName}
+// NewActionTag returns the tag for the action with the given id.
+func NewActionTag(actionId string) Tag {
+	return ActionTag{id: actionId}
 }
 
 // ParseActionTag parses a action tag string.
