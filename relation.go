@@ -37,7 +37,7 @@ func (t RelationTag) Kind() string   { return RelationTagKind }
 func (t RelationTag) Id() string     { return relationTagSuffixToKey(t.key) }
 
 // NewRelationTag returns the tag for the relation with the given key.
-func NewRelationTag(relationKey string) Tag {
+func NewRelationTag(relationKey string) RelationTag {
 	if !IsRelation(relationKey) {
 		panic(fmt.Sprintf("%q is not a valid relation key", relationKey))
 	}

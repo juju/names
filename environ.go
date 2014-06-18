@@ -14,7 +14,7 @@ type EnvironTag struct {
 }
 
 // NewEnvironTag returns the tag of an environment with the given environment UUID.
-func NewEnvironTag(uuid string) Tag {
+func NewEnvironTag(uuid string) EnvironTag {
 	return EnvironTag{uuid: uuid}
 }
 

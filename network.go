@@ -26,7 +26,7 @@ func (t NetworkTag) Kind() string   { return NetworkTagKind }
 func (t NetworkTag) Id() string     { return t.name }
 
 // NewNetworkTag returns the tag of a network with the given name.
-func NewNetworkTag(name string) Tag {
+func NewNetworkTag(name string) NetworkTag {
 	if !IsNetwork(name) {
 		panic(fmt.Sprintf("%q is not a valid network name", name))
 	}

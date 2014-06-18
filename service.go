@@ -30,7 +30,7 @@ func (t ServiceTag) Kind() string   { return ServiceTagKind }
 func (t ServiceTag) Id() string     { return t.name }
 
 // NewServiceTag returns the tag for the service with the given name.
-func NewServiceTag(serviceName string) Tag {
+func NewServiceTag(serviceName string) ServiceTag {
 	return ServiceTag{name: serviceName}
 }
 

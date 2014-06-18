@@ -23,7 +23,7 @@ func (t UnitTag) Id() string     { return unitTagSuffixToId(t.name) }
 
 // NewUnitTag returns the tag for the unit with the given name.
 // It will panic if the given unit name is not valid.
-func NewUnitTag(unitName string) Tag {
+func NewUnitTag(unitName string) UnitTag {
 	// Replace only the last "/" with "-".
 	i := strings.LastIndex(unitName, "/")
 	if i <= 0 || !IsUnit(unitName) {

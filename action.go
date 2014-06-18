@@ -46,7 +46,7 @@ func (t ActionTag) Kind() string { return ActionTagKind }
 func (t ActionTag) Id() string { return t.id }
 
 // NewActionTag returns the tag for the action with the given id.
-func NewActionTag(actionId string) Tag {
+func NewActionTag(actionId string) ActionTag {
 	return ActionTag{id: actionId}
 }
 
