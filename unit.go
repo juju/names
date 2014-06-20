@@ -11,7 +11,7 @@ import (
 
 const UnitTagKind = "unit"
 
-var validUnit = regexp.MustCompile("^" + ServiceSnippet + "/" + NumberSnippet + "$")
+var validUnit = regexp.MustCompile("^(" + ServiceSnippet + ")/" + NumberSnippet + "$")
 
 type UnitTag struct {
 	name string
