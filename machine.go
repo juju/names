@@ -12,8 +12,8 @@ const MachineTagKind = "machine"
 
 const (
 	ContainerTypeSnippet = "[a-z]+"
-	ContainerSnippet     = "(/" + ContainerTypeSnippet + "/" + NumberSnippet + ")"
-	MachineSnippet       = NumberSnippet + ContainerSnippet + "*"
+	ContainerSnippet     = "/" + ContainerTypeSnippet + "/" + NumberSnippet + ""
+	MachineSnippet       = NumberSnippet + "(?:" + ContainerSnippet + ")*"
 )
 
 var validMachine = regexp.MustCompile("^" + MachineSnippet + "$")
