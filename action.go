@@ -23,7 +23,7 @@ const (
 // a prefix that can be used for filtering, and a suffix that should be
 // unique.  The prefix should match the name rules for units
 func IsAction(actionId string) bool {
-	_, ok := ParseActionId(actionId)
+	_, ok := parseActionId(actionId)
 	return ok
 }
 
@@ -50,14 +50,19 @@ func NewActionTag(tag UnitTag, sequence int) ActionTag {
 	return ActionTag{unit: tag, sequence: sequence}
 }
 
-// UnitTag will extract and return the UnitTag from the ActionTag
+// UnitTag returns the UnitTag that the ActionTag is queued for
 func (t ActionTag) UnitTag() UnitTag {
 	return t.unit
 }
 
-// ParseActionId creates an ActionTag from an actionId
+// Sequence returns the unique suffix of the ActionTag
+func (t ActionTag) Sequence() int {
+    return t.sequence
+}
+
+// parseActionId creates an ActionTag from an actionId
 // Id.  It returns false if the actionId cannot be parsed otherwise true
-func ParseActionId(actionId string) (ActionTag, bool) {
+func parseActionId(actionId string) (ActionTag, bool) {
 	bad := ActionTag{}
 	parts := strings.Split(actionId, ActionMarker)
 	// must have exactly one ActionMarker token
