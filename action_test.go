@@ -21,15 +21,21 @@ var actionNameTests = []struct {
 	{pattern: "", valid: false},
 	{pattern: "service", valid: false},
 	{pattern: "service" + marker, valid: false},
-	{pattern: "service" + marker + "0", valid: true},
+	{pattern: "service" + marker + "0", valid: false},
 	{pattern: "service" + marker + "00", valid: false},
 	{pattern: "service" + marker + "0" + marker + "0", valid: false},
+
 	{pattern: "service-name/0" + marker, valid: false},
+	{pattern: "service-name-0" + marker, valid: false},
 	{pattern: "service-name/0" + marker + "0", valid: true},
-	{pattern: "service-name-0" + marker + "0", valid: true},
+	{pattern: "service-name-0" + marker + "0", valid: false},
+
 	{pattern: "service-name/0" + marker + "00", valid: false},
+	{pattern: "service-name-0" + marker + "00", valid: false},
 	{pattern: "service-name/0" + marker + "01", valid: false},
+	{pattern: "service-name-0" + marker + "01", valid: false},
 	{pattern: "service-name/0" + marker + "11", valid: true},
+	{pattern: "service-name-0" + marker + "11", valid: false},
 }
 
 func (s *actionSuite) TestActionNameFormats(c *gc.C) {
@@ -53,8 +59,8 @@ var parseActionTagTests = []struct {
 	err:      names.InvalidTagError("", ""),
 }, {
 	tag:      "action-dave" + names.ActionMarker + "123",
-	expected: names.NewActionTag("dave" + names.ActionMarker + "123"),
-	err:      nil,
+	expected: makeActionTag("action-dave" + names.ActionMarker + "123"),
+	err:      names.InvalidTagError("action-dave"+names.ActionMarker+"123", names.ActionTagKind),
 }, {
 	tag:      "dave",
 	expected: nil,
@@ -84,4 +90,11 @@ func (s *actionSuite) TestParseActionTag(c *gc.C) {
 		c.Check(got, gc.FitsTypeOf, t.expected)
 		c.Check(got, gc.Equals, t.expected)
 	}
+}
+
+func makeActionTag(actionId string) names.ActionTag {
+	if tag, ok := names.ParseActionId(actionId); ok {
+		return tag
+	}
+	return names.ActionTag{}
 }

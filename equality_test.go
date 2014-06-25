@@ -16,7 +16,8 @@ var tagEqualityTests = []struct {
 	{NewEnvironTag("local"), EnvironTag{uuid: "local"}},
 	{NewUserTag("admin"), UserTag{name: "admin"}},
 	{NewNetworkTag("eth0"), NetworkTag{name: "eth0"}},
-	{NewActionTag("foo" + ActionMarker + "321"), ActionTag{id: "foo" + ActionMarker + "321"}},
+	{makeActionTag("foo" + ActionMarker + "321"), ActionTag{}},
+	{makeActionTag("foo/0" + ActionMarker + "321"), ActionTag{unit: NewUnitTag("foo/0"), sequence: 321}},
 }
 
 type equalitySuite struct{}
@@ -27,4 +28,11 @@ func (s *equalitySuite) TestTagEquality(c *gc.C) {
 	for _, tt := range tagEqualityTests {
 		c.Check(tt.want, gc.Equals, tt.expected)
 	}
+}
+
+func makeActionTag(actionId string) ActionTag {
+	if tag, ok := ParseActionId(actionId); ok {
+		return tag
+	}
+	return ActionTag{}
 }
