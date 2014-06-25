@@ -57,7 +57,7 @@ func NewActionTag(actionId string) ActionTag {
 // UnitTag will extract and return the UnitTag from the ActionTag
 func (t ActionTag) UnitTag() (UnitTag, bool) {
 	if parts, ok := parseActionId(t.id); ok {
-		return parts.Unit, true
+		return parts.unittag, true
 	}
 	return UnitTag{}, false
 }
@@ -65,8 +65,8 @@ func (t ActionTag) UnitTag() (UnitTag, bool) {
 // actionIdParts is a convenience struct for holding parsed
 // actionId's
 type actionIdParts struct {
-	Unit     UnitTag
-	Sequence int
+	unittag  UnitTag
+	sequence int
 }
 
 // parseActionId extracts the UnitTag and the unique sequence from the
@@ -100,7 +100,7 @@ func parseActionId(actionId string) (actionIdParts, bool) {
 	if err != nil {
 		return bad, false
 	}
-	return actionIdParts{Unit: tag, Sequence: int(sequence)}, true
+	return actionIdParts{unittag: tag, sequence: int(sequence)}, true
 }
 
 // ParseActionTag parses a action tag string.
