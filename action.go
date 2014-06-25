@@ -80,7 +80,7 @@ func parseActionId(actionId string) (actionIdParts, bool) {
 		return bad, false
 	}
 	// first part must be a unit name
-	tag, ok := unitNameToTag(parts[0])
+	tag, ok := tagFromUnitName(parts[0])
 	if !ok {
 		return bad, false
 	}
