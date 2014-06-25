@@ -35,7 +35,7 @@ type ActionTag struct {
 // String returns a string that shows the type and id of an ActionTag
 func (t ActionTag) String() string {
 	if len(t.id) > 0 {
-		return t.Kind() + "-" + t.Id()
+		return t.Kind() + "-" + t.id
 	}
 	return ""
 }
