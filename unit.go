@@ -24,13 +24,11 @@ func (t UnitTag) Id() string     { return unitTagSuffixToId(t.name) }
 // NewUnitTag returns the tag for the unit with the given name.
 // It will panic if the given unit name is not valid.
 func NewUnitTag(unitName string) UnitTag {
-	// Replace only the last "/" with "-".
-	i := strings.LastIndex(unitName, "/")
-	if i <= 0 || !IsUnit(unitName) {
+	tag, ok := unitNameToTag(unitName)
+	if !ok {
 		panic(fmt.Sprintf("%q is not a valid unit name", unitName))
 	}
-	unitName = unitName[:i] + "-" + unitName[i+1:]
-	return UnitTag{name: unitName}
+	return tag
 }
 
 // ParseUnitTag parses a unit tag string.
@@ -59,6 +57,16 @@ func UnitService(unitName string) string {
 		panic(fmt.Sprintf("%q is not a valid unit name", unitName))
 	}
 	return s[1]
+}
+
+func unitNameToTag(unitName string) (UnitTag, bool) {
+	// Replace only the last "/" with "-".
+	i := strings.LastIndex(unitName, "/")
+	if i <= 0 || !IsUnit(unitName) {
+		return UnitTag{}, false
+	}
+	unitName = unitName[:i] + "-" + unitName[i+1:]
+	return UnitTag{name: unitName}, true
 }
 
 func unitTagSuffixToId(s string) string {

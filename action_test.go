@@ -21,15 +21,21 @@ var actionNameTests = []struct {
 	{pattern: "", valid: false},
 	{pattern: "service", valid: false},
 	{pattern: "service" + marker, valid: false},
-	{pattern: "service" + marker + "0", valid: true},
+	{pattern: "service" + marker + "0", valid: false},
 	{pattern: "service" + marker + "00", valid: false},
 	{pattern: "service" + marker + "0" + marker + "0", valid: false},
+
 	{pattern: "service-name/0" + marker, valid: false},
+	{pattern: "service-name-0" + marker, valid: false},
 	{pattern: "service-name/0" + marker + "0", valid: true},
-	{pattern: "service-name-0" + marker + "0", valid: true},
+	{pattern: "service-name-0" + marker + "0", valid: false},
+
 	{pattern: "service-name/0" + marker + "00", valid: false},
+	{pattern: "service-name-0" + marker + "00", valid: false},
 	{pattern: "service-name/0" + marker + "01", valid: false},
+	{pattern: "service-name-0" + marker + "01", valid: false},
 	{pattern: "service-name/0" + marker + "11", valid: true},
+	{pattern: "service-name-0" + marker + "11", valid: false},
 }
 
 func (s *actionSuite) TestActionNameFormats(c *gc.C) {
@@ -54,7 +60,7 @@ var parseActionTagTests = []struct {
 }, {
 	tag:      "action-dave" + names.ActionMarker + "123",
 	expected: names.NewActionTag("dave" + names.ActionMarker + "123"),
-	err:      nil,
+	err:      names.InvalidTagError("action-dave"+names.ActionMarker+"123", names.ActionTagKind),
 }, {
 	tag:      "dave",
 	expected: nil,

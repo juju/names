@@ -29,7 +29,7 @@ var tagKindTests = []struct {
 	{tag: "unit", err: `"unit" is not a valid tag`},
 	{tag: "network", err: `"network" is not a valid tag`},
 	{tag: "network-42", kind: names.NetworkTagKind},
-	{tag: "action-service-foo" + names.ActionMarker + "0", kind: names.ActionTagKind},
+	{tag: "action-service-foo/3" + names.ActionMarker + "0", kind: names.ActionTagKind},
 	{tag: "action-wordpress/42" + names.ActionMarker + "0", kind: names.ActionTagKind},
 }
 
@@ -142,7 +142,7 @@ var parseTagTests = []struct {
 	tag:        "action-wordpress" + names.ActionMarker + "333",
 	expectKind: names.ActionTagKind,
 	expectType: names.ActionTag{},
-	resultId:   "wordpress" + names.ActionMarker + "333",
+	resultErr:  `"action-wordpress` + names.ActionMarker + `333" is not a valid action tag`,
 }, {
 	tag:        "action-wordpress/0" + names.ActionMarker + "333",
 	expectKind: names.ActionTagKind,
