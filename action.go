@@ -4,6 +4,7 @@
 package names
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -22,58 +23,42 @@ const (
 // a prefix that can be used for filtering, and a suffix that should be
 // unique.  The prefix should match the name rules for units
 func IsAction(actionId string) bool {
-	_, ok := parseActionId(actionId)
+	_, ok := ParseActionId(actionId)
 	return ok
 }
 
 // ActionTag is a Tag type for representing Action entities, which
 // are records of queued actions for a given unit
 type ActionTag struct {
-	id string
+	unit     UnitTag
+	sequence int
 }
 
 // String returns a string that shows the type and id of an ActionTag
 func (t ActionTag) String() string {
-	if len(t.id) > 0 {
-		return t.Kind() + "-" + t.id
-	}
-	return ""
+	return t.Kind() + "-" + t.Id()
 }
 
 // Kind exposes the ActionTagKind value to identify what kind of Tag this is
 func (t ActionTag) Kind() string { return ActionTagKind }
 
 // Id returns the id of the Action this Tag represents
-func (t ActionTag) Id() string { return t.id }
+func (t ActionTag) Id() string { return fmt.Sprintf("%s%s%d", t.unit.Id(), ActionMarker, t.sequence) }
 
 // NewActionTag returns the tag for the action with the given id.
-func NewActionTag(actionId string) ActionTag {
-	if IsAction(actionId) {
-		return ActionTag{id: actionId}
-	}
-	return ActionTag{}
+func NewActionTag(tag UnitTag, sequence int) ActionTag {
+	return ActionTag{unit: tag, sequence: sequence}
 }
 
 // UnitTag will extract and return the UnitTag from the ActionTag
-func (t ActionTag) UnitTag() (UnitTag, bool) {
-	if parts, ok := parseActionId(t.id); ok {
-		return parts.unittag, true
-	}
-	return UnitTag{}, false
+func (t ActionTag) UnitTag() UnitTag {
+	return t.unit
 }
 
-// actionIdParts is a convenience struct for holding parsed
-// actionId's
-type actionIdParts struct {
-	unittag  UnitTag
-	sequence int
-}
-
-// parseActionId extracts the UnitTag and the unique sequence from the
-// actionId.  It returns false if the actionId cannot be parsed otherwise
-// true.
-func parseActionId(actionId string) (actionIdParts, bool) {
-	bad := actionIdParts{}
+// ParseActionId creates an ActionTag from an actionId
+// Id.  It returns false if the actionId cannot be parsed otherwise true
+func ParseActionId(actionId string) (ActionTag, bool) {
+	bad := ActionTag{}
 	parts := strings.Split(actionId, ActionMarker)
 	// must have exactly one ActionMarker token
 	if len(parts) != 2 {
@@ -100,7 +85,7 @@ func parseActionId(actionId string) (actionIdParts, bool) {
 	if err != nil {
 		return bad, false
 	}
-	return actionIdParts{unittag: tag, sequence: int(sequence)}, true
+	return ActionTag{unit: tag, sequence: int(sequence)}, true
 }
 
 // ParseActionTag parses a action tag string.

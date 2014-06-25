@@ -161,7 +161,7 @@ var makeTag = map[string]func(string) names.Tag{
 	names.EnvironTagKind:  func(tag string) names.Tag { return names.NewEnvironTag(tag) },
 	names.UserTagKind:     func(tag string) names.Tag { return names.NewUserTag(tag) },
 	names.NetworkTagKind:  func(tag string) names.Tag { return names.NewNetworkTag(tag) },
-	names.ActionTagKind:   func(tag string) names.Tag { return names.NewActionTag(tag) },
+	names.ActionTagKind:   func(tag string) names.Tag { t, _ := names.ParseActionId(tag); return t },
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
