@@ -21,7 +21,7 @@ var actionNameTests = []struct {
 	{pattern: "", valid: false},
 	{pattern: "service", valid: false},
 	{pattern: "service" + marker, valid: false},
-	{pattern: "service" + marker + "0", valid: false},
+	{pattern: "service" + marker + "0", valid: true},
 	{pattern: "service" + marker + "00", valid: false},
 	{pattern: "service" + marker + "0" + marker + "0", valid: false},
 
@@ -58,9 +58,17 @@ var parseActionTagTests = []struct {
 	expected: nil,
 	err:      names.InvalidTagError("", ""),
 }, {
-	tag:      "action-dave" + names.ActionMarker + "123",
-	expected: makeActionTag("action-dave" + names.ActionMarker + "123"),
-	err:      names.InvalidTagError("action-dave"+names.ActionMarker+"123", names.ActionTagKind),
+	tag:      "action-good" + names.ActionMarker + "123",
+	expected: names.NewActionTag("good" + names.ActionMarker + "123"),
+	err:      nil,
+}, {
+	tag:      "action-good/0" + names.ActionMarker + "123",
+	expected: names.NewActionTag("good/0" + names.ActionMarker + "123"),
+	err:      nil,
+}, {
+	tag:      "action-bad/00" + names.ActionMarker + "123",
+	expected: nil,
+	err:      names.InvalidTagError("action-bad/00"+names.ActionMarker+"123", names.ActionTagKind),
 }, {
 	tag:      "dave",
 	expected: nil,
@@ -90,11 +98,4 @@ func (s *actionSuite) TestParseActionTag(c *gc.C) {
 		c.Check(got, gc.FitsTypeOf, t.expected)
 		c.Check(got, gc.Equals, t.expected)
 	}
-}
-
-func makeActionTag(actionId string) names.ActionTag {
-	if tag, ok := names.ParseActionId(actionId); ok {
-		return tag
-	}
-	return names.ActionTag{}
 }

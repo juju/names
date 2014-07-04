@@ -13,25 +13,30 @@ const (
 	// ActionTagKind is used to identify the Tag type
 	ActionTagKind = "action"
 
-	// ActionMarker is the identifier used to join filterable
+	// actionMarker is the identifier used to join filterable
 	// prefixes for Action Id's with unique suffixes
-	ActionMarker = "_a_"
+	actionMarker = "_a_"
 )
-
-// IsAction returns whether actionId is a valid actionId
-// Valid action ids include the names.ActionMarker token that delimits
-// a prefix that can be used for filtering, and a suffix that should be
-// unique.  The prefix should match the name rules for units
-func IsAction(actionId string) bool {
-	_, ok := parseActionId(actionId)
-	return ok
-}
 
 // ActionTag is a Tag type for representing Action entities, which
 // are records of queued actions for a given unit
 type ActionTag struct {
-	unit     UnitTag
-	sequence int
+	id string
+}
+
+// NewActionTag returns the tag for the action with the given id.
+func NewActionTag(id string) ActionTag {
+	tag, ok := newActionTag(id)
+	if !ok {
+		return ActionTag{}
+	}
+	return tag
+}
+
+// HydrateActionTag reconstitutes an ActionTag from it's prefix and sequence
+func HydrateActionTag(prefix string, sequence int) ActionTag {
+	actionId := fmt.Sprintf("%s%s%d", prefix, actionMarker, sequence)
+	return ActionTag{id: actionId}
 }
 
 // String returns a string that shows the type and id of an ActionTag
@@ -43,54 +48,48 @@ func (t ActionTag) String() string {
 func (t ActionTag) Kind() string { return ActionTagKind }
 
 // Id returns the id of the Action this Tag represents
-func (t ActionTag) Id() string { return fmt.Sprintf("%s%s%d", t.unit.Id(), ActionMarker, t.sequence) }
+func (t ActionTag) Id() string { return t.id }
 
-// NewActionTag returns the tag for the action with the given id.
-func NewActionTag(tag UnitTag, sequence int) ActionTag {
-	return ActionTag{unit: tag, sequence: sequence}
-}
-
-// UnitTag returns the UnitTag that the ActionTag is queued for
-func (t ActionTag) UnitTag() UnitTag {
-	return t.unit
-}
-
-// Sequence returns the unique suffix of the ActionTag
-func (t ActionTag) Sequence() int {
-    return t.sequence
-}
-
-// parseActionId creates an ActionTag from an actionId
-// Id.  It returns false if the actionId cannot be parsed otherwise true
-func parseActionId(actionId string) (ActionTag, bool) {
-	bad := ActionTag{}
-	parts := strings.Split(actionId, ActionMarker)
-	// must have exactly one ActionMarker token
-	if len(parts) != 2 {
-		return bad, false
-	}
-	// first part must be a unit name
-	tag, ok := tagFromUnitName(parts[0])
+// PrefixTag returns a Tag representing the ActionReceiver this action is
+// queued for
+func (t ActionTag) PrefixTag() Tag {
+	prefix, _, ok := splitActionId(t.Id())
 	if !ok {
-		return bad, false
+		return nil
 	}
 
-	sl := len(parts[1])
-	// sequence has to be at least one digit long
-	if sl == 0 {
-		return bad, false
+	var tag Tag
+	var err error
+
+	switch {
+	case IsUnit(prefix):
+		tag = NewUnitTag(prefix)
+	case IsService(prefix):
+		tag = NewServiceTag(prefix)
+	default:
+		tag, err = ParseTag(prefix)
+		if err != nil {
+			tag = nil
+		}
 	}
-	// sequence cannot have leading zero if more than
-	// one digit long
-	if sl > 1 && strings.HasPrefix(parts[1], "0") {
-		return bad, false
+	return tag
+}
+
+func (t ActionTag) Sequence() int {
+	_, sequence, ok := splitActionId(t.Id())
+	if !ok {
+		return -1
 	}
-	// sequence must be a number (it's generated as int)
-	sequence, err := strconv.ParseUint(parts[1], 10, 32)
-	if err != nil {
-		return bad, false
-	}
-	return ActionTag{unit: tag, sequence: int(sequence)}, true
+	return sequence
+}
+
+// IsAction returns whether actionId is a valid actionId
+// Valid action ids include the names.actionMarker token that delimits
+// a prefix that can be used for filtering, and a suffix that should be
+// unique.  The prefix should match the name rules for units
+func IsAction(actionId string) bool {
+	_, ok := newActionTag(actionId)
+	return ok
 }
 
 // ParseActionTag parses a action tag string.
@@ -104,4 +103,34 @@ func ParseActionTag(actionTag string) (ActionTag, error) {
 		return ActionTag{}, invalidTagError(actionTag, ActionTagKind)
 	}
 	return st, nil
+}
+
+func newActionTag(actionId string) (ActionTag, bool) {
+	bad := ActionTag{}
+	prefix, _, ok := splitActionId(actionId)
+	if !ok {
+		return bad, false
+	}
+	switch {
+	case IsUnit(prefix):
+	case IsService(prefix):
+	default:
+		return bad, false
+	}
+	return ActionTag{id: actionId}, true
+}
+
+func splitActionId(id string) (string, int, bool) {
+	parts := strings.Split(id, actionMarker)
+	if len(parts) != 2 {
+		return "", -(len(parts) + 100), false
+	}
+	if len(parts[1]) > 1 && parts[1][:1] == "0" {
+		return "", -2, false
+	}
+	seq, err := strconv.ParseInt(parts[1], 10, 0)
+	if err != nil {
+		return "", -3, false
+	}
+	return parts[0], int(seq), true
 }
