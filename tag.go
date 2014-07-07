@@ -96,11 +96,10 @@ func ParseTag(tag string) (Tag, error) {
 		}
 		return NewNetworkTag(id), nil
 	case ActionTagKind:
-		actionTag, ok := parseActionId(id)
-		if ok {
-			return actionTag, nil
+		if !IsAction(id) {
+			return nil, invalidTagError(tag, kind)
 		}
-		return nil, invalidTagError(tag, kind)
+		return NewActionTag(id), nil
 	default:
 		return nil, invalidTagError(tag, "")
 	}

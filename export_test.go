@@ -4,4 +4,4 @@
 package names
 
 var InvalidTagError = invalidTagError
-var ParseActionId = parseActionId
+var ActionMarker = actionMarker
