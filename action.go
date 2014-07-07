@@ -33,8 +33,8 @@ func NewActionTag(id string) ActionTag {
 	return tag
 }
 
-// HydrateActionTag reconstitutes an ActionTag from it's prefix and sequence
-func HydrateActionTag(prefix string, sequence int) ActionTag {
+// JoinActionTag reconstitutes an ActionTag from it's prefix and sequence
+func JoinActionTag(prefix string, sequence int) ActionTag {
 	actionId := fmt.Sprintf("%s%s%d", prefix, actionMarker, sequence)
 	return ActionTag{id: actionId}
 }
