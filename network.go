@@ -10,7 +10,11 @@ import (
 
 const NetworkTagKind = "network"
 
-var validNetwork = regexp.MustCompile("^([a-z0-9]+(-[a-z0-9]+)*)$")
+const (
+	NetworkSnippet = "(?:[a-z0-9]+(?:-[a-z0-9]+)*)"
+)
+
+var validNetwork = regexp.MustCompile("^" + NetworkSnippet + "$")
 
 // IsNetwork reports whether name is a valid network name.
 func IsNetwork(name string) bool {
