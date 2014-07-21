@@ -52,7 +52,7 @@ func (s *actionSuite) TestActionNameFormats(c *gc.C) {
 }
 
 var invalidActionNameTests = []string{
-	"",      // blank is not a valid action in
+	"",      // blank is not a valid action id
 	"admin", // probably a user name, which isn't a valid action id
 }
 
