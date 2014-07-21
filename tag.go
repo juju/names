@@ -70,7 +70,7 @@ func ParseTag(tag string) (Tag, error) {
 		}
 		return NewMachineTag(id), nil
 	case ServiceTagKind:
-		if !IsService(id) {
+		if !IsValidService(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewServiceTag(id), nil
