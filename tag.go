@@ -65,7 +65,7 @@ func ParseTag(tag string) (Tag, error) {
 		return NewUnitTag(id), nil
 	case MachineTagKind:
 		id = machineTagSuffixToId(id)
-		if !IsMachine(id) {
+		if !IsValidMachine(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewMachineTag(id), nil

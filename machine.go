@@ -18,8 +18,8 @@ const (
 
 var validMachine = regexp.MustCompile("^" + MachineSnippet + "$")
 
-// IsMachine returns whether id is a valid machine id.
-func IsMachine(id string) bool {
+// IsValidMachine returns whether id is a valid machine id.
+func IsValidMachine(id string) bool {
 	return validMachine.MatchString(id)
 }
 
