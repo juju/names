@@ -23,8 +23,8 @@ var (
 	validPeerRelation = regexp.MustCompile("^" + ServiceSnippet + ":" + RelationSnippet + "$")
 )
 
-// IsRelation returns whether key is a valid relation key.
-func IsRelation(key string) bool {
+// isValidRelation returns whether key is a valid relation key.
+func isValidRelation(key string) bool {
 	return validRelation.MatchString(key) || validPeerRelation.MatchString(key)
 }
 
@@ -38,7 +38,7 @@ func (t RelationTag) Id() string     { return relationTagSuffixToKey(t.key) }
 
 // NewRelationTag returns the tag for the relation with the given key.
 func NewRelationTag(relationKey string) RelationTag {
-	if !IsRelation(relationKey) {
+	if !isValidRelation(relationKey) {
 		panic(fmt.Sprintf("%q is not a valid relation key", relationKey))
 	}
 	// Replace both ":" with "." and the " " with "#".

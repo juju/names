@@ -86,7 +86,7 @@ func ParseTag(tag string) (Tag, error) {
 		return NewEnvironTag(id), nil
 	case RelationTagKind:
 		id = relationTagSuffixToKey(id)
-		if !IsRelation(id) {
+		if !isValidRelation(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewRelationTag(id), nil
