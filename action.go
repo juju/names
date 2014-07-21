@@ -28,7 +28,7 @@ type ActionTag struct {
 func NewActionTag(id string) ActionTag {
 	tag, ok := newActionTag(id)
 	if !ok {
-		return ActionTag{}
+		panic(fmt.Sprintf("%q is not a valid action id", id))
 	}
 	return tag
 }

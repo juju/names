@@ -4,6 +4,8 @@
 package names_test
 
 import (
+	"fmt"
+
 	gc "launchpad.net/gocheck"
 
 	"github.com/juju/names"
@@ -46,6 +48,19 @@ func (s *actionSuite) TestActionNameFormats(c *gc.C) {
 	for i, test := range actionNameTests {
 		c.Logf("test %d: %q", i, test.pattern)
 		assertAction(test.pattern, test.valid)
+	}
+}
+
+var invalidActionNameTests = []string{
+	"",      // blank is not a valid action id
+	"admin", // probably a user name, which isn't a valid action id
+}
+
+func (s *actionSuite) TestInvalidActionNamesPanic(c *gc.C) {
+	for _, name := range invalidActionNameTests {
+		expect := fmt.Sprintf("%q is not a valid action id", name)
+		testFunc := func() { names.NewActionTag(name) }
+		c.Assert(testFunc, gc.PanicMatches, expect)
 	}
 }
 
