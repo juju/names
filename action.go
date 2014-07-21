@@ -62,7 +62,7 @@ func (t ActionTag) PrefixTag() Tag {
 	var err error
 
 	switch {
-	case IsUnit(prefix):
+	case IsValidUnit(prefix):
 		tag = NewUnitTag(prefix)
 	case IsValidService(prefix):
 		tag = NewServiceTag(prefix)
@@ -112,7 +112,7 @@ func newActionTag(actionId string) (ActionTag, bool) {
 		return bad, false
 	}
 	switch {
-	case IsUnit(prefix):
+	case IsValidUnit(prefix):
 	case IsValidService(prefix):
 	default:
 		return bad, false
