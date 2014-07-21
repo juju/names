@@ -75,7 +75,7 @@ func ParseTag(tag string) (Tag, error) {
 		}
 		return NewServiceTag(id), nil
 	case UserTagKind:
-		if !IsUser(id) {
+		if !IsValidUser(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewUserTag(id), nil

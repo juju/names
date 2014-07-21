@@ -55,10 +55,10 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 	c.Assert(names.NewUserTag("admin").String(), gc.Equals, "user-admin")
 }
 
-func (s *userSuite) TestIsUser(c *gc.C) {
+func (s *userSuite) TestIsValidUser(c *gc.C) {
 	for i, t := range validTests {
 		c.Logf("test %d: %s", i, t.string)
-		c.Assert(names.IsUser(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
+		c.Assert(names.IsValidUser(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
 	}
 }
 
