@@ -16,8 +16,8 @@ const (
 
 var validNetwork = regexp.MustCompile("^" + NetworkSnippet + "$")
 
-// IsNetwork reports whether name is a valid network name.
-func IsNetwork(name string) bool {
+// IsValidNetwork reports whether name is a valid network name.
+func IsValidNetwork(name string) bool {
 	return validNetwork.MatchString(name)
 }
 
@@ -31,7 +31,7 @@ func (t NetworkTag) Id() string     { return t.name }
 
 // NewNetworkTag returns the tag of a network with the given name.
 func NewNetworkTag(name string) NetworkTag {
-	if !IsNetwork(name) {
+	if !IsValidNetwork(name) {
 		panic(fmt.Sprintf("%q is not a valid network name", name))
 	}
 	return NetworkTag{name: name}

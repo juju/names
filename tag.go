@@ -91,7 +91,7 @@ func ParseTag(tag string) (Tag, error) {
 		}
 		return NewRelationTag(id), nil
 	case NetworkTagKind:
-		if !IsNetwork(id) {
+		if !IsValidNetwork(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewNetworkTag(id), nil

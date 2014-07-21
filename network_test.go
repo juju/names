@@ -39,7 +39,7 @@ var networkNameTests = []struct {
 func (s *networkSuite) TestNetworkNames(c *gc.C) {
 	for i, test := range networkNameTests {
 		c.Logf("test %d: %q", i, test.pattern)
-		c.Check(names.IsNetwork(test.pattern), gc.Equals, test.valid)
+		c.Check(names.IsValidNetwork(test.pattern), gc.Equals, test.valid)
 		if test.valid {
 			expectTag := fmt.Sprintf("%s-%s", names.NetworkTagKind, test.pattern)
 			c.Check(names.NewNetworkTag(test.pattern).String(), gc.Equals, expectTag)
