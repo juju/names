@@ -40,7 +40,7 @@ var actionNameTests = []struct {
 
 func (s *actionSuite) TestActionNameFormats(c *gc.C) {
 	assertAction := func(s string, expect bool) {
-		c.Assert(names.IsAction(s), gc.Equals, expect)
+		c.Assert(names.IsValidAction(s), gc.Equals, expect)
 	}
 
 	for i, test := range actionNameTests {

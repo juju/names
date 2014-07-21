@@ -83,11 +83,11 @@ func (t ActionTag) Sequence() int {
 	return sequence
 }
 
-// IsAction returns whether actionId is a valid actionId
+// IsValidAction returns whether actionId is a valid actionId
 // Valid action ids include the names.actionMarker token that delimits
 // a prefix that can be used for filtering, and a suffix that should be
 // unique.  The prefix should match the name rules for units
-func IsAction(actionId string) bool {
+func IsValidAction(actionId string) bool {
 	_, ok := newActionTag(actionId)
 	return ok
 }
