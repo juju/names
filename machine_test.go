@@ -56,7 +56,7 @@ var machineIdTests = []struct {
 func (s *machineSuite) TestMachineIdFormats(c *gc.C) {
 	for i, test := range machineIdTests {
 		c.Logf("test %d: %q", i, test.pattern)
-		c.Assert(names.IsMachine(test.pattern), gc.Equals, test.valid)
+		c.Assert(names.IsValidMachine(test.pattern), gc.Equals, test.valid)
 		c.Assert(names.IsContainerMachine(test.pattern), gc.Equals, test.container)
 	}
 }

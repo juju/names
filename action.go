@@ -62,9 +62,9 @@ func (t ActionTag) PrefixTag() Tag {
 	var err error
 
 	switch {
-	case IsUnit(prefix):
+	case IsValidUnit(prefix):
 		tag = NewUnitTag(prefix)
-	case IsService(prefix):
+	case IsValidService(prefix):
 		tag = NewServiceTag(prefix)
 	default:
 		tag, err = ParseTag(prefix)
@@ -83,11 +83,11 @@ func (t ActionTag) Sequence() int {
 	return sequence
 }
 
-// IsAction returns whether actionId is a valid actionId
+// IsValidAction returns whether actionId is a valid actionId
 // Valid action ids include the names.actionMarker token that delimits
 // a prefix that can be used for filtering, and a suffix that should be
 // unique.  The prefix should match the name rules for units
-func IsAction(actionId string) bool {
+func IsValidAction(actionId string) bool {
 	_, ok := newActionTag(actionId)
 	return ok
 }
@@ -112,8 +112,8 @@ func newActionTag(actionId string) (ActionTag, bool) {
 		return bad, false
 	}
 	switch {
-	case IsUnit(prefix):
-	case IsService(prefix):
+	case IsValidUnit(prefix):
+	case IsValidService(prefix):
 	default:
 		return bad, false
 	}

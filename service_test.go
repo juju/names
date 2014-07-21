@@ -34,15 +34,15 @@ var serviceNameTests = []struct {
 
 func (s *serviceSuite) TestServiceNameFormats(c *gc.C) {
 	assertService := func(s string, expect bool) {
-		c.Assert(names.IsService(s), gc.Equals, expect)
+		c.Assert(names.IsValidService(s), gc.Equals, expect)
 		// Check that anything that is considered a valid service name
 		// is also (in)valid if a(n) (in)valid unit designator is added
 		// to it.
-		c.Assert(names.IsUnit(s+"/0"), gc.Equals, expect)
-		c.Assert(names.IsUnit(s+"/99"), gc.Equals, expect)
-		c.Assert(names.IsUnit(s+"/-1"), gc.Equals, false)
-		c.Assert(names.IsUnit(s+"/blah"), gc.Equals, false)
-		c.Assert(names.IsUnit(s+"/"), gc.Equals, false)
+		c.Assert(names.IsValidUnit(s+"/0"), gc.Equals, expect)
+		c.Assert(names.IsValidUnit(s+"/99"), gc.Equals, expect)
+		c.Assert(names.IsValidUnit(s+"/-1"), gc.Equals, false)
+		c.Assert(names.IsValidUnit(s+"/blah"), gc.Equals, false)
+		c.Assert(names.IsValidUnit(s+"/"), gc.Equals, false)
 	}
 
 	for i, test := range serviceNameTests {

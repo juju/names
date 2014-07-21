@@ -3,5 +3,8 @@
 
 package names
 
-var InvalidTagError = invalidTagError
-var ActionMarker = actionMarker
+var (
+	ActionMarker    = actionMarker
+	InvalidTagError = invalidTagError
+	IsValidRelation = isValidRelation
+)

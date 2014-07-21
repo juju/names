@@ -59,44 +59,44 @@ func ParseTag(tag string) (Tag, error) {
 	switch kind {
 	case UnitTagKind:
 		id = unitTagSuffixToId(id)
-		if !IsUnit(id) {
+		if !IsValidUnit(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewUnitTag(id), nil
 	case MachineTagKind:
 		id = machineTagSuffixToId(id)
-		if !IsMachine(id) {
+		if !IsValidMachine(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewMachineTag(id), nil
 	case ServiceTagKind:
-		if !IsService(id) {
+		if !IsValidService(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewServiceTag(id), nil
 	case UserTagKind:
-		if !IsUser(id) {
+		if !IsValidUser(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewUserTag(id), nil
 	case EnvironTagKind:
-		if !IsEnvironment(id) {
+		if !isValidEnvironment(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewEnvironTag(id), nil
 	case RelationTagKind:
 		id = relationTagSuffixToKey(id)
-		if !IsRelation(id) {
+		if !isValidRelation(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewRelationTag(id), nil
 	case NetworkTagKind:
-		if !IsNetwork(id) {
+		if !IsValidNetwork(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewNetworkTag(id), nil
 	case ActionTagKind:
-		if !IsAction(id) {
+		if !IsValidAction(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewActionTag(id), nil

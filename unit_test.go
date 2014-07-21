@@ -39,7 +39,7 @@ var unitNameTests = []struct {
 func (s *unitSuite) TestUnitNameFormats(c *gc.C) {
 	for i, test := range unitNameTests {
 		c.Logf("test %d: %q", i, test.pattern)
-		c.Assert(names.IsUnit(test.pattern), gc.Equals, test.valid)
+		c.Assert(names.IsValidUnit(test.pattern), gc.Equals, test.valid)
 	}
 }
 

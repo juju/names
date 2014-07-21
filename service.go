@@ -16,8 +16,8 @@ const (
 
 var validService = regexp.MustCompile("^" + ServiceSnippet + "$")
 
-// IsService returns whether name is a valid service name.
-func IsService(name string) bool {
+// IsValidService returns whether name is a valid service name.
+func IsValidService(name string) bool {
 	return validService.MatchString(name)
 }
 

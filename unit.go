@@ -44,8 +44,8 @@ func ParseUnitTag(unitTag string) (UnitTag, error) {
 	return ut, nil
 }
 
-// IsUnit returns whether name is a valid unit name.
-func IsUnit(name string) bool {
+// IsValidUnit returns whether name is a valid unit name.
+func IsValidUnit(name string) bool {
 	return validUnit.MatchString(name)
 }
 
@@ -62,7 +62,7 @@ func UnitService(unitName string) string {
 func tagFromUnitName(unitName string) (UnitTag, bool) {
 	// Replace only the last "/" with "-".
 	i := strings.LastIndex(unitName, "/")
-	if i <= 0 || !IsUnit(unitName) {
+	if i <= 0 || !IsValidUnit(unitName) {
 		return UnitTag{}, false
 	}
 	unitName = unitName[:i] + "-" + unitName[i+1:]
