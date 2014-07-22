@@ -4,7 +4,8 @@
 package names
 
 var (
-	ActionMarker    = actionMarker
-	InvalidTagError = invalidTagError
-	IsValidRelation = isValidRelation
+	ActionMarker       = actionMarker
+	ActionResultMarker = actionResultMarker
+	InvalidTagError    = invalidTagError
+	IsValidRelation    = isValidRelation
 )

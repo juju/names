@@ -13,9 +13,15 @@ const (
 	// ActionTagKind is used to identify the Tag type
 	ActionTagKind = "action"
 
+	// ActionResultTagKind is used to identify the Tag type
+	ActionResultTagKind = "actionresult"
+
 	// actionMarker is the identifier used to join filterable
 	// prefixes for Action Id's with unique suffixes
 	actionMarker = "_a_"
+
+	// actionResultMarker is the token used to delimit a filterable prefix from unique suffix
+	actionResultMarker = "_ar_"
 )
 
 // ActionTag is a Tag type for representing Action entities, which
@@ -75,6 +81,7 @@ func (t ActionTag) PrefixTag() Tag {
 	return tag
 }
 
+// Sequence returns the unique integer suffix of the ActionTag
 func (t ActionTag) Sequence() int {
 	_, sequence, ok := splitActionId(t.Id())
 	if !ok {
@@ -121,7 +128,77 @@ func newActionTag(actionId string) (ActionTag, bool) {
 }
 
 func splitActionId(id string) (string, int, bool) {
-	parts := strings.Split(id, actionMarker)
+	return splitId(id, actionMarker)
+}
+
+// ActionResultTag represents the actionresult of an action
+type ActionResultTag struct {
+	id string
+}
+
+// NewActionResultTag returns a tag for an actionresult using it's id
+func NewActionResultTag(id string) ActionResultTag {
+	tag, ok := newActionResultTag(id)
+	if !ok {
+		panic(fmt.Sprintf("%q is not a valid action result id", id))
+	}
+	return tag
+}
+
+// String returns a string that shows the type and id of an ActionResultTag
+func (t ActionResultTag) String() string {
+	return t.Kind() + "-" + t.Id()
+}
+
+// Kind exposes the ActionTagKind value to identify what kind of Tag this is
+func (t ActionResultTag) Kind() string { return ActionResultTagKind }
+
+// Id returns the id of the Action this Tag represents
+func (t ActionResultTag) Id() string { return t.id }
+
+// IsValidActionResult returns whether resultId is a valid actionResultId
+// Valid action result ids include the names.actionResultMarker token that delimits
+// a prefix that can be used for filtering, and a suffix that should be
+// unique.  The prefix should match the name rules for units or services
+func IsValidActionResult(resultId string) bool {
+	_, ok := newActionResultTag(resultId)
+	return ok
+}
+
+// ParseActionResultTag parses a action result tag string.
+func ParseActionResultTag(actionResultTag string) (ActionResultTag, error) {
+	tag, err := ParseTag(actionResultTag)
+	if err != nil {
+		return ActionResultTag{}, err
+	}
+	st, ok := tag.(ActionResultTag)
+	if !ok {
+		return ActionResultTag{}, invalidTagError(actionResultTag, ActionResultTagKind)
+	}
+	return st, nil
+}
+
+func newActionResultTag(resultId string) (ActionResultTag, bool) {
+	bad := ActionResultTag{}
+	prefix, _, ok := splitActionResultId(resultId)
+	if !ok {
+		return bad, false
+	}
+	switch {
+	case IsValidUnit(prefix):
+	case IsValidService(prefix):
+	default:
+		return bad, false
+	}
+	return ActionResultTag{id: resultId}, true
+}
+
+func splitActionResultId(id string) (string, int, bool) {
+	return splitId(id, actionResultMarker)
+}
+
+func splitId(id, marker string) (string, int, bool) {
+	parts := strings.Split(id, marker)
 	if len(parts) != 2 {
 		return "", -(len(parts) + 100), false
 	}
