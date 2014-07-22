@@ -159,7 +159,7 @@ func (t ActionResultTag) Id() string { return t.id }
 // IsValidActionResult returns whether resultId is a valid actionResultId
 // Valid action result ids include the names.actionResultMarker token that delimits
 // a prefix that can be used for filtering, and a suffix that should be
-// unique.  The prefix should match the name rules for units or services
+// unique. The prefix should match the name rules for units or services
 func IsValidActionResult(resultId string) bool {
 	_, ok := newActionResultTag(resultId)
 	return ok
