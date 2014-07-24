@@ -80,7 +80,7 @@ func ParseTag(tag string) (Tag, error) {
 		}
 		return NewUserTag(id), nil
 	case EnvironTagKind:
-		if !isValidEnvironment(id) {
+		if !IsValidEnvironment(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewEnvironTag(id), nil
