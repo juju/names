@@ -21,8 +21,8 @@ var parseEnvironTagTests = []struct {
 	tag: "",
 	err: names.InvalidTagError("", ""),
 }, {
-	tag:      "environment-dave",
-	expected: names.NewEnvironTag("dave"),
+	tag:      "environment-f47ac10b-58cc-4372-a567-0e02b2c3d479",
+	expected: names.NewEnvironTag("f47ac10b-58cc-4372-a567-0e02b2c3d479"),
 }, {
 	tag: "dave",
 	err: names.InvalidTagError("dave", ""),

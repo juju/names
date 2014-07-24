@@ -4,7 +4,7 @@
 package names
 
 import (
-	"strings"
+	"regexp"
 )
 
 const EnvironTagKind = "environment"
@@ -12,6 +12,8 @@ const EnvironTagKind = "environment"
 type EnvironTag struct {
 	uuid string
 }
+
+var validUUID = regexp.MustCompile(`[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}`)
 
 // NewEnvironTag returns the tag of an environment with the given environment UUID.
 func NewEnvironTag(uuid string) EnvironTag {
@@ -35,10 +37,7 @@ func (t EnvironTag) String() string { return t.Kind() + "-" + t.Id() }
 func (t EnvironTag) Kind() string   { return EnvironTagKind }
 func (t EnvironTag) Id() string     { return t.uuid }
 
-// isValidEnvironment returns whether id is a valid environment UUID.
-func isValidEnvironment(id string) bool {
-	// TODO(axw) 2013-12-04 #1257587
-	// We should not accept environment tags that
-	// do not look like UUIDs.
-	return !strings.Contains(id, "/")
+// IsValidEnvironment returns whether id is a valid environment UUID.
+func IsValidEnvironment(id string) bool {
+	return validUUID.MatchString(id)
 }

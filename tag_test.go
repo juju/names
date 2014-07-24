@@ -94,10 +94,10 @@ var parseTagTests = []struct {
 	expectType: names.ServiceTag{},
 	resultErr:  `"service-#" is not a valid service tag`,
 }, {
-	tag:        "environment-foo",
+	tag:        "environment-f47ac10b-58cc-4372-a567-0e02b2c3d479",
 	expectKind: names.EnvironTagKind,
 	expectType: names.EnvironTag{},
-	resultId:   "foo",
+	resultId:   "f47ac10b-58cc-4372-a567-0e02b2c3d479",
 }, {
 	tag:        "relation-my-svc1.myrel1#other-svc.other-rel2",
 	expectKind: names.RelationTagKind,
