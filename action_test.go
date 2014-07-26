@@ -217,3 +217,29 @@ func (s *actionSuite) TestParseActionResultTag(c *gc.C) {
 		c.Check(got, gc.Equals, t.expected)
 	}
 }
+
+func (s *actionSuite) TestPrefixSuffix(c *gc.C) {
+	var tests = []struct {
+		prefix string
+		suffix int
+	}{
+		{prefix: "asdf", suffix: 0},
+		{prefix: "qwer/0", suffix: 10},
+		{prefix: "zxcv/3", suffix: 11},
+	}
+
+	for _, test := range tests {
+		suf := fmt.Sprintf("%d", test.suffix)
+
+		action := names.NewActionTag(test.prefix + names.ActionMarker + suf)
+		c.Assert(action.Prefix(), gc.Equals, test.prefix)
+		c.Assert(action.Sequence(), gc.Equals, test.suffix)
+
+		result := names.NewActionResultTag(test.prefix + names.ActionResultMarker + suf)
+		c.Assert(result.Prefix(), gc.Equals, test.prefix)
+		c.Assert(result.Sequence(), gc.Equals, test.suffix)
+
+		c.Assert(action.PrefixTag(), gc.Not(gc.IsNil))
+		c.Assert(action.PrefixTag(), gc.DeepEquals, result.PrefixTag())
+	}
+}
