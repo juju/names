@@ -24,11 +24,17 @@ const (
 	actionResultMarker = "_ar_"
 )
 
+//
+// ActionTag
+//
+
 // ActionTag is a Tag type for representing Action entities, which
 // are records of queued actions for a given unit
 type ActionTag struct {
-	id string
+	idPrefixer
 }
+
+var _ PrefixTag = (*ActionTag)(nil)
 
 // NewActionTag returns the tag for the action with the given id.
 func NewActionTag(id string) ActionTag {
@@ -42,24 +48,151 @@ func NewActionTag(id string) ActionTag {
 // JoinActionTag reconstitutes an ActionTag from it's prefix and sequence
 func JoinActionTag(prefix string, sequence int) ActionTag {
 	actionId := fmt.Sprintf("%s%s%d", prefix, actionMarker, sequence)
-	return ActionTag{id: actionId}
+	tag, ok := newActionTag(actionId)
+	if !ok {
+		panic("bad prefix or sequence")
+	}
+	return tag
 }
 
-// String returns a string that shows the type and id of an ActionTag
-func (t ActionTag) String() string {
-	return t.Kind() + "-" + t.Id()
+// IsValidAction returns whether actionId is a valid actionId
+// Valid action ids include the names.actionMarker token that delimits
+// a prefix that can be used for filtering, and a suffix that should be
+// unique.  The prefix should match the name rules for units
+func IsValidAction(actionId string) bool {
+	return isValidIdPrefixTag(actionId, actionMarker)
 }
 
-// Kind exposes the ActionTagKind value to identify what kind of Tag this is
-func (t ActionTag) Kind() string { return ActionTagKind }
+// ParseActionTag parses a action tag string.
+func ParseActionTag(actionTag string) (ActionTag, error) {
+	tag, err := ParseTag(actionTag)
+	if err != nil {
+		return ActionTag{}, err
+	}
+	st, ok := tag.(ActionTag)
+	if !ok {
+		return ActionTag{}, invalidTagError(actionTag, ActionTagKind)
+	}
+	return st, nil
+}
 
-// Id returns the id of the Action this Tag represents
-func (t ActionTag) Id() string { return t.id }
+func newActionTag(actionId string) (ActionTag, bool) {
+	if !isValidIdPrefixTag(actionId, actionMarker) {
+		return ActionTag{}, false
+	}
+	prefixer := idPrefixer{
+		id:     actionId,
+		kind:   ActionTagKind,
+		marker: actionMarker,
+	}
+	return ActionTag{idPrefixer: prefixer}, true
+}
 
-// PrefixTag returns a Tag representing the ActionReceiver this action is
-// queued for
-func (t ActionTag) PrefixTag() Tag {
-	prefix, _, ok := splitActionId(t.Id())
+//
+// ActionResultTag
+//
+
+// ActionResultTag represents the actionresult of an action
+type ActionResultTag struct {
+	idPrefixer
+}
+
+var _ PrefixTag = (*ActionResultTag)(nil)
+
+// NewActionResultTag returns a tag for an actionresult using it's id
+func NewActionResultTag(id string) ActionResultTag {
+	tag, ok := newActionResultTag(id)
+	if !ok {
+		panic(fmt.Sprintf("%q is not a valid action result id", id))
+	}
+	return tag
+}
+
+// IsValidActionResult returns whether resultId is a valid actionResultId
+// Valid action result ids include the names.actionResultMarker token that delimits
+// a prefix that can be used for filtering, and a suffix that should be
+// unique. The prefix should match the name rules for units or services
+func IsValidActionResult(resultId string) bool {
+	return isValidIdPrefixTag(resultId, actionResultMarker)
+}
+
+// ParseActionResultTag parses a action result tag string.
+func ParseActionResultTag(actionResultTag string) (ActionResultTag, error) {
+	tag, err := ParseTag(actionResultTag)
+	if err != nil {
+		return ActionResultTag{}, err
+	}
+	st, ok := tag.(ActionResultTag)
+	if !ok {
+		return ActionResultTag{}, invalidTagError(actionResultTag, ActionResultTagKind)
+	}
+	return st, nil
+}
+
+func newActionResultTag(resultId string) (ActionResultTag, bool) {
+	if !isValidIdPrefixTag(resultId, actionResultMarker) {
+		return ActionResultTag{}, false
+	}
+	prefixer := idPrefixer{
+		id:     resultId,
+		kind:   ActionResultTagKind,
+		marker: actionResultMarker,
+	}
+	return ActionResultTag{idPrefixer: prefixer}, true
+}
+
+//
+// idPrefixer
+//
+
+type PrefixTag interface {
+	Tag
+	Prefix() string
+	Sequence() int
+	PrefixTag() Tag
+}
+
+// idPrefixer is an internal type for representing tags that have
+// structured prefixes
+type idPrefixer struct {
+	id     string
+	kind   string
+	marker string
+}
+
+var _ PrefixTag = (*idPrefixer)(nil)
+
+// Id returns the id of the type this Tag represents
+func (t idPrefixer) Id() string { return t.id }
+
+// String returns a string that shows the type and id of the Tag
+func (t idPrefixer) String() string { return t.kind + "-" + t.Id() }
+
+// Kind exposes the value to identify what kind of Tag this is
+func (t idPrefixer) Kind() string { return t.kind }
+
+// Prefix returns the string representation of the prefix of the Tag
+func (t idPrefixer) Prefix() string {
+	prefix, _, ok := splitId(t.Id(), t.marker)
+	if !ok {
+		return ""
+	}
+	return prefix
+}
+
+// Sequence returns the unique integer suffix of the Tag
+func (t idPrefixer) Sequence() int {
+	_, sequence, ok := splitId(t.Id(), t.marker)
+	if !ok {
+		return -1
+	}
+	return sequence
+}
+
+// PrefixTag returns a Tag representing the Entity matching the id
+// prefix
+func (t idPrefixer) PrefixTag() Tag {
+	prefix, _, ok := splitId(t.Id(), t.marker)
 	if !ok {
 		return nil
 	}
@@ -81,133 +214,35 @@ func (t ActionTag) PrefixTag() Tag {
 	return tag
 }
 
-// Sequence returns the unique integer suffix of the ActionTag
-func (t ActionTag) Sequence() int {
-	_, sequence, ok := splitActionId(t.Id())
+// isValidIdPrefixTag signals whether the id is a validly formatted id
+// for an idPrefixer with the given marker
+func isValidIdPrefixTag(id, marker string) bool {
+	prefix, _, ok := splitId(id, marker)
 	if !ok {
-		return -1
-	}
-	return sequence
-}
-
-// IsValidAction returns whether actionId is a valid actionId
-// Valid action ids include the names.actionMarker token that delimits
-// a prefix that can be used for filtering, and a suffix that should be
-// unique.  The prefix should match the name rules for units
-func IsValidAction(actionId string) bool {
-	_, ok := newActionTag(actionId)
-	return ok
-}
-
-// ParseActionTag parses a action tag string.
-func ParseActionTag(actionTag string) (ActionTag, error) {
-	tag, err := ParseTag(actionTag)
-	if err != nil {
-		return ActionTag{}, err
-	}
-	st, ok := tag.(ActionTag)
-	if !ok {
-		return ActionTag{}, invalidTagError(actionTag, ActionTagKind)
-	}
-	return st, nil
-}
-
-func newActionTag(actionId string) (ActionTag, bool) {
-	bad := ActionTag{}
-	prefix, _, ok := splitActionId(actionId)
-	if !ok {
-		return bad, false
+		return false
 	}
 	switch {
 	case IsValidUnit(prefix):
 	case IsValidService(prefix):
 	default:
-		return bad, false
+		return false
 	}
-	return ActionTag{id: actionId}, true
+	return true
 }
 
-func splitActionId(id string) (string, int, bool) {
-	return splitId(id, actionMarker)
-}
-
-// ActionResultTag represents the actionresult of an action
-type ActionResultTag struct {
-	id string
-}
-
-// NewActionResultTag returns a tag for an actionresult using it's id
-func NewActionResultTag(id string) ActionResultTag {
-	tag, ok := newActionResultTag(id)
-	if !ok {
-		panic(fmt.Sprintf("%q is not a valid action result id", id))
-	}
-	return tag
-}
-
-// String returns a string that shows the type and id of an ActionResultTag
-func (t ActionResultTag) String() string {
-	return t.Kind() + "-" + t.Id()
-}
-
-// Kind exposes the ActionTagKind value to identify what kind of Tag this is
-func (t ActionResultTag) Kind() string { return ActionResultTagKind }
-
-// Id returns the id of the Action this Tag represents
-func (t ActionResultTag) Id() string { return t.id }
-
-// IsValidActionResult returns whether resultId is a valid actionResultId
-// Valid action result ids include the names.actionResultMarker token that delimits
-// a prefix that can be used for filtering, and a suffix that should be
-// unique. The prefix should match the name rules for units or services
-func IsValidActionResult(resultId string) bool {
-	_, ok := newActionResultTag(resultId)
-	return ok
-}
-
-// ParseActionResultTag parses a action result tag string.
-func ParseActionResultTag(actionResultTag string) (ActionResultTag, error) {
-	tag, err := ParseTag(actionResultTag)
-	if err != nil {
-		return ActionResultTag{}, err
-	}
-	st, ok := tag.(ActionResultTag)
-	if !ok {
-		return ActionResultTag{}, invalidTagError(actionResultTag, ActionResultTagKind)
-	}
-	return st, nil
-}
-
-func newActionResultTag(resultId string) (ActionResultTag, bool) {
-	bad := ActionResultTag{}
-	prefix, _, ok := splitActionResultId(resultId)
-	if !ok {
-		return bad, false
-	}
-	switch {
-	case IsValidUnit(prefix):
-	case IsValidService(prefix):
-	default:
-		return bad, false
-	}
-	return ActionResultTag{id: resultId}, true
-}
-
-func splitActionResultId(id string) (string, int, bool) {
-	return splitId(id, actionResultMarker)
-}
-
+// splitId extracts the prefix and suffix from the id using the marker
+// token
 func splitId(id, marker string) (string, int, bool) {
 	parts := strings.Split(id, marker)
 	if len(parts) != 2 {
-		return "", -(len(parts) + 100), false
+		return "", 0, false
 	}
 	if len(parts[1]) > 1 && parts[1][:1] == "0" {
-		return "", -2, false
+		return "", 0, false
 	}
 	seq, err := strconv.ParseInt(parts[1], 10, 0)
 	if err != nil {
-		return "", -3, false
+		return "", 0, false
 	}
 	return parts[0], int(seq), true
 }
