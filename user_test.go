@@ -25,13 +25,13 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 			input:    "bob",
 			string:   "user-bob",
 			name:     "bob",
-			provider: names.LocalProvider,
+			provider: "local",
 			username: "bob@local",
 		}, {
 			input:    "bob@local",
 			string:   "user-bob@local",
 			name:     "bob",
-			provider: names.LocalProvider,
+			provider: "local",
 			username: "bob@local",
 		}, {
 			input:    "bob@foo",
