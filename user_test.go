@@ -47,12 +47,14 @@ var validTests = []struct {
 	{"%bar", false},
 	{"&bar", false},
 	{"#1foo", false},
-	{"bar@ram.u", false},
+	{"bar@ram.u", true},
+	{"bar@", false},
+	{"@local", false},
 	{"not/valid", false},
 }
 
 func (s *userSuite) TestUserTag(c *gc.C) {
-	c.Assert(names.NewUserTag("admin").String(), gc.Equals, "user-admin")
+	c.Assert(names.NewUserTag("admin").String(), gc.Equals, "user-admin@local")
 }
 
 func (s *userSuite) TestIsValidUser(c *gc.C) {
@@ -72,6 +74,12 @@ var parseUserTagTests = []struct {
 }, {
 	tag:      "user-dave",
 	expected: names.NewUserTag("dave"),
+}, {
+	tag:      "user-dave@local",
+	expected: names.NewUserTag("dave@local"),
+}, {
+	tag:      "user-dave@foobar",
+	expected: names.NewUserTag("dave@foobar"),
 }, {
 	tag: "dave",
 	err: names.InvalidTagError("dave", ""),
