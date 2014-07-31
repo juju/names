@@ -13,52 +13,83 @@ type userSuite struct{}
 
 var _ = gc.Suite(&userSuite{})
 
-var validTests = []struct {
-	string string
-	expect bool
-}{
-	{"", false},
-	{"bob", true},
-	{"Bob", true},
-	{"bOB", true},
-	{"b^b", false},
-	{"bob1", true},
-	{"bob-1", true},
-	{"bob+1", false},
-	{"bob.1", true},
-	{"1bob", false},
-	{"1-bob", false},
-	{"1+bob", false},
-	{"1.bob", false},
-	{"jim.bob+99-1.", false},
-	{"a", false},
-	{"0foo", false},
-	{"foo bar", false},
-	{"bar{}", false},
-	{"bar+foo", false},
-	{"bar_foo", false},
-	{"bar!", false},
-	{"bar^", false},
-	{"bar*", false},
-	{"foo=bar", false},
-	{"foo?", false},
-	{"[bar]", false},
-	{"'foo'", false},
-	{"%bar", false},
-	{"&bar", false},
-	{"#1foo", false},
-	{"bar@ram.u", true},
-	{"bar@", false},
-	{"@local", false},
-	{"not/valid", false},
-}
-
 func (s *userSuite) TestUserTag(c *gc.C) {
-	c.Assert(names.NewUserTag("admin").String(), gc.Equals, "user-admin@local")
+	for i, t := range []struct {
+		input    string
+		string   string
+		name     string
+		provider string
+		username string
+	}{
+		{
+			input:    "bob",
+			string:   "user-bob",
+			name:     "bob",
+			provider: names.LocalProvider,
+			username: "bob@local",
+		}, {
+			input:    "bob@local",
+			string:   "user-bob@local",
+			name:     "bob",
+			provider: names.LocalProvider,
+			username: "bob@local",
+		}, {
+			input:    "bob@foo",
+			string:   "user-bob@foo",
+			name:     "bob",
+			provider: "foo",
+			username: "bob@foo",
+		},
+	} {
+		c.Logf("test %d: %s", i, t.input)
+		userTag := names.NewUserTag(t.input)
+		c.Check(userTag.String(), gc.Equals, t.string)
+		c.Check(userTag.Id(), gc.Equals, t.input)
+		c.Check(userTag.Name(), gc.Equals, t.name)
+		c.Check(userTag.Provider(), gc.Equals, t.provider)
+	}
 }
 
 func (s *userSuite) TestIsValidUser(c *gc.C) {
-	for i, t := range validTests {
+	for i, t := range []struct {
+		string string
+		expect bool
+	}{
+		{"", false},
+		{"bob", true},
+		{"Bob", true},
+		{"bOB", true},
+		{"b^b", false},
+		{"bob1", true},
+		{"bob-1", true},
+		{"bob+1", false},
+		{"bob.1", true},
+		{"1bob", false},
+		{"1-bob", false},
+		{"1+bob", false},
+		{"1.bob", false},
+		{"jim.bob+99-1.", false},
+		{"a", false},
+		{"0foo", false},
+		{"foo bar", false},
+		{"bar{}", false},
+		{"bar+foo", false},
+		{"bar_foo", false},
+		{"bar!", false},
+		{"bar^", false},
+		{"bar*", false},
+		{"foo=bar", false},
+		{"foo?", false},
+		{"[bar]", false},
+		{"'foo'", false},
+		{"%bar", false},
+		{"&bar", false},
+		{"#1foo", false},
+		{"bar@ram.u", true},
+		{"bar@", false},
+		{"@local", false},
+		{"not/valid", false},
+	} {
 		c.Logf("test %d: %s", i, t.string)
 		c.Assert(names.IsValidUser(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
 	}

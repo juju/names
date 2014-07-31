@@ -114,10 +114,15 @@ var parseTagTests = []struct {
 	expectType: names.EnvironTag{},
 	resultErr:  `"environment-/" is not a valid environment tag`,
 }, {
-	tag:        "user-foo@local",
+	tag:        "user-foo",
 	expectKind: names.UserTagKind,
 	expectType: names.UserTag{},
 	resultId:   "foo",
+}, {
+	tag:        "user-foo@local",
+	expectKind: names.UserTagKind,
+	expectType: names.UserTag{},
+	resultId:   "foo@local",
 }, {
 	tag:        "user-/",
 	expectKind: names.UserTagKind,

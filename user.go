@@ -27,10 +27,25 @@ type UserTag struct {
 	provider string
 }
 
-func (t UserTag) String() string   { return t.Kind() + "-" + t.Id() + "@" + t.Provider() }
-func (t UserTag) Kind() string     { return UserTagKind }
-func (t UserTag) Id() string       { return t.name }
-func (t UserTag) Provider() string { return t.provider }
+func (t UserTag) Kind() string   { return UserTagKind }
+func (t UserTag) String() string { return UserTagKind + "-" + t.Id() }
+
+func (t UserTag) Id() string {
+	if t.provider == "" {
+		return t.name
+	}
+	return t.name + "@" + t.provider
+}
+
+func (t UserTag) Username() string { return t.name + "@" + t.Provider() }
+func (t UserTag) Name() string     { return t.name }
+
+func (t UserTag) Provider() string {
+	if t.provider == "" {
+		return LocalProvider
+	}
+	return t.provider
+}
 
 // NewUserTag returns the tag for the user with the given name.
 func NewUserTag(userName string) UserTag {
@@ -38,10 +53,7 @@ func NewUserTag(userName string) UserTag {
 	if len(parts) != 3 {
 		panic(fmt.Sprintf("Invalid user tag %q", userName))
 	}
-	if parts[2] != "" {
-		return UserTag{name: parts[1], provider: parts[2]}
-	}
-	return UserTag{name: parts[1], provider: LocalProvider}
+	return UserTag{name: parts[1], provider: parts[2]}
 }
 
 // ParseUserTag parser a user tag string.
