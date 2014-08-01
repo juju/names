@@ -47,6 +47,7 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 		c.Check(userTag.Id(), gc.Equals, t.input)
 		c.Check(userTag.Name(), gc.Equals, t.name)
 		c.Check(userTag.Provider(), gc.Equals, t.provider)
+		c.Check(userTag.Username(), gc.Equals, t.username)
 	}
 }
 
