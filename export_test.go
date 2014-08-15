@@ -7,5 +7,4 @@ var (
 	ActionMarker       = actionMarker
 	ActionResultMarker = actionResultMarker
 	InvalidTagError    = invalidTagError
-	IsValidRelation    = isValidRelation
 )
