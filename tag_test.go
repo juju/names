@@ -119,6 +119,11 @@ var parseTagTests = []struct {
 	expectType: names.UserTag{},
 	resultId:   "foo",
 }, {
+	tag:        "user-foo@local",
+	expectKind: names.UserTagKind,
+	expectType: names.UserTag{},
+	resultId:   "foo@local",
+}, {
 	tag:        "user-/",
 	expectKind: names.UserTagKind,
 	expectType: names.UserTag{},

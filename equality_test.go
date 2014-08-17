@@ -18,6 +18,8 @@ var tagEqualityTests = []struct {
 	{NewRelationTag("wordpress:haproxy"), RelationTag{key: "wordpress.haproxy"}},
 	{NewEnvironTag("local"), EnvironTag{uuid: "local"}},
 	{NewUserTag("admin"), UserTag{name: "admin"}},
+	{NewUserTag("admin@local"), UserTag{name: "admin", provider: "local"}},
+	{NewUserTag("admin@foobar"), UserTag{name: "admin", provider: "foobar"}},
 	{NewNetworkTag("eth0"), NetworkTag{name: "eth0"}},
 	{NewActionTag("foo" + actionMarker + "321"), makeActionTag("foo", "321")},
 	{NewActionTag("foo/0" + actionMarker + "321"), makeActionTag("foo/0", "321")},
