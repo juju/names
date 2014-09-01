@@ -96,6 +96,53 @@ func (s *userSuite) TestIsValidUser(c *gc.C) {
 	}
 }
 
+func (s *userSuite) TestIsValidUserName(c *gc.C) {
+	for i, t := range []struct {
+		string string
+		expect bool
+	}{
+		{"", false},
+		{"bob", true},
+		{"Bob", true},
+		{"bOB", true},
+		{"b^b", false},
+		{"bob1", true},
+		{"bob-1", true},
+		{"bob+1", false},
+		{"bob.1", true},
+		{"1bob", false},
+		{"1-bob", false},
+		{"1+bob", false},
+		{"1.bob", false},
+		{"jim.bob+99-1.", false},
+		{"a", false},
+		{"0foo", false},
+		{"foo bar", false},
+		{"bar{}", false},
+		{"bar+foo", false},
+		{"bar_foo", false},
+		{"bar!", false},
+		{"bar^", false},
+		{"bar*", false},
+		{"foo=bar", false},
+		{"foo?", false},
+		{"[bar]", false},
+		{"'foo'", false},
+		{"%bar", false},
+		{"&bar", false},
+		{"#1foo", false},
+		{"bar@ram.u", false},
+		{"bar@local", false},
+		{"bar@ubuntuone", false},
+		{"bar@", false},
+		{"@local", false},
+		{"not/valid", false},
+	} {
+		c.Logf("test %d: %s", i, t.string)
+		c.Assert(names.IsValidUserName(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
+	}
+}
+
 var parseUserTagTests = []struct {
 	tag      string
 	expected names.Tag

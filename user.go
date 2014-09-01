@@ -16,10 +16,16 @@ const (
 var validPart = "[a-zA-Z][a-zA-Z0-9.-]*[a-zA-Z0-9]"
 
 var validName = regexp.MustCompile(fmt.Sprintf("^(?P<name>%s)(?:@(?P<provider>%s))?$", validPart, validPart))
+var validUserName = regexp.MustCompile("^" + validPart + "$")
 
 // IsValidUser returns whether id is a valid user id.
 func IsValidUser(name string) bool {
 	return validName.MatchString(name)
+}
+
+// IsValidUserName returns whether the user's name is a valid.
+func IsValidUserName(name string) bool {
+	return validUserName.MatchString(name)
 }
 
 type UserTag struct {
