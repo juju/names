@@ -25,13 +25,13 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 			input:    "bob",
 			string:   "user-bob",
 			name:     "bob",
-			provider: "local",
+			provider: names.LocalProvider,
 			username: "bob@local",
 		}, {
 			input:    "bob@local",
 			string:   "user-bob@local",
 			name:     "bob",
-			provider: "local",
+			provider: names.LocalProvider,
 			username: "bob@local",
 		}, {
 			input:    "bob@foo",
@@ -47,6 +47,7 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 		c.Check(userTag.Id(), gc.Equals, t.input)
 		c.Check(userTag.Name(), gc.Equals, t.name)
 		c.Check(userTag.Provider(), gc.Equals, t.provider)
+		c.Check(userTag.IsLocal(), gc.Equals, t.provider == names.LocalProvider)
 		c.Check(userTag.Username(), gc.Equals, t.username)
 	}
 }
@@ -143,35 +144,33 @@ func (s *userSuite) TestIsValidUserName(c *gc.C) {
 	}
 }
 
-var parseUserTagTests = []struct {
-	tag      string
-	expected names.Tag
-	err      error
-}{{
-	tag: "",
-	err: names.InvalidTagError("", ""),
-}, {
-	tag:      "user-dave",
-	expected: names.NewUserTag("dave"),
-}, {
-	tag:      "user-dave@local",
-	expected: names.NewUserTag("dave@local"),
-}, {
-	tag:      "user-dave@foobar",
-	expected: names.NewUserTag("dave@foobar"),
-}, {
-	tag: "dave",
-	err: names.InvalidTagError("dave", ""),
-}, {
-	tag: "unit-dave",
-	err: names.InvalidTagError("unit-dave", names.UnitTagKind), // not a valid unit name either
-}, {
-	tag: "service-dave",
-	err: names.InvalidTagError("service-dave", names.UserTagKind),
-}}
-
 func (s *userSuite) TestParseUserTag(c *gc.C) {
-	for i, t := range parseUserTagTests {
+	for i, t := range []struct {
+		tag      string
+		expected names.Tag
+		err      error
+	}{{
+		tag: "",
+		err: names.InvalidTagError("", ""),
+	}, {
+		tag:      "user-dave",
+		expected: names.NewUserTag("dave"),
+	}, {
+		tag:      "user-dave@local",
+		expected: names.NewUserTag("dave@local"),
+	}, {
+		tag:      "user-dave@foobar",
+		expected: names.NewUserTag("dave@foobar"),
+	}, {
+		tag: "dave",
+		err: names.InvalidTagError("dave", ""),
+	}, {
+		tag: "unit-dave",
+		err: names.InvalidTagError("unit-dave", names.UnitTagKind), // not a valid unit name either
+	}, {
+		tag: "service-dave",
+		err: names.InvalidTagError("service-dave", names.UserTagKind),
+	}} {
 		c.Logf("test %d: %s", i, t.tag)
 		got, err := names.ParseUserTag(t.tag)
 		if err != nil || t.err != nil {
@@ -181,4 +180,17 @@ func (s *userSuite) TestParseUserTag(c *gc.C) {
 		c.Check(got, gc.FitsTypeOf, t.expected)
 		c.Check(got, gc.Equals, t.expected)
 	}
+}
+
+func (s *userSuite) TestNewLocalUserTag(c *gc.C) {
+	user := names.NewLocalUserTag("bob")
+	c.Assert(user.Username(), gc.Equals, "bob@local")
+	c.Assert(user.Name(), gc.Equals, "bob")
+	c.Assert(user.Provider(), gc.Equals, "local")
+	c.Assert(user.IsLocal(), gc.Equals, true)
+	c.Assert(user.String(), gc.Equals, "user-bob@local")
+
+	c.Assert(func() { names.NewLocalUserTag("bob@local") }, gc.PanicMatches, `invalid user name "bob@local"`)
+	c.Assert(func() { names.NewLocalUserTag("") }, gc.PanicMatches, `invalid user name ""`)
+	c.Assert(func() { names.NewLocalUserTag("!@#") }, gc.PanicMatches, `invalid user name "!@#"`)
 }

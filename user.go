@@ -28,6 +28,8 @@ func IsValidUserName(name string) bool {
 	return validUserName.MatchString(name)
 }
 
+// UserTag represents a user that may be stored in the local database, or provided
+// through some remote identity provider.
 type UserTag struct {
 	name     string
 	provider string
@@ -46,6 +48,13 @@ func (t UserTag) Id() string {
 func (t UserTag) Username() string { return t.name + "@" + t.Provider() }
 func (t UserTag) Name() string     { return t.name }
 
+// IsLocal returns true if the tag represents a local user.
+func (t UserTag) IsLocal() bool {
+	return t.Provider() == LocalProvider
+}
+
+// Provider returns the name of the user provider. Users in the local database
+// are from the LocalProvider. Other users are considered 'remote' users.
 func (t UserTag) Provider() string {
 	if t.provider == "" {
 		return LocalProvider
@@ -57,9 +66,17 @@ func (t UserTag) Provider() string {
 func NewUserTag(userName string) UserTag {
 	parts := validName.FindStringSubmatch(userName)
 	if len(parts) != 3 {
-		panic(fmt.Sprintf("Invalid user tag %q", userName))
+		panic(fmt.Sprintf("invalid user tag %q", userName))
 	}
 	return UserTag{name: parts[1], provider: parts[2]}
+}
+
+// NewLocalUserTag returns the tag for a local user with the given name.
+func NewLocalUserTag(name string) UserTag {
+	if !IsValidUserName(name) {
+		panic(fmt.Sprintf("invalid user name %q", name))
+	}
+	return UserTag{name: name, provider: LocalProvider}
 }
 
 // ParseUserTag parser a user tag string.
