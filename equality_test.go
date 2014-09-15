@@ -4,7 +4,7 @@
 package names
 
 import (
-	gc "launchpad.net/gocheck"
+	gc "gopkg.in/check.v1"
 )
 
 var tagEqualityTests = []struct {
