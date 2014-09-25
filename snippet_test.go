@@ -3,7 +3,7 @@ package names
 import (
 	"strings"
 
-	gc "launchpad.net/gocheck"
+	gc "gopkg.in/check.v1"
 )
 
 var snippets = []struct {

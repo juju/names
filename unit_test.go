@@ -6,7 +6,7 @@ package names_test
 import (
 	"fmt"
 
-	gc "launchpad.net/gocheck"
+	gc "gopkg.in/check.v1"
 
 	"github.com/juju/names"
 )
