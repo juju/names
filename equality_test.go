@@ -46,5 +46,5 @@ func makeActionResultTag(prefix, suffix string) ActionResultTag {
 	return ActionResultTag{idPrefixer: makePrefixer(id, ActionResultTagKind, ActionResultMarker)}
 }
 func makePrefixer(id, kind, marker string) idPrefixer {
-	return idPrefixer{id: id, kind: kind, marker: marker}
+	return idPrefixer{Id_: id, Kind_: kind, Marker_: marker}
 }

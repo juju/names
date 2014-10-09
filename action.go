@@ -81,9 +81,9 @@ func newActionTag(actionId string) (ActionTag, bool) {
 		return ActionTag{}, false
 	}
 	prefixer := idPrefixer{
-		id:     actionId,
-		kind:   ActionTagKind,
-		marker: actionMarker,
+		Id_:     actionId,
+		Kind_:   ActionTagKind,
+		Marker_: actionMarker,
 	}
 	return ActionTag{idPrefixer: prefixer}, true
 }
@@ -134,9 +134,9 @@ func newActionResultTag(resultId string) (ActionResultTag, bool) {
 		return ActionResultTag{}, false
 	}
 	prefixer := idPrefixer{
-		id:     resultId,
-		kind:   ActionResultTagKind,
-		marker: actionResultMarker,
+		Id_:     resultId,
+		Kind_:   ActionResultTagKind,
+		Marker_: actionResultMarker,
 	}
 	return ActionResultTag{idPrefixer: prefixer}, true
 }
@@ -155,25 +155,25 @@ type PrefixTag interface {
 // idPrefixer is an internal type for representing tags that have
 // structured prefixes
 type idPrefixer struct {
-	id     string
-	kind   string
-	marker string
+	Id_     string
+	Kind_   string
+	Marker_ string
 }
 
 var _ PrefixTag = (*idPrefixer)(nil)
 
 // Id returns the id of the type this Tag represents
-func (t idPrefixer) Id() string { return t.id }
+func (t idPrefixer) Id() string { return t.Id_ }
 
 // String returns a string that shows the type and id of the Tag
-func (t idPrefixer) String() string { return t.kind + "-" + t.Id() }
+func (t idPrefixer) String() string { return t.Kind_ + "-" + t.Id() }
 
 // Kind exposes the value to identify what kind of Tag this is
-func (t idPrefixer) Kind() string { return t.kind }
+func (t idPrefixer) Kind() string { return t.Kind_ }
 
 // Prefix returns the string representation of the prefix of the Tag
 func (t idPrefixer) Prefix() string {
-	prefix, _, ok := splitId(t.Id(), t.marker)
+	prefix, _, ok := splitId(t.Id(), t.Marker_)
 	if !ok {
 		return ""
 	}
@@ -182,7 +182,7 @@ func (t idPrefixer) Prefix() string {
 
 // Sequence returns the unique integer suffix of the Tag
 func (t idPrefixer) Sequence() int {
-	_, sequence, ok := splitId(t.Id(), t.marker)
+	_, sequence, ok := splitId(t.Id(), t.Marker_)
 	if !ok {
 		return -1
 	}
@@ -192,7 +192,7 @@ func (t idPrefixer) Sequence() int {
 // PrefixTag returns a Tag representing the Entity matching the id
 // prefix
 func (t idPrefixer) PrefixTag() Tag {
-	prefix, _, ok := splitId(t.Id(), t.marker)
+	prefix, _, ok := splitId(t.Id(), t.Marker_)
 	if !ok {
 		return nil
 	}
