@@ -39,12 +39,12 @@ func (s *equalitySuite) TestTagEquality(c *gc.C) {
 
 func makeActionTag(prefix, suffix string) ActionTag {
 	id := prefix + ActionMarker + suffix
-	return ActionTag{idPrefixer: makePrefixer(id, ActionTagKind, ActionMarker)}
+	return ActionTag{IdPrefixer: makePrefixer(id, ActionTagKind, ActionMarker)}
 }
 func makeActionResultTag(prefix, suffix string) ActionResultTag {
 	id := prefix + ActionResultMarker + suffix
-	return ActionResultTag{idPrefixer: makePrefixer(id, ActionResultTagKind, ActionResultMarker)}
+	return ActionResultTag{IdPrefixer: makePrefixer(id, ActionResultTagKind, ActionResultMarker)}
 }
-func makePrefixer(id, kind, marker string) idPrefixer {
-	return idPrefixer{Id_: id, Kind_: kind, Marker_: marker}
+func makePrefixer(id, kind, marker string) IdPrefixer {
+	return IdPrefixer{Id_: id, Kind_: kind, Marker_: marker}
 }
