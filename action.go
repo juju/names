@@ -153,7 +153,12 @@ type PrefixTag interface {
 }
 
 // IdPrefixer is a common type for representing tags that have
-// structured prefixes
+// structured prefixes.
+// Note: this type is only used as an embedded type in other Tags that
+// use structured prefixes, like ActionTag, and ActionResultTag. We
+// have to export this type however so that gccgo is able to serialize
+// the embedding types without dropping these fields.
+// see: https://bugs.launchpad.net/juju-core/+bug/1381626
 type IdPrefixer struct {
 	Id_     string
 	Kind_   string
