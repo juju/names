@@ -14,7 +14,7 @@ var tagEqualityTests = []struct {
 	{NewMachineTag("0"), MachineTag{id: "0"}},
 	{NewMachineTag("10/lxc/1"), MachineTag{id: "10-lxc-1"}},
 	{NewUnitTag("mysql/1"), UnitTag{name: "mysql-1"}},
-	{NewServiceTag("ceph"), ServiceTag{name: "ceph"}},
+	{NewServiceTag("ceph"), ServiceTag{Name: "ceph"}},
 	{NewRelationTag("wordpress:haproxy"), RelationTag{key: "wordpress.haproxy"}},
 	{NewEnvironTag("local"), EnvironTag{uuid: "local"}},
 	{NewUserTag("admin"), UserTag{name: "admin"}},
