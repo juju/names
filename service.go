@@ -22,16 +22,16 @@ func IsValidService(name string) bool {
 }
 
 type ServiceTag struct {
-	name string
+	Name string
 }
 
 func (t ServiceTag) String() string { return t.Kind() + "-" + t.Id() }
 func (t ServiceTag) Kind() string   { return ServiceTagKind }
-func (t ServiceTag) Id() string     { return t.name }
+func (t ServiceTag) Id() string     { return t.Name }
 
 // NewServiceTag returns the tag for the service with the given name.
 func NewServiceTag(serviceName string) ServiceTag {
-	return ServiceTag{name: serviceName}
+	return ServiceTag{Name: serviceName}
 }
 
 // ParseServiceTag parses a service tag string.
