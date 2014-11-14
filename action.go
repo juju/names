@@ -21,8 +21,8 @@ const (
 // ActionTag
 //
 
-// ActionTag is a Tag type for representing Action entities, which
-// are records of queued actions for a given unit
+// ActionTag is a Tag type for representing Action entities, which are
+// records of queued actions for a given unit
 type ActionTag struct {
 	IdPrefixer
 }
@@ -38,22 +38,33 @@ func NewActionTag(id string) ActionTag {
 	return tag
 }
 
-// JoinActionTag reconstitutes an ActionTag from it's prefix and UUID
-func JoinActionTag(prefix string, uuid string) ActionTag {
-	actionId := prefix + actionMarker + uuid
-	tag, ok := newActionTag(actionId)
+// JoinActionTag reconstitutes an ActionTag from a prefix and suffix
+func JoinActionTag(prefix, suffix string) ActionTag {
+	tag, ok := ParseActionTagFromParts(prefix, suffix)
 	if !ok {
-		panic("bad prefix or uuid")
+		panic("bad prefix or suffix")
 	}
 	return tag
 }
 
-// IsValidAction returns whether actionId is a valid actionId
-// Valid action ids include the names.actionMarker token that delimits
-// a prefix that can be used for filtering, and a suffix that should be
-// unique.  The prefix should match the name rules for units
+// IsValidAction returns whether actionId is a valid actionId Valid
+// action ids include the names.actionMarker token that delimits a
+// prefix that can be used for filtering, and a suffix that should be
+// unique. The prefix should match the name rules for units
 func IsValidAction(actionId string) bool {
 	return isValidIdPrefixTag(actionId, actionMarker)
+}
+
+// ParseActionTagFromId safely checks id and returns an ActionTag if the
+// id is valid.
+func ParseActionTagFromId(id string) (ActionTag, bool) {
+	return newActionTag(id)
+}
+
+// ParseActionTagFromParts safely reconstitutes an ActionTag from it's
+// prefix and suffix.
+func ParseActionTagFromParts(prefix, suffix string) (ActionTag, bool) {
+	return newActionTag(prefix + actionMarker + suffix)
 }
 
 // ParseActionTag parses a action tag string.
@@ -88,7 +99,7 @@ func newActionTag(actionId string) (ActionTag, bool) {
 type PrefixTag interface {
 	Tag
 	Prefix() string
-	UUID() string
+	Suffix() string
 	PrefixTag() Tag
 }
 
@@ -122,10 +133,10 @@ func (t IdPrefixer) Prefix() string {
 	return prefix
 }
 
-// UUID returns the unique suffix of the Tag
-func (t IdPrefixer) UUID() string {
-	_, uuid, _ := splitId(t.Id(), t.Marker_)
-	return uuid
+// Suffix returns the suffix of the Tag
+func (t IdPrefixer) Suffix() string {
+	_, suffix, _ := splitId(t.Id(), t.Marker_)
+	return suffix
 }
 
 // PrefixTag returns a Tag representing the Entity matching the id

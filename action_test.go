@@ -124,7 +124,7 @@ func (s *actionSuite) TestPrefixSuffix(c *gc.C) {
 	for _, test := range tests {
 		action := names.NewActionTag(test.prefix + names.ActionMarker + test.suffix)
 		c.Assert(action.Prefix(), gc.Equals, test.prefix)
-		c.Assert(action.UUID(), gc.Equals, test.suffix)
+		c.Assert(action.Suffix(), gc.Equals, test.suffix)
 
 		c.Assert(action.PrefixTag(), gc.Not(gc.IsNil))
 	}
