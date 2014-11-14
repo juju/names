@@ -40,7 +40,7 @@ func NewActionTag(id string) ActionTag {
 
 // JoinActionTag reconstitutes an ActionTag from it's prefix and UUID
 func JoinActionTag(prefix string, uuid string) ActionTag {
-	actionId := fmt.Sprintf("%s%s%s", prefix, actionMarker, uuid)
+	actionId := prefix + actionMarker + uuid
 	tag, ok := newActionTag(actionId)
 	if !ok {
 		panic("bad prefix or uuid")
@@ -118,19 +118,13 @@ func (t IdPrefixer) Kind() string { return t.Kind_ }
 
 // Prefix returns the string representation of the prefix of the Tag
 func (t IdPrefixer) Prefix() string {
-	prefix, _, ok := splitId(t.Id(), t.Marker_)
-	if !ok {
-		return ""
-	}
+	prefix, _, _ := splitId(t.Id(), t.Marker_)
 	return prefix
 }
 
 // UUID returns the unique suffix of the Tag
 func (t IdPrefixer) UUID() string {
-	_, uuid, ok := splitId(t.Id(), t.Marker_)
-	if !ok {
-		return ""
-	}
+	_, uuid, _ := splitId(t.Id(), t.Marker_)
 	return uuid
 }
 
