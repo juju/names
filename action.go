@@ -5,7 +5,6 @@ package names
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -13,15 +12,9 @@ const (
 	// ActionTagKind is used to identify the Tag type
 	ActionTagKind = "action"
 
-	// ActionResultTagKind is used to identify the Tag type
-	ActionResultTagKind = "actionresult"
-
 	// actionMarker is the identifier used to join filterable
 	// prefixes for Action Id's with unique suffixes
 	actionMarker = "_a_"
-
-	// actionResultMarker is the token used to delimit a filterable prefix from unique suffix
-	actionResultMarker = "_ar_"
 )
 
 //
@@ -45,12 +38,12 @@ func NewActionTag(id string) ActionTag {
 	return tag
 }
 
-// JoinActionTag reconstitutes an ActionTag from it's prefix and sequence
-func JoinActionTag(prefix string, sequence int) ActionTag {
-	actionId := fmt.Sprintf("%s%s%d", prefix, actionMarker, sequence)
+// JoinActionTag reconstitutes an ActionTag from it's prefix and UUID
+func JoinActionTag(prefix string, uuid string) ActionTag {
+	actionId := fmt.Sprintf("%s%s%s", prefix, actionMarker, uuid)
 	tag, ok := newActionTag(actionId)
 	if !ok {
-		panic("bad prefix or sequence")
+		panic("bad prefix or uuid")
 	}
 	return tag
 }
@@ -89,66 +82,13 @@ func newActionTag(actionId string) (ActionTag, bool) {
 }
 
 //
-// ActionResultTag
-//
-
-// ActionResultTag represents the actionresult of an action
-type ActionResultTag struct {
-	IdPrefixer
-}
-
-var _ PrefixTag = (*ActionResultTag)(nil)
-
-// NewActionResultTag returns a tag for an actionresult using it's id
-func NewActionResultTag(id string) ActionResultTag {
-	tag, ok := newActionResultTag(id)
-	if !ok {
-		panic(fmt.Sprintf("%q is not a valid action result id", id))
-	}
-	return tag
-}
-
-// IsValidActionResult returns whether resultId is a valid actionResultId
-// Valid action result ids include the names.actionResultMarker token that delimits
-// a prefix that can be used for filtering, and a suffix that should be
-// unique. The prefix should match the name rules for units or services
-func IsValidActionResult(resultId string) bool {
-	return isValidIdPrefixTag(resultId, actionResultMarker)
-}
-
-// ParseActionResultTag parses a action result tag string.
-func ParseActionResultTag(actionResultTag string) (ActionResultTag, error) {
-	tag, err := ParseTag(actionResultTag)
-	if err != nil {
-		return ActionResultTag{}, err
-	}
-	st, ok := tag.(ActionResultTag)
-	if !ok {
-		return ActionResultTag{}, invalidTagError(actionResultTag, ActionResultTagKind)
-	}
-	return st, nil
-}
-
-func newActionResultTag(resultId string) (ActionResultTag, bool) {
-	if !isValidIdPrefixTag(resultId, actionResultMarker) {
-		return ActionResultTag{}, false
-	}
-	prefixer := IdPrefixer{
-		Id_:     resultId,
-		Kind_:   ActionResultTagKind,
-		Marker_: actionResultMarker,
-	}
-	return ActionResultTag{IdPrefixer: prefixer}, true
-}
-
-//
 // IdPrefixer
 //
 
 type PrefixTag interface {
 	Tag
 	Prefix() string
-	Sequence() int
+	UUID() string
 	PrefixTag() Tag
 }
 
@@ -185,13 +125,13 @@ func (t IdPrefixer) Prefix() string {
 	return prefix
 }
 
-// Sequence returns the unique integer suffix of the Tag
-func (t IdPrefixer) Sequence() int {
-	_, sequence, ok := splitId(t.Id(), t.Marker_)
+// UUID returns the unique suffix of the Tag
+func (t IdPrefixer) UUID() string {
+	_, uuid, ok := splitId(t.Id(), t.Marker_)
 	if !ok {
-		return -1
+		return ""
 	}
-	return sequence
+	return uuid
 }
 
 // PrefixTag returns a Tag representing the Entity matching the id
@@ -237,17 +177,13 @@ func isValidIdPrefixTag(id, marker string) bool {
 
 // splitId extracts the prefix and suffix from the id using the marker
 // token
-func splitId(id, marker string) (string, int, bool) {
+func splitId(id, marker string) (string, string, bool) {
 	parts := strings.Split(id, marker)
 	if len(parts) != 2 {
-		return "", 0, false
+		return "", "", false
 	}
-	if len(parts[1]) > 1 && parts[1][:1] == "0" {
-		return "", 0, false
+	if len(parts[1]) < 1 {
+		return "", "", false
 	}
-	seq, err := strconv.ParseInt(parts[1], 10, 0)
-	if err != nil {
-		return "", 0, false
-	}
-	return parts[0], int(seq), true
+	return parts[0], parts[1], true
 }

@@ -4,7 +4,6 @@
 package names
 
 var (
-	ActionMarker       = actionMarker
-	ActionResultMarker = actionResultMarker
-	InvalidTagError    = invalidTagError
+	ActionMarker    = actionMarker
+	InvalidTagError = invalidTagError
 )
