@@ -21,8 +21,7 @@ var tagEqualityTests = []struct {
 	{NewUserTag("admin@local"), UserTag{name: "admin", provider: "local"}},
 	{NewUserTag("admin@foobar"), UserTag{name: "admin", provider: "foobar"}},
 	{NewNetworkTag("eth0"), NetworkTag{name: "eth0"}},
-	{NewActionTag("foo" + actionMarker + "321"), makeActionTag("foo", "321")},
-	{NewActionTag("foo/0" + actionMarker + "321"), makeActionTag("foo/0", "321")},
+	{NewActionTag("01234567-aaaa-bbbb-cccc-012345678901"), ActionTag{"01234567-aaaa-bbbb-cccc-012345678901"}},
 }
 
 type equalitySuite struct{}
@@ -33,13 +32,4 @@ func (s *equalitySuite) TestTagEquality(c *gc.C) {
 	for _, tt := range tagEqualityTests {
 		c.Check(tt.want, gc.Equals, tt.expected)
 	}
-}
-
-func makeActionTag(prefix, suffix string) ActionTag {
-	id := prefix + ActionMarker + suffix
-	return ActionTag{IdPrefixer: makePrefixer(id, ActionTagKind, ActionMarker)}
-}
-
-func makePrefixer(id, kind, marker string) IdPrefixer {
-	return IdPrefixer{Id_: id, Kind_: kind, Marker_: marker}
 }

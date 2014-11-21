@@ -4,8 +4,6 @@
 package names_test
 
 import (
-	"fmt"
-
 	gc "gopkg.in/check.v1"
 
 	"github.com/juju/names"
@@ -15,90 +13,19 @@ type actionSuite struct{}
 
 var _ = gc.Suite(&actionSuite{})
 
-func (s *actionSuite) TestActionNameFormats(c *gc.C) {
-	marker := names.ActionMarker
-	actionNameTests := []struct {
-		pattern string
-		valid   bool
-	}{
-		{pattern: "", valid: false},
-		{pattern: "service", valid: false},
-		{pattern: "service" + marker, valid: false},
-		{pattern: "service" + marker + "0", valid: true},
-		{pattern: "service" + marker + "0" + marker + "0", valid: false},
-
-		{pattern: "service-name/0" + marker, valid: false},
-		{pattern: "service-name-0" + marker, valid: false},
-		{pattern: "service-name/0" + marker + "0", valid: true},
-		{pattern: "service-name-0" + marker + "0", valid: false},
-
-		{pattern: "service-name/0" + marker + "11", valid: true},
-		{pattern: "service-name-0" + marker + "11", valid: false},
-	}
-
-	assertAction := func(s string, expect bool) {
-		c.Assert(names.IsValidAction(s), gc.Equals, expect)
-	}
-
-	for i, test := range actionNameTests {
-		c.Logf("test %d: %q", i, test.pattern)
-		assertAction(test.pattern, test.valid)
-	}
-}
-
-func (s *actionSuite) TestInvalidActionNamesPanic(c *gc.C) {
-	invalidActionNameTests := []string{
-		"",      // blank is not a valid action id
-		"admin", // probably a user name, which isn't a valid action id
-	}
-
-	for _, name := range invalidActionNameTests {
-		expect := fmt.Sprintf("%q is not a valid action id", name)
-		testFunc := func() { names.NewActionTag(name) }
-		c.Assert(testFunc, gc.PanicMatches, expect)
-	}
-}
+var parseActionTagTests = []struct {
+	tag      string
+	expected names.Tag
+	err      error
+}{
+	{tag: "", err: names.InvalidTagError("", "")},
+	{tag: "action-f47ac10b-58cc-4372-a567-0e02b2c3d479", expected: names.NewActionTag("f47ac10b-58cc-4372-a567-0e02b2c3d479")},
+	{tag: "action-012345678", err: names.InvalidTagError("action-012345678", "action")},
+	{tag: "action-1234567", err: names.InvalidTagError("action-1234567", "action")},
+	{tag: "bob", err: names.InvalidTagError("bob", "")},
+	{tag: "service-ned", err: names.InvalidTagError("service-ned", names.ActionTagKind)}}
 
 func (s *actionSuite) TestParseActionTag(c *gc.C) {
-	parseActionTagTests := []struct {
-		tag      string
-		expected names.Tag
-		err      error
-	}{
-		{
-			tag:      "",
-			expected: nil,
-			err:      names.InvalidTagError("", ""),
-		}, {
-			tag:      "action-good" + names.ActionMarker + "123",
-			expected: names.NewActionTag("good" + names.ActionMarker + "123"),
-			err:      nil,
-		}, {
-			tag:      "action-good/0" + names.ActionMarker + "123",
-			expected: names.NewActionTag("good/0" + names.ActionMarker + "123"),
-			err:      nil,
-		}, {
-			tag:      "action-bad/00" + names.ActionMarker + "123",
-			expected: nil,
-			err:      names.InvalidTagError("action-bad/00"+names.ActionMarker+"123", names.ActionTagKind),
-		}, {
-			tag:      "dave",
-			expected: nil,
-			err:      names.InvalidTagError("dave", ""),
-		}, {
-			tag:      "action-dave/0",
-			expected: nil,
-			err:      names.InvalidTagError("action-dave/0", names.ActionTagKind),
-		}, {
-			tag:      "action",
-			expected: nil,
-			err:      names.InvalidTagError("action", ""),
-		}, {
-			tag:      "user-dave",
-			expected: nil,
-			err:      names.InvalidTagError("user-dave", names.ActionTagKind),
-		}}
-
 	for i, t := range parseActionTagTests {
 		c.Logf("test %d: %s", i, t.tag)
 		got, err := names.ParseActionTag(t.tag)
@@ -111,21 +38,24 @@ func (s *actionSuite) TestParseActionTag(c *gc.C) {
 	}
 }
 
-func (s *actionSuite) TestPrefixSuffix(c *gc.C) {
-	var tests = []struct {
-		prefix string
-		suffix string
+func (s *actionSuite) TestActionReceiverTag(c *gc.C) {
+	testCases := []struct {
+		name     string
+		expected names.Tag
+		valid    bool
 	}{
-		{prefix: "asdf", suffix: "0"},
-		{prefix: "qwer/0", suffix: "10"},
-		{prefix: "zxcv/3", suffix: "11"},
+		{name: "mysql", valid: false},
+		{name: "mysql/3", expected: names.NewUnitTag("mysql/3"), valid: true},
 	}
 
-	for _, test := range tests {
-		action := names.NewActionTag(test.prefix + names.ActionMarker + test.suffix)
-		c.Assert(action.Prefix(), gc.Equals, test.prefix)
-		c.Assert(action.Suffix(), gc.Equals, test.suffix)
-
-		c.Assert(action.PrefixTag(), gc.Not(gc.IsNil))
+	for _, tcase := range testCases {
+		tag, err := names.ActionReceiverTag(tcase.name)
+		c.Check(err == nil, gc.Equals, tcase.valid)
+		if err != nil {
+			continue
+		}
+		c.Check(tag, gc.FitsTypeOf, tcase.expected)
+		c.Check(tag, gc.Equals, tcase.expected)
 	}
+
 }
