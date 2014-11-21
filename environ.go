@@ -4,20 +4,22 @@
 package names
 
 import (
-	"regexp"
+	"github.com/juju/utils"
 )
 
 const EnvironTagKind = "environment"
 
 type EnvironTag struct {
-	uuid string
+	ID utils.UUID
 }
 
-var validUUID = regexp.MustCompile(`[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}`)
-
 // NewEnvironTag returns the tag of an environment with the given environment UUID.
-func NewEnvironTag(uuid string) EnvironTag {
-	return EnvironTag{uuid: uuid}
+func NewEnvironTag(id string) EnvironTag {
+	uuid, err := utils.UUIDFromString(id)
+	if err != nil {
+		panic(err)
+	}
+	return EnvironTag{ID: uuid}
 }
 
 // ParseEnvironTag parses an environ tag string.
@@ -35,9 +37,9 @@ func ParseEnvironTag(environTag string) (EnvironTag, error) {
 
 func (t EnvironTag) String() string { return t.Kind() + "-" + t.Id() }
 func (t EnvironTag) Kind() string   { return EnvironTagKind }
-func (t EnvironTag) Id() string     { return t.uuid }
+func (t EnvironTag) Id() string     { return t.ID.String() }
 
 // IsValidEnvironment returns whether id is a valid environment UUID.
 func IsValidEnvironment(id string) bool {
-	return validUUID.MatchString(id)
+	return utils.IsValidUUIDString(id)
 }

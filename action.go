@@ -5,25 +5,24 @@ package names
 
 import (
 	"fmt"
-	"regexp"
+
+	"github.com/juju/utils"
 )
 
 const ActionTagKind = "action"
 
 type ActionTag struct {
 	// Tags that are serialized need to have fields exported.
-	UUID string
+	ID utils.UUID
 }
 
-// validActionUUID describes the valid UUID's for an ActionTag.
-var validActionUUID = regexp.MustCompile(`^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$`)
-
-// NewActionTag returns the tag of an action with the given id UUID.
-func NewActionTag(uuid string) ActionTag {
-	if !IsValidAction(uuid) {
-		panic(fmt.Sprintf("%q is not a valid action id", uuid))
+// NewActionTag returns the tag of an action with the given id (UUID).
+func NewActionTag(id string) ActionTag {
+	uuid, err := utils.UUIDFromString(id)
+	if err != nil {
+		panic(err)
 	}
-	return ActionTag{UUID: uuid}
+	return ActionTag{ID: uuid}
 }
 
 // ParseActionTag parses an action tag string.
@@ -41,11 +40,11 @@ func ParseActionTag(actionTag string) (ActionTag, error) {
 
 func (t ActionTag) String() string { return t.Kind() + "-" + t.Id() }
 func (t ActionTag) Kind() string   { return ActionTagKind }
-func (t ActionTag) Id() string     { return t.UUID }
+func (t ActionTag) Id() string     { return t.ID.String() }
 
-// IsValidAction returns whether id is a valid action id UUID.
+// IsValidAction returns whether id is a valid action id (UUID).
 func IsValidAction(id string) bool {
-	return validActionUUID.MatchString(id)
+	return utils.IsValidUUIDString(id)
 }
 
 func ActionReceiverTag(name string) (Tag, error) {

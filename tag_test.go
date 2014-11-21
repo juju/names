@@ -29,8 +29,8 @@ var tagKindTests = []struct {
 	{tag: "unit", err: `"unit" is not a valid tag`},
 	{tag: "network", err: `"network" is not a valid tag`},
 	{tag: "network-42", kind: names.NetworkTagKind},
-	{tag: "ab01cd23-0123-fedc-9a8b-3210-fedcba987654", err: `"ab01cd23-0123-fedc-9a8b-3210-fedcba987654" is not a valid tag`},
-	{tag: "action-ab01cd23-0123-fedc-9a8b-3210-fedcba987654", kind: names.ActionTagKind},
+	{tag: "ab01cd23-0123-4edc-9a8b-fedcba987654", err: `"ab01cd23-0123-4edc-9a8b-fedcba987654" is not a valid tag`},
+	{tag: "action-ab01cd23-0123-4edc-9a8b-fedcba987654", kind: names.ActionTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -149,10 +149,10 @@ var parseTagTests = []struct {
 	expectType: names.ActionTag{},
 	resultErr:  `"action-00000033" is not a valid action tag`,
 }, {
-	tag:        "action-abedaf33-3212-afde-deca-87356432deca",
+	tag:        "action-abedaf33-3212-4fde-aeca-87356432deca",
 	expectKind: names.ActionTagKind,
 	expectType: names.ActionTag{},
-	resultId:   "abedaf33-3212-afde-deca-87356432deca",
+	resultId:   "abedaf33-3212-4fde-aeca-87356432deca",
 }, {
 	tag:       "foo",
 	resultErr: `"foo" is not a valid tag`,
