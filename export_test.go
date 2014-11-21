@@ -3,7 +3,4 @@
 
 package names
 
-var (
-	ActionMarker    = actionMarker
-	InvalidTagError = invalidTagError
-)
+var InvalidTagError = invalidTagError

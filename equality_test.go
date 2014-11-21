@@ -4,6 +4,7 @@
 package names
 
 import (
+	"github.com/juju/utils"
 	gc "gopkg.in/check.v1"
 )
 
@@ -16,13 +17,12 @@ var tagEqualityTests = []struct {
 	{NewUnitTag("mysql/1"), UnitTag{name: "mysql-1"}},
 	{NewServiceTag("ceph"), ServiceTag{Name: "ceph"}},
 	{NewRelationTag("wordpress:haproxy"), RelationTag{key: "wordpress.haproxy"}},
-	{NewEnvironTag("local"), EnvironTag{uuid: "local"}},
+	{NewEnvironTag("deadbeef-0123-4567-89ab-feedfacebeef"), EnvironTag{uuid: "deadbeef-0123-4567-89ab-feedfacebeef"}},
 	{NewUserTag("admin"), UserTag{name: "admin"}},
 	{NewUserTag("admin@local"), UserTag{name: "admin", provider: "local"}},
 	{NewUserTag("admin@foobar"), UserTag{name: "admin", provider: "foobar"}},
 	{NewNetworkTag("eth0"), NetworkTag{name: "eth0"}},
-	{NewActionTag("foo" + actionMarker + "321"), makeActionTag("foo", "321")},
-	{NewActionTag("foo/0" + actionMarker + "321"), makeActionTag("foo/0", "321")},
+	{NewActionTag("01234567-aaaa-4bbb-8ccc-012345678901"), ActionTag{ID: stringToUUID("01234567-aaaa-4bbb-8ccc-012345678901")}},
 }
 
 type equalitySuite struct{}
@@ -35,11 +35,10 @@ func (s *equalitySuite) TestTagEquality(c *gc.C) {
 	}
 }
 
-func makeActionTag(prefix, suffix string) ActionTag {
-	id := prefix + ActionMarker + suffix
-	return ActionTag{IdPrefixer: makePrefixer(id, ActionTagKind, ActionMarker)}
-}
-
-func makePrefixer(id, kind, marker string) IdPrefixer {
-	return IdPrefixer{Id_: id, Kind_: kind, Marker_: marker}
+func stringToUUID(id string) utils.UUID {
+	uuid, err := utils.UUIDFromString(id)
+	if err != nil {
+		panic(err)
+	}
+	return uuid
 }
