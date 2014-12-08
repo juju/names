@@ -31,6 +31,7 @@ var tagKindTests = []struct {
 	{tag: "network-42", kind: names.NetworkTagKind},
 	{tag: "ab01cd23-0123-4edc-9a8b-fedcba987654", err: `"ab01cd23-0123-4edc-9a8b-fedcba987654" is not a valid tag`},
 	{tag: "action-ab01cd23-0123-4edc-9a8b-fedcba987654", kind: names.ActionTagKind},
+	{tag: "disk-0", kind: names.DiskTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -154,6 +155,11 @@ var parseTagTests = []struct {
 	expectType: names.ActionTag{},
 	resultId:   "abedaf33-3212-4fde-aeca-87356432deca",
 }, {
+	tag:        "disk-2",
+	expectKind: names.DiskTagKind,
+	expectType: names.DiskTag{},
+	resultId:   "2",
+}, {
 	tag:       "foo",
 	resultErr: `"foo" is not a valid tag`,
 }}
@@ -167,6 +173,7 @@ var makeTag = map[string]func(string) names.Tag{
 	names.UserTagKind:     func(tag string) names.Tag { return names.NewUserTag(tag) },
 	names.NetworkTagKind:  func(tag string) names.Tag { return names.NewNetworkTag(tag) },
 	names.ActionTagKind:   func(tag string) names.Tag { return names.NewActionTag(tag) },
+	names.DiskTagKind:     func(tag string) names.Tag { return names.NewDiskTag(tag) },
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
