@@ -28,7 +28,12 @@ var (
 	revisionSnippet         = "(-1|0|[1-9][0-9]*)"
 )
 
-var validCharmRegEx = regexp.MustCompile("^(" + localSchemaSnippet + "|" + charmStoreSchemaSnippet + ")?(" + seriesSnippet + "/)?" + charmNameSnippet + "(-" + revisionSnippet + ")?$")
+var validCharmRegEx = regexp.MustCompile("^(" +
+	localSchemaSnippet + "|" +
+	charmStoreSchemaSnippet + ")?(" +
+	seriesSnippet + "/)?" +
+	charmNameSnippet + "(-" +
+	revisionSnippet + ")?$")
 
 type CharmTag struct {
 	url string
