@@ -15,13 +15,6 @@ type charmSuite struct{}
 
 var _ = gc.Suite(&charmSuite{})
 
-func (s *charmSuite) TestValidCharmURLs(c *gc.C) {
-	for _, url := range validCharmURLs {
-		c.Logf("Processing tag %q", url)
-		s.assertCharmNameVaild(c, url)
-	}
-}
-
 var validCharmURLs = []string{"charm",
 	"local:charm",
 	"local:charm--1",
@@ -45,6 +38,13 @@ var validCharmURLs = []string{"charm",
 	"series/charm-1",
 }
 
+func (s *charmSuite) TestValidCharmURLs(c *gc.C) {
+	for _, url := range validCharmURLs {
+		c.Logf("Processing tag %q", url)
+		c.Assert(names.IsValidCharm(url), jc.IsTrue)
+	}
+}
+
 func (s *charmSuite) TestInvalidCharmURLs(c *gc.C) {
 	invalidURLs := []string{"",
 		"local:~user/charm",          // false: user on local
@@ -56,20 +56,8 @@ func (s *charmSuite) TestInvalidCharmURLs(c *gc.C) {
 	}
 	for _, url := range invalidURLs {
 		c.Logf("Processing tag %q", url)
-		s.assertCharmNameInvaild(c, url)
+		c.Assert(names.IsValidCharm(url), jc.IsFalse)
 	}
-}
-
-func (s *charmSuite) assertCharmNameValidity(c *gc.C, charmName string, expected bool) {
-	c.Assert(names.IsValidCharm(charmName), gc.Equals, expected)
-}
-
-func (s *charmSuite) assertCharmNameVaild(c *gc.C, charmName string) {
-	s.assertCharmNameValidity(c, charmName, true)
-}
-
-func (s *charmSuite) assertCharmNameInvaild(c *gc.C, charmName string) {
-	s.assertCharmNameValidity(c, charmName, false)
 }
 
 func (s *charmSuite) TestParseCharmTagValid(c *gc.C) {
