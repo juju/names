@@ -1,4 +1,4 @@
-// Copyright 2013 Canonical Ltd.
+// Copyright 2014 Canonical Ltd.
 // Licensed under the LGPLv3, see LICENCE file for details.
 
 package names
@@ -21,14 +21,14 @@ const CharmTagKind = "charm"
 //     revision  is optional and can be -1 if revision is unset
 
 var (
-	LocalSchemaSnippet      = "local:"
-	CharmStoreSchemaSnippet = "cs:(~[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]/)?"
-	SeriesSnippet           = "[a-z]+([a-z0-9]+)?"
-	CharmNameSnippet        = "[a-z][a-z0-9]*(-[a-z0-9]*[a-z][a-z0-9]*)*"
-	RevisionSnippet         = "(-1|0|[1-9][0-9]*)"
+	localSchemaSnippet      = "local:"
+	charmStoreSchemaSnippet = "cs:(~[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]/)?"
+	seriesSnippet           = "[a-z]+([a-z0-9]+)?"
+	charmNameSnippet        = "[a-z][a-z0-9]*(-[a-z0-9]*[a-z][a-z0-9]*)*"
+	revisionSnippet         = "(-1|0|[1-9][0-9]*)"
 )
 
-var validCharmRegEx = regexp.MustCompile("^(" + LocalSchemaSnippet + "|" + CharmStoreSchemaSnippet + ")?(" + SeriesSnippet + "/)?" + CharmNameSnippet + "(-" + RevisionSnippet + ")?$")
+var validCharmRegEx = regexp.MustCompile("^(" + localSchemaSnippet + "|" + charmStoreSchemaSnippet + ")?(" + seriesSnippet + "/)?" + charmNameSnippet + "(-" + revisionSnippet + ")?$")
 
 type CharmTag struct {
 	url string

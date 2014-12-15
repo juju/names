@@ -1,15 +1,14 @@
-// Copyright 2013 Canonical Ltd.
+// Copyright 2014 Canonical Ltd.
 // Licensed under the LGPLv3, see LICENCE file for details.
 
 package names_test
 
 import (
-	gc "gopkg.in/check.v1"
+	"fmt"
 
 	"github.com/juju/names"
-
-	"fmt"
 	jc "github.com/juju/testing/checkers"
+	gc "gopkg.in/check.v1"
 )
 
 type charmSuite struct{}
