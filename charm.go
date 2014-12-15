@@ -1,0 +1,68 @@
+// Copyright 2013 Canonical Ltd.
+// Licensed under the LGPLv3, see LICENCE file for details.
+
+package names
+
+import (
+	"fmt"
+	"regexp"
+)
+
+const CharmTagKind = "charm"
+
+// Valid charm url is of the form
+// schema:~user/series/name-revision
+// where
+//     schema    is optional and can be either "local" or "cs".
+//               When not supplied, "cs" is implied.
+//     user      is optional and is only applicable for "cs" schema
+//     series    is optional and is a valid series name
+//     name      is mandatory and is the name of the charm
+//     revision  is optional and can be -1 if revision is unset
+
+var (
+	LocalSchemaSnippet      = "local:"
+	CharmStoreSchemaSnippet = "cs:(~[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]/)?"
+	SeriesSnippet           = "[a-z]+([a-z0-9]+)?"
+	CharmNameSnippet        = "[a-z][a-z0-9]*(-[a-z0-9]*[a-z][a-z0-9]*)*"
+	RevisionSnippet         = "(-1|0|[1-9][0-9]*)"
+)
+
+var validCharmRegEx = regexp.MustCompile("^(" + LocalSchemaSnippet + "|" + CharmStoreSchemaSnippet + ")?(" + SeriesSnippet + "/)?" + CharmNameSnippet + "(-" + RevisionSnippet + ")?$")
+
+type CharmTag struct {
+	url string
+}
+
+func (t CharmTag) String() string { return t.Kind() + "-" + t.Id() }
+func (t CharmTag) Kind() string   { return CharmTagKind }
+func (t CharmTag) Id() string     { return t.url }
+
+// NewCharmTag returns the tag for the charm with the given url.
+// It will panic if the given charm url is not valid.
+func NewCharmTag(charmURL string) CharmTag {
+	if !IsValidCharm(charmURL) {
+		panic(fmt.Sprintf("%q is not a valid charm name", charmURL))
+	}
+	return CharmTag{url: charmURL}
+}
+
+var emptyTag = CharmTag{}
+
+// ParseCharmTag parses a charm tag string.
+func ParseCharmTag(charmTag string) (CharmTag, error) {
+	tag, err := ParseTag(charmTag)
+	if err != nil {
+		return emptyTag, err
+	}
+	ct, ok := tag.(CharmTag)
+	if !ok {
+		return emptyTag, invalidTagError(charmTag, CharmTagKind)
+	}
+	return ct, nil
+}
+
+// IsValidCharm returns whether name is a valid charm url.
+func IsValidCharm(url string) bool {
+	return validCharmRegEx.MatchString(url)
+}
