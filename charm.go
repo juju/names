@@ -8,6 +8,7 @@ import (
 	"regexp"
 )
 
+// CharmTagKind specifies charm tag kind
 const CharmTagKind = "charm"
 
 // Valid charm url is of the form
@@ -35,13 +36,23 @@ var validCharmRegEx = regexp.MustCompile("^(" +
 	charmNameSnippet + "(-" +
 	revisionSnippet + ")?$")
 
+// CharmTag represents tag for charm
+// using charm's URL
 type CharmTag struct {
 	url string
 }
 
+// String satisfies Tag interface.
+// Produces string representation of charm tag.
 func (t CharmTag) String() string { return t.Kind() + "-" + t.Id() }
-func (t CharmTag) Kind() string   { return CharmTagKind }
-func (t CharmTag) Id() string     { return t.url }
+
+// Kind satisfies Tag interface.
+// Returns Charm tag kind.
+func (t CharmTag) Kind() string { return CharmTagKind }
+
+// Id satisfies Tag interface.
+// Returns charm URL.
+func (t CharmTag) Id() string { return t.url }
 
 // NewCharmTag returns the tag for the charm with the given url.
 // It will panic if the given charm url is not valid.
