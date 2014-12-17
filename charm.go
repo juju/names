@@ -25,9 +25,7 @@ var (
 	localSchemaSnippet      = "local:"
 	charmStoreSchemaSnippet = "cs:(~" + validUserPart + "/)?"
 	revisionSnippet         = "(-1|0|[1-9][0-9]*)"
-)
 
-var (
 	// SeriesSnippet is a regular expression representing series
 	SeriesSnippet = "[a-z]+([a-z0-9]+)?"
 
