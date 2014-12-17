@@ -13,10 +13,11 @@ const (
 	LocalProvider = "local"
 )
 
-var validPart = "[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]"
-
-var validName = regexp.MustCompile(fmt.Sprintf("^(?P<name>%s)(?:@(?P<provider>%s))?$", validPart, validPart))
-var validUserName = regexp.MustCompile("^" + validPart + "$")
+var (
+	validUserPart = "[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]"
+	validName     = regexp.MustCompile(fmt.Sprintf("^(?P<name>%s)(?:@(?P<provider>%s))?$", validUserPart, validUserPart))
+	validUserName = regexp.MustCompile("^" + validUserPart + "$")
+)
 
 // IsValidUser returns whether id is a valid user id.
 func IsValidUser(name string) bool {
