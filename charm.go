@@ -22,23 +22,23 @@ const CharmTagKind = "charm"
 //     revision  is optional and can be -1 if revision is unset
 
 var (
-	localSchemaSnippet      = "local:"
-	charmStoreSchemaSnippet = "cs:(~" + validUserPart + "/)?"
-	revisionSnippet         = "(-1|0|[1-9][0-9]*)"
-
 	// SeriesSnippet is a regular expression representing series
 	SeriesSnippet = "[a-z]+([a-z0-9]+)?"
 
 	// CharmNameSnippet is a regular expression representing charm name
 	CharmNameSnippet = "[a-z][a-z0-9]*(-[a-z0-9]*[a-z][a-z0-9]*)*"
-)
 
-var validCharmRegEx = regexp.MustCompile("^(" +
-	localSchemaSnippet + "|" +
-	charmStoreSchemaSnippet + ")?(" +
-	SeriesSnippet + "/)?" +
-	CharmNameSnippet + "(-" +
-	revisionSnippet + ")?$")
+	localSchemaSnippet      = "local:"
+	charmStoreSchemaSnippet = "cs:(~" + validUserPart + "/)?"
+	revisionSnippet         = "(-1|0|[1-9][0-9]*)"
+
+	validCharmRegEx = regexp.MustCompile("^(" +
+		localSchemaSnippet + "|" +
+		charmStoreSchemaSnippet + ")?(" +
+		SeriesSnippet + "/)?" +
+		CharmNameSnippet + "(-" +
+		revisionSnippet + ")?$")
+)
 
 // CharmTag represents tag for charm
 // using charm's URL
