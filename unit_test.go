@@ -59,10 +59,12 @@ func (s *serviceSuite) TestUnitService(c *gc.C) {
 		c.Logf("test %d: %q", i, test.pattern)
 		if !test.valid {
 			expect := fmt.Sprintf("%q is not a valid unit name", test.pattern)
-			testFunc := func() { names.UnitService(test.pattern) }
-			c.Assert(testFunc, gc.PanicMatches, expect)
+			_, err := names.UnitService(test.pattern)
+			c.Assert(err, gc.ErrorMatches, expect)
 		} else {
-			c.Assert(names.UnitService(test.pattern), gc.Equals, test.service)
+			result, err := names.UnitService(test.pattern)
+			c.Assert(err, gc.IsNil)
+			c.Assert(result, gc.Equals, test.service)
 		}
 	}
 }

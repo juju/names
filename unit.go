@@ -50,13 +50,13 @@ func IsValidUnit(name string) bool {
 }
 
 // UnitService returns the name of the service that the unit is
-// associated with. It panics if unitName is not a valid unit name.
-func UnitService(unitName string) string {
+// associated with. It returns an error if unitName is not a valid unit name.
+func UnitService(unitName string) (string, error) {
 	s := validUnit.FindStringSubmatch(unitName)
 	if s == nil {
-		panic(fmt.Sprintf("%q is not a valid unit name", unitName))
+		return "", fmt.Errorf("%q is not a valid unit name", unitName)
 	}
-	return s[1]
+	return s[1], nil
 }
 
 func tagFromUnitName(unitName string) (UnitTag, bool) {
