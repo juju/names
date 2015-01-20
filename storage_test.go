@@ -20,8 +20,8 @@ func (s *storageSuite) TestStorageTag(c *gc.C) {
 }
 
 func (s *storageSuite) TestStorageNameValidity(c *gc.C) {
-	assertStorageNameValid(c, "store/0")
-	assertStorageNameValid(c, "store/1000")
+	assertStorageNameValid(c, "shared-fs/0")
+	assertStorageNameValid(c, "db-dir/1000")
 	assertStorageNameInvalid(c, "store/-1")
 	assertStorageNameInvalid(c, "store-1")
 	assertStorageNameInvalid(c, "")
@@ -30,7 +30,7 @@ func (s *storageSuite) TestStorageNameValidity(c *gc.C) {
 }
 
 func (s *storageSuite) TestParseStorageTag(c *gc.C) {
-	assertParseStorageTag(c, "storage-store-0", names.NewStorageTag("store/0"))
+	assertParseStorageTag(c, "storage-shared-fs-0", names.NewStorageTag("shared-fs/0"))
 	assertParseStorageTag(c, "storage-store-88", names.NewStorageTag("store/88"))
 	assertParseStorageTagInvalid(c, "", names.InvalidTagError("", ""))
 	assertParseStorageTagInvalid(c, "one", names.InvalidTagError("one", ""))
