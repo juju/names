@@ -20,13 +20,13 @@ func (s *storageSuite) TestStorageTag(c *gc.C) {
 }
 
 func (s *storageSuite) TestStorageNameValidity(c *gc.C) {
-	assertStorageNameValid(c, "shared-fs/0")
-	assertStorageNameValid(c, "db-dir/1000")
-	assertStorageNameInvalid(c, "store/-1")
-	assertStorageNameInvalid(c, "store-1")
-	assertStorageNameInvalid(c, "")
-	assertStorageNameInvalid(c, "store")
-	assertStorageNameInvalid(c, "store/#")
+	assertStorageIdValid(c, "shared-fs/0")
+	assertStorageIdValid(c, "db-dir/1000")
+	assertStorageIdInvalid(c, "store/-1")
+	assertStorageIdInvalid(c, "store-1")
+	assertStorageIdInvalid(c, "")
+	assertStorageIdInvalid(c, "store")
+	assertStorageIdInvalid(c, "store/#")
 }
 
 func (s *storageSuite) TestParseStorageTag(c *gc.C) {
@@ -38,16 +38,33 @@ func (s *storageSuite) TestParseStorageTag(c *gc.C) {
 	assertParseStorageTagInvalid(c, "machine-0", names.InvalidTagError("machine-0", names.StorageTagKind))
 }
 
-func assertStorageNameValid(c *gc.C, name string) {
+func (s *serviceSuite) TestStorageName(c *gc.C) {
+	assertStorageNameValid(c, "shared-fs/0", "shared-fs")
+	assertStorageNameInvalid(c, "storage-shared-fs-0")
+}
+
+func assertStorageIdValid(c *gc.C, name string) {
 	c.Assert(names.IsValidStorage(name), gc.Equals, true)
 	names.NewStorageTag(name)
 }
 
-func assertStorageNameInvalid(c *gc.C, name string) {
+func assertStorageIdInvalid(c *gc.C, name string) {
 	c.Assert(names.IsValidStorage(name), gc.Equals, false)
 	testStorageTag := func() { names.NewStorageTag(name) }
 	expect := fmt.Sprintf("%q is not a valid storage instance ID", name)
 	c.Assert(testStorageTag, gc.PanicMatches, expect)
+}
+
+func assertStorageNameValid(c *gc.C, id, expect string) {
+	name, err := names.StorageName(id)
+	c.Assert(err, gc.IsNil)
+	c.Assert(name, gc.Equals, expect)
+}
+
+func assertStorageNameInvalid(c *gc.C, id string) {
+	_, err := names.StorageName(id)
+	expect := fmt.Sprintf("%q is not a valid storage instance ID", id)
+	c.Assert(err, gc.ErrorMatches, expect)
 }
 
 func assertParseStorageTag(c *gc.C, tag string, expect names.StorageTag) {

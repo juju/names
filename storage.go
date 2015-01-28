@@ -55,6 +55,17 @@ func IsValidStorage(id string) bool {
 	return validStorage.MatchString(id)
 }
 
+// StorageName returns the storage name from a storage instance ID.
+// StorageName returns an error if "id" is not a valid storage
+// instance ID.
+func StorageName(id string) (string, error) {
+	s := validStorage.FindStringSubmatch(id)
+	if s == nil {
+		return "", fmt.Errorf("%q is not a valid storage instance ID", id)
+	}
+	return s[1], nil
+}
+
 func tagFromStorageId(id string) (StorageTag, bool) {
 	// replace only the last "/" with "-".
 	i := strings.LastIndex(id, "/")
