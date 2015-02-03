@@ -226,3 +226,25 @@ func (*tagSuite) TestParseTag(c *gc.C) {
 		}
 	}
 }
+
+func (*tagSuite) TestReadableString(c *gc.C) {
+	var readableStringTests = []struct {
+		tag    names.Tag
+		result string
+	}{{
+		tag:    nil,
+		result: "",
+	}, {
+		tag:    names.NewMachineTag("0"),
+		result: "machine 0",
+	}, {
+		tag:    names.NewUnitTag("wordpress/2"),
+		result: "unit wordpress/2",
+	}}
+
+	for i, test := range readableStringTests {
+		c.Logf("test %d: expected result %q", i, test.result)
+		resultStr := names.ReadableString(test.tag)
+		c.Assert(resultStr, gc.Equals, test.result)
+	}
+}

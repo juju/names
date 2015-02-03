@@ -127,3 +127,14 @@ func invalidTagError(tag, kind string) error {
 	}
 	return fmt.Errorf("%q is not a valid tag", tag)
 }
+
+// ReadableString returns a human-readable string from the tag passed in.
+// It currently supports unit and machine tags. Support for additional types
+// can be added in as needed.
+func ReadableString(tag Tag) string {
+	if tag == nil {
+		return ""
+	}
+
+	return tag.Kind() + " " + tag.Id()
+}
