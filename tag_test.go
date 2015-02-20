@@ -33,6 +33,7 @@ var tagKindTests = []struct {
 	{tag: "action-ab01cd23-0123-4edc-9a8b-fedcba987654", kind: names.ActionTagKind},
 	{tag: "volume-0", kind: names.VolumeTagKind},
 	{tag: "storage-data-0", kind: names.StorageTagKind},
+	{tag: "filesystem-0", kind: names.FilesystemTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -161,6 +162,11 @@ var parseTagTests = []struct {
 	expectType: names.VolumeTag{},
 	resultId:   "2",
 }, {
+	tag:        "filesystem-3",
+	expectKind: names.FilesystemTagKind,
+	expectType: names.FilesystemTag{},
+	resultId:   "3",
+}, {
 	tag:        "storage-block-storage-0",
 	expectKind: names.StorageTagKind,
 	expectType: names.StorageTag{},
@@ -171,16 +177,17 @@ var parseTagTests = []struct {
 }}
 
 var makeTag = map[string]func(string) names.Tag{
-	names.MachineTagKind:  func(tag string) names.Tag { return names.NewMachineTag(tag) },
-	names.UnitTagKind:     func(tag string) names.Tag { return names.NewUnitTag(tag) },
-	names.ServiceTagKind:  func(tag string) names.Tag { return names.NewServiceTag(tag) },
-	names.RelationTagKind: func(tag string) names.Tag { return names.NewRelationTag(tag) },
-	names.EnvironTagKind:  func(tag string) names.Tag { return names.NewEnvironTag(tag) },
-	names.UserTagKind:     func(tag string) names.Tag { return names.NewUserTag(tag) },
-	names.NetworkTagKind:  func(tag string) names.Tag { return names.NewNetworkTag(tag) },
-	names.ActionTagKind:   func(tag string) names.Tag { return names.NewActionTag(tag) },
-	names.VolumeTagKind:   func(tag string) names.Tag { return names.NewVolumeTag(tag) },
-	names.StorageTagKind:  func(tag string) names.Tag { return names.NewStorageTag(tag) },
+	names.MachineTagKind:    func(tag string) names.Tag { return names.NewMachineTag(tag) },
+	names.UnitTagKind:       func(tag string) names.Tag { return names.NewUnitTag(tag) },
+	names.ServiceTagKind:    func(tag string) names.Tag { return names.NewServiceTag(tag) },
+	names.RelationTagKind:   func(tag string) names.Tag { return names.NewRelationTag(tag) },
+	names.EnvironTagKind:    func(tag string) names.Tag { return names.NewEnvironTag(tag) },
+	names.UserTagKind:       func(tag string) names.Tag { return names.NewUserTag(tag) },
+	names.NetworkTagKind:    func(tag string) names.Tag { return names.NewNetworkTag(tag) },
+	names.ActionTagKind:     func(tag string) names.Tag { return names.NewActionTag(tag) },
+	names.VolumeTagKind:     func(tag string) names.Tag { return names.NewVolumeTag(tag) },
+	names.FilesystemTagKind: func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
+	names.StorageTagKind:    func(tag string) names.Tag { return names.NewStorageTag(tag) },
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {

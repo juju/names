@@ -9,27 +9,26 @@ import (
 	"strings"
 )
 
-const (
-	FilesystemTagKind = "filesystem"
-	filenameSnippet   = "[\\w. ][\\w\\-. ]*"
-)
+const FilesystemTagKind = "filesystem"
 
-var validFilesystem = regexp.MustCompile("^" + filenameSnippet + "$")
+// Filesystems may be bound to a machine, meaning that the filesystem cannot
+// exist without that machine. We encode this in the tag.
+var validFilesystem = regexp.MustCompile("^(" + MachineSnippet + "/)?" + NumberSnippet + "$")
 
 type FilesystemTag struct {
-	name string
+	id string
 }
 
-func (t FilesystemTag) String() string { return t.Kind() + "-" + t.name }
+func (t FilesystemTag) String() string { return t.Kind() + "-" + t.id }
 func (t FilesystemTag) Kind() string   { return FilesystemTagKind }
-func (t FilesystemTag) Id() string     { return t.name }
+func (t FilesystemTag) Id() string     { return filesystemTagSuffixToId(t.id) }
 
 // NewFilesystemTag returns the tag for the filesystem with the given name.
 // It will panic if the given filesystem name is not valid.
-func NewFilesystemTag(filesystemName string) FilesystemTag {
-	tag, ok := tagFromFilesystemName(filesystemName)
+func NewFilesystemTag(id string) FilesystemTag {
+	tag, ok := tagFromFilesystemId(id)
 	if !ok {
-		panic(fmt.Sprintf("%q is not a valid filesystem name", filesystemName))
+		panic(fmt.Sprintf("%q is not a valid filesystem id", id))
 	}
 	return tag
 }
@@ -47,23 +46,31 @@ func ParseFilesystemTag(filesystemTag string) (FilesystemTag, error) {
 	return fstag, nil
 }
 
-// IsValidFilesystem returns whether name is a valid filesystem name.
-func IsValidFilesystem(name string) bool {
-	return validFilesystem.MatchString(name)
+// IsValidFilesystem returns whether id is a valid filesystem id.
+func IsValidFilesystem(id string) bool {
+	return validFilesystem.MatchString(id)
 }
 
-func tagFromFilesystemName(filesystemName string) (FilesystemTag, bool) {
-	if !IsValidFilesystem(filesystemName) {
+// FilesystemMachine returns the machine component of the filesystem
+// tag, and a boolean indicating whether or not there is a
+// machine component.
+func FilesystemMachine(tag FilesystemTag) (MachineTag, bool) {
+	id := tag.Id()
+	pos := strings.LastIndex(id, "/")
+	if pos == -1 {
+		return MachineTag{}, false
+	}
+	return NewMachineTag(id[:pos]), true
+}
+
+func tagFromFilesystemId(id string) (FilesystemTag, bool) {
+	if !IsValidFilesystem(id) {
 		return FilesystemTag{}, false
 	}
-	return FilesystemTag{filesystemName}, true
+	id = strings.Replace(id, "/", "-", -1)
+	return FilesystemTag{id}, true
 }
 
 func filesystemTagSuffixToId(s string) string {
-	// Replace only the last "-" with "/", as it is valid for filesystem
-	// names to contain hyphens.
-	if i := strings.LastIndex(s, "-"); i > 0 {
-		s = s[:i] + "/" + s[i+1:]
-	}
-	return s
+	return strings.Replace(s, "-", "/", -1)
 }
