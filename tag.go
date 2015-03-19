@@ -8,7 +8,23 @@ import (
 	"strings"
 )
 
-// A Tag tags things that are taggable.
+// A Tag tags things that are taggable. Its purpose is to uniquely
+// identify some resource and provide a consistent representation of
+// that identity in both a human-readable and a machine-friendly format.
+// The latter benefits use of the tag in over-the-wire transmission
+// (e.g. in HTTP RPC calls) and in filename paths. The human-readable
+// tag "name" is available through the Id method. The machine-friendly
+// representation is provided by the String method.
+//
+// The ParseTag function may be used to build a tag from the machine-
+// formatted string. As well each kind of tag has its own Parse* method.
+// Each kind also has a New* method (e.g. NewMachineTag) which produces
+// a tag from the human-readable tag "ID".
+//
+// In the context of juju, the API *must* use tags to represent the
+// various juju entities. This contrasts with user-facing code, where
+// tags *must not* be used. Internal to juju the use of tags is a
+// judgement call based on the situation.
 type Tag interface {
 	// Kind returns the kind of the tag.
 	// This method is for legacy compatibility, callers should
