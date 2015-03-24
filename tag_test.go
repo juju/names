@@ -34,6 +34,8 @@ var tagKindTests = []struct {
 	{tag: "volume-0", kind: names.VolumeTagKind},
 	{tag: "storage-data-0", kind: names.StorageTagKind},
 	{tag: "filesystem-0", kind: names.FilesystemTagKind},
+	{tag: "space", err: `"space" is not a valid tag`},
+	{tag: "space-42", kind: names.SpaceTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -174,6 +176,14 @@ var parseTagTests = []struct {
 }, {
 	tag:       "foo",
 	resultErr: `"foo" is not a valid tag`,
+}, {
+	tag:        "space-",
+	resultErr:  `"space-" is not a valid space tag`,
+}, {
+	tag:        "space-myspace1",
+	expectKind: names.SpaceTagKind,
+	expectType: names.SpaceTag{},
+	resultId:   "myspace1",
 }}
 
 var makeTag = map[string]func(string) names.Tag{
@@ -188,6 +198,7 @@ var makeTag = map[string]func(string) names.Tag{
 	names.VolumeTagKind:     func(tag string) names.Tag { return names.NewVolumeTag(tag) },
 	names.FilesystemTagKind: func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
 	names.StorageTagKind:    func(tag string) names.Tag { return names.NewStorageTag(tag) },
+	names.SpaceTagKind:      func(tag string) names.Tag { return names.NewSpaceTag(tag) },
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
