@@ -178,8 +178,6 @@ var parseTagTests = []struct {
 	resultErr: `"foo" is not a valid tag`,
 }, {
 	tag:        "space-",
-	expectKind: names.SpaceTagKind,
-	expectType: names.SpaceTag{},
 	resultErr:  `"space-" is not a valid space tag`,
 }, {
 	tag:        "space-myspace1",
