@@ -22,18 +22,19 @@ var networkNameTests = []struct {
 }{
 	{pattern: "", valid: false},
 	{pattern: "eth0", valid: true},
-	{pattern: "-my-net-", valid: false},
+	{pattern: "-my-net-", valid: true},
 	{pattern: "42", valid: true},
 	{pattern: "%not", valid: false},
 	{pattern: "$PATH", valid: false},
 	{pattern: "but-this-works", valid: true},
-	{pattern: "----", valid: false},
-	{pattern: "oh--no", valid: false},
+	{pattern: "----", valid: true},
+	{pattern: "oh--no", valid: true},
 	{pattern: "777", valid: true},
-	{pattern: "is-it-", valid: false},
-	{pattern: "also_not", valid: false},
-	{pattern: "a--", valid: false},
+	{pattern: "is-it-", valid: true},
+	{pattern: "also_not", valid: true},
+	{pattern: "a--", valid: true},
 	{pattern: "foo-2", valid: true},
+	{pattern: "MAAS_n3t-w0rK-", valid: true},
 }
 
 func (s *networkSuite) TestNetworkNames(c *gc.C) {
