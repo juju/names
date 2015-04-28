@@ -11,7 +11,7 @@ import (
 const NetworkTagKind = "network"
 
 const (
-	NetworkSnippet = "(?:[a-z0-9]+(?:-[a-z0-9]+)*)"
+	NetworkSnippet = "(?:[a-zA-Z0-9_-]+)"
 )
 
 var validNetwork = regexp.MustCompile("^" + NetworkSnippet + "$")
