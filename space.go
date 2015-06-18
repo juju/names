@@ -9,8 +9,8 @@ import (
 )
 
 const (
-    SpaceTagKind = "space"
-    SpaceSnippet = "(?:[a-z0-9]+(?:-[a-z0-9]+)*)"
+	SpaceTagKind = "space"
+	SpaceSnippet = "(?:[a-z0-9]+(?:-[a-z0-9]+)*)"
 )
 
 var validSpace = regexp.MustCompile("^" + SpaceSnippet + "$")
