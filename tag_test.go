@@ -1,4 +1,4 @@
-// Copyright 2014 Canonical Ltd.
+// Copyright 2015 Canonical Ltd.
 // Licensed under the LGPLv3, see LICENCE file for details.
 
 package names_test
@@ -34,6 +34,8 @@ var tagKindTests = []struct {
 	{tag: "volume-0", kind: names.VolumeTagKind},
 	{tag: "storage-data-0", kind: names.StorageTagKind},
 	{tag: "filesystem-0", kind: names.FilesystemTagKind},
+	{tag: "ipaddress", err: `"ipaddress" is not a valid tag`},
+	{tag: "ipaddress-42424242-1111-2222-3333-0123456789ab", kind: names.IPAddressTagKind},
 	{tag: "space", err: `"space" is not a valid tag`},
 	{tag: "space-42", kind: names.SpaceTagKind},
 }
@@ -177,8 +179,16 @@ var parseTagTests = []struct {
 	tag:       "foo",
 	resultErr: `"foo" is not a valid tag`,
 }, {
-	tag:        "space-",
-	resultErr:  `"space-" is not a valid space tag`,
+	tag:       "ipaddress-",
+	resultErr: `"ipaddress-" is not a valid ipaddress tag`,
+}, {
+	tag:        "ipaddress-42424242-1111-2222-3333-0123456789ab",
+	expectKind: names.IPAddressTagKind,
+	expectType: names.IPAddressTag{},
+	resultId:   "42424242-1111-2222-3333-0123456789ab",
+}, {
+	tag:       "space-",
+	resultErr: `"space-" is not a valid space tag`,
 }, {
 	tag:        "space-myspace1",
 	expectKind: names.SpaceTagKind,
@@ -198,6 +208,7 @@ var makeTag = map[string]func(string) names.Tag{
 	names.VolumeTagKind:     func(tag string) names.Tag { return names.NewVolumeTag(tag) },
 	names.FilesystemTagKind: func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
 	names.StorageTagKind:    func(tag string) names.Tag { return names.NewStorageTag(tag) },
+	names.IPAddressTagKind:  func(tag string) names.Tag { return names.NewIPAddressTag(tag) },
 	names.SpaceTagKind:      func(tag string) names.Tag { return names.NewSpaceTag(tag) },
 }
 

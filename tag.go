@@ -1,4 +1,4 @@
-// Copyright 2013 Canonical Ltd.
+// Copyright 2015 Canonical Ltd.
 // Licensed under the LGPLv3, see LICENCE file for details.
 
 package names
@@ -6,6 +6,8 @@ package names
 import (
 	"fmt"
 	"strings"
+
+	"github.com/juju/utils"
 )
 
 // A Tag tags things that are taggable. Its purpose is to uniquely
@@ -52,8 +54,10 @@ func TagKind(tag string) (string, error) {
 
 func validKinds(kind string) bool {
 	switch kind {
-	case UnitTagKind, MachineTagKind, ServiceTagKind, EnvironTagKind, UserTagKind, RelationTagKind, NetworkTagKind,
-		ActionTagKind, VolumeTagKind, CharmTagKind, StorageTagKind, FilesystemTagKind, SpaceTagKind:
+	case UnitTagKind, MachineTagKind, ServiceTagKind, EnvironTagKind, UserTagKind,
+		RelationTagKind, NetworkTagKind, ActionTagKind, VolumeTagKind,
+		CharmTagKind, StorageTagKind, FilesystemTagKind, IPAddressTagKind,
+		SpaceTagKind:
 		return true
 	}
 	return false
@@ -140,6 +144,12 @@ func ParseTag(tag string) (Tag, error) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewFilesystemTag(id), nil
+	case IPAddressTagKind:
+		uuid, err := utils.UUIDFromString(id)
+		if err != nil {
+			return nil, invalidTagError(tag, kind)
+		}
+		return NewIPAddressTag(uuid.String()), nil
 	case SpaceTagKind:
 		if !IsValidSpace(id) {
 			return nil, invalidTagError(tag, kind)
