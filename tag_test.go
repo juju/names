@@ -36,6 +36,9 @@ var tagKindTests = []struct {
 	{tag: "filesystem-0", kind: names.FilesystemTagKind},
 	{tag: "ipaddress", err: `"ipaddress" is not a valid tag`},
 	{tag: "ipaddress-42424242-1111-2222-3333-0123456789ab", kind: names.IPAddressTagKind},
+	{tag: "subnet", err: `"subnet" is not a valid tag`},
+	{tag: "subnet-10.20.0.0/16", kind: names.SubnetTagKind},
+	{tag: "subnet-2001:db8::/32", kind: names.SubnetTagKind},
 	{tag: "space", err: `"space" is not a valid tag`},
 	{tag: "space-42", kind: names.SpaceTagKind},
 }
@@ -187,6 +190,19 @@ var parseTagTests = []struct {
 	expectType: names.IPAddressTag{},
 	resultId:   "42424242-1111-2222-3333-0123456789ab",
 }, {
+	tag:       "subnet-",
+	resultErr: `"subnet-" is not a valid subnet tag`,
+}, {
+	tag:        "subnet-10.20.0.0/16",
+	expectKind: names.SubnetTagKind,
+	expectType: names.SubnetTag{},
+	resultId:   "10.20.0.0/16",
+}, {
+	tag:        "subnet-2001:db8::/32",
+	expectKind: names.SubnetTagKind,
+	expectType: names.SubnetTag{},
+	resultId:   "2001:db8::/32",
+}, {
 	tag:       "space-",
 	resultErr: `"space-" is not a valid space tag`,
 }, {
@@ -209,6 +225,7 @@ var makeTag = map[string]func(string) names.Tag{
 	names.FilesystemTagKind: func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
 	names.StorageTagKind:    func(tag string) names.Tag { return names.NewStorageTag(tag) },
 	names.IPAddressTagKind:  func(tag string) names.Tag { return names.NewIPAddressTag(tag) },
+	names.SubnetTagKind:     func(tag string) names.Tag { return names.NewSubnetTag(tag) },
 	names.SpaceTagKind:      func(tag string) names.Tag { return names.NewSpaceTag(tag) },
 }
 
