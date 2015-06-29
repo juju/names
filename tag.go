@@ -57,7 +57,7 @@ func validKinds(kind string) bool {
 	case UnitTagKind, MachineTagKind, ServiceTagKind, EnvironTagKind, UserTagKind,
 		RelationTagKind, NetworkTagKind, ActionTagKind, VolumeTagKind,
 		CharmTagKind, StorageTagKind, FilesystemTagKind, IPAddressTagKind,
-		SpaceTagKind:
+		SpaceTagKind, SubnetTagKind:
 		return true
 	}
 	return false
@@ -150,6 +150,11 @@ func ParseTag(tag string) (Tag, error) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewIPAddressTag(uuid.String()), nil
+	case SubnetTagKind:
+		if !IsValidSubnet(id) {
+			return nil, invalidTagError(tag, kind)
+		}
+		return NewSubnetTag(id), nil
 	case SpaceTagKind:
 		if !IsValidSpace(id) {
 			return nil, invalidTagError(tag, kind)
