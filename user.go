@@ -14,7 +14,7 @@ const (
 )
 
 var (
-	validUserPart = "[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]"
+	validUserPart = "[a-zA-Z0-9][a-zA-Z0-9.+-]*[a-zA-Z0-9]"
 	validName     = regexp.MustCompile(fmt.Sprintf("^(?P<name>%s)(?:@(?P<provider>%s))?$", validUserPart, validUserPart))
 	validUserName = regexp.MustCompile("^" + validUserPart + "$")
 )
