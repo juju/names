@@ -6,9 +6,10 @@ package names_test
 import (
 	"fmt"
 
-	"github.com/juju/names"
 	jc "github.com/juju/testing/checkers"
 	gc "gopkg.in/check.v1"
+
+	"github.com/juju/names"
 )
 
 type charmSuite struct{}
