@@ -6,7 +6,7 @@ import (
 )
 
 // ValidSeries matches any valid series string.
-var ValidSeries = regexp.MustCompile("^[a-z]+([a-z0-9]+)?$")
+var ValidSeries = regexp.MustCompile("^" + SeriesSnippet + "$")
 
 // KnownSeries is a map of all the different series' that juju knows about.
 var KnownSeries = map[string]bool{
