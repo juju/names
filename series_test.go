@@ -1,3 +1,6 @@
+// Copyright 2014 Canonical Ltd.
+// Licensed under the LGPLv3, see LICENCE file for details.
+
 package names_test
 
 import (
@@ -10,78 +13,10 @@ type seriesSuite struct{}
 
 var _ = gc.Suite(&seriesSuite{})
 
-var seriesNameTests = []struct {
+var invalidSeriesNameTests = []struct {
 	pattern, err string
 	valid        bool
 }{
-	{
-		pattern: "bundle",
-		valid:   true,
-	},
-	{
-		pattern: "oneiric",
-		valid:   true,
-	},
-	{
-		pattern: "precise",
-		valid:   true,
-	},
-	{
-		pattern: "quantal",
-		valid:   true,
-	},
-	{
-		pattern: "raring",
-		valid:   true,
-	},
-	{
-		pattern: "saucy",
-		valid:   true,
-	},
-	{
-		pattern: "trusty",
-		valid:   true,
-	},
-	{
-		pattern: "utopic",
-		valid:   true,
-	},
-	{
-		pattern: "vivid",
-		valid:   true,
-	},
-	{
-		pattern: "win2012hvr2",
-		valid:   true,
-	},
-	{
-		pattern: "win2012hv",
-		valid:   true,
-	},
-	{
-		pattern: "win2012r2",
-		valid:   true,
-	},
-	{
-		pattern: "win2012",
-		valid:   true,
-	},
-	{
-		pattern: "win7",
-		valid:   true,
-	},
-	{
-		pattern: "win8",
-		valid:   true,
-	},
-	{
-		pattern: "win81",
-		valid:   true,
-	},
-	{
-		pattern: "centos7",
-		valid:   true,
-	},
 	{
 		pattern: ".bad-wolf",
 		valid:   false,
@@ -94,10 +29,19 @@ var seriesNameTests = []struct {
 	},
 }
 
-func (s *seriesSuite) TestIsValidSeries(c *gc.C) {
-	for i, test := range seriesNameTests {
+func (s *seriesSuite) TestValidVerifySeries(c *gc.C) {
+	for series, _ := range names.KnownSeries {
+		c.Logf("test %q", series)
+		result, err := names.VerifySeries(series)
+		c.Assert(result, gc.Equals, true)
+		c.Assert(err, gc.IsNil)
+	}
+}
+
+func (s *seriesSuite) TestInvalidVerifySeries(c *gc.C) {
+	for i, test := range invalidSeriesNameTests {
 		c.Logf("test %d: %q", i, test.pattern)
-		result, err := names.IsValidSeries(test.pattern)
+		result, err := names.VerifySeries(test.pattern)
 		if test.valid {
 			c.Assert(err, gc.IsNil)
 			c.Assert(result, gc.Equals, true)

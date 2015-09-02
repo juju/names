@@ -1,3 +1,6 @@
+// Copyright 2014 Canonical Ltd.
+// Licensed under the LGPLv3, see LICENCE file for details.
+
 package names
 
 import (
@@ -6,7 +9,7 @@ import (
 )
 
 // ValidSeries matches any valid series string.
-var ValidSeries = regexp.MustCompile("^" + SeriesSnippet + "$")
+var validSeries = regexp.MustCompile("^" + SeriesSnippet + "$")
 
 // KnownSeries is a map of all the different series' that juju knows about.
 var KnownSeries = map[string]bool{
@@ -29,10 +32,10 @@ var KnownSeries = map[string]bool{
 	"centos7":     true,
 }
 
-// IsValidSeries checks to see if a given string is a valid series string and if
+// VerifySeries checks to see if a given string is a valid series string and if
 // it is a known series.
-func IsValidSeries(series string) (bool, error) {
-	if !ValidSeries.MatchString(series) {
+func VerifySeries(series string) (bool, error) {
+	if !validSeries.MatchString(series) {
 		return false, fmt.Errorf("invalid series format: %q", series)
 	}
 	if !KnownSeries[series] {
