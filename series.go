@@ -22,6 +22,7 @@ var KnownSeries = map[string]bool{
 	"trusty":      true,
 	"utopic":      true,
 	"vivid":       true,
+	"wily":        true,
 	"win2012hvr2": true,
 	"win2012hv":   true,
 	"win2012r2":   true,
