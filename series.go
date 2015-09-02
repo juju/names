@@ -1,4 +1,4 @@
-// Copyright 2014 Canonical Ltd.
+// Copyright 2015 Canonical Ltd.
 // Licensed under the LGPLv3, see LICENCE file for details.
 
 package names
@@ -34,12 +34,12 @@ var KnownSeries = map[string]bool{
 
 // VerifySeries checks to see if a given string is a valid series string and if
 // it is a known series.
-func VerifySeries(series string) (bool, error) {
+func VerifySeries(series string) error {
 	if !validSeries.MatchString(series) {
-		return false, fmt.Errorf("invalid series format: %q", series)
+		return fmt.Errorf("invalid series format: %q", series)
 	}
 	if !KnownSeries[series] {
-		return false, fmt.Errorf("unknown series: %q", series)
+		return fmt.Errorf("unknown series: %q", series)
 	}
-	return true, nil
+	return nil
 }
