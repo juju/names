@@ -4,6 +4,8 @@
 package names_test
 
 import (
+	"fmt"
+
 	gc "gopkg.in/check.v1"
 
 	"github.com/juju/names"
@@ -18,26 +20,26 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 		input    string
 		string   string
 		name     string
-		provider string
+		domain   string
 		username string
 	}{
 		{
 			input:    "bob",
 			string:   "user-bob",
 			name:     "bob",
-			provider: names.LocalProvider,
+			domain:   names.LocalUserDomain,
 			username: "bob@local",
 		}, {
 			input:    "bob@local",
 			string:   "user-bob@local",
 			name:     "bob",
-			provider: names.LocalProvider,
+			domain:   names.LocalUserDomain,
 			username: "bob@local",
 		}, {
 			input:    "bob@foo",
 			string:   "user-bob@foo",
 			name:     "bob",
-			provider: "foo",
+			domain:   "foo",
 			username: "bob@foo",
 		},
 	} {
@@ -46,9 +48,47 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 		c.Check(userTag.String(), gc.Equals, t.string)
 		c.Check(userTag.Id(), gc.Equals, t.input)
 		c.Check(userTag.Name(), gc.Equals, t.name)
-		c.Check(userTag.Provider(), gc.Equals, t.provider)
-		c.Check(userTag.IsLocal(), gc.Equals, t.provider == names.LocalProvider)
-		c.Check(userTag.Username(), gc.Equals, t.username)
+		c.Check(userTag.Domain(), gc.Equals, t.domain)
+		c.Check(userTag.IsLocal(), gc.Equals, t.domain == names.LocalUserDomain)
+		c.Check(userTag.Canonical(), gc.Equals, t.username)
+	}
+}
+
+var withDomainTests = []struct {
+	id       string
+	domain   string
+	expectId string
+}{{
+	id:       "bob",
+	domain:   names.LocalUserDomain,
+	expectId: "bob@local",
+}, {
+	id:       "bob@local",
+	domain:   "foo",
+	expectId: "bob@foo",
+}, {
+	id:     "bob@local",
+	domain: "",
+}, {
+	id:       "bob@foo",
+	domain:   names.LocalUserDomain,
+	expectId: "bob@local",
+}, {
+	id:     "bob",
+	domain: "@foo",
+}}
+
+func (s *userSuite) TestWithDomain(c *gc.C) {
+	for i, test := range withDomainTests {
+		c.Logf("test %d: id %q; domain %q", i, test.id, test.domain)
+		tag := names.NewUserTag(test.id)
+		if test.expectId == "" {
+			c.Assert(func() {
+				tag.WithDomain(test.domain)
+			}, gc.PanicMatches, fmt.Sprintf("invalid user domain %q", test.domain))
+		} else {
+			c.Assert(tag.WithDomain(test.domain).Id(), gc.Equals, test.expectId)
+		}
 	}
 }
 
@@ -99,7 +139,7 @@ func (s *userSuite) TestIsValidUser(c *gc.C) {
 	}
 }
 
-func (s *userSuite) TestIsValidUserName(c *gc.C) {
+func (s *userSuite) TestIsValidUserNameOrDomain(c *gc.C) {
 	for i, t := range []struct {
 		string string
 		expect bool
@@ -145,6 +185,7 @@ func (s *userSuite) TestIsValidUserName(c *gc.C) {
 	} {
 		c.Logf("test %d: %s", i, t.string)
 		c.Assert(names.IsValidUserName(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
+		c.Assert(names.IsValidUserDomain(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
 	}
 }
 
@@ -188,9 +229,9 @@ func (s *userSuite) TestParseUserTag(c *gc.C) {
 
 func (s *userSuite) TestNewLocalUserTag(c *gc.C) {
 	user := names.NewLocalUserTag("bob")
-	c.Assert(user.Username(), gc.Equals, "bob@local")
+	c.Assert(user.Canonical(), gc.Equals, "bob@local")
 	c.Assert(user.Name(), gc.Equals, "bob")
-	c.Assert(user.Provider(), gc.Equals, "local")
+	c.Assert(user.Domain(), gc.Equals, "local")
 	c.Assert(user.IsLocal(), gc.Equals, true)
 	c.Assert(user.String(), gc.Equals, "user-bob@local")
 
