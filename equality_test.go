@@ -19,8 +19,8 @@ var tagEqualityTests = []struct {
 	{NewRelationTag("wordpress:haproxy"), RelationTag{key: "wordpress.haproxy"}},
 	{NewEnvironTag("deadbeef-0123-4567-89ab-feedfacebeef"), EnvironTag{uuid: "deadbeef-0123-4567-89ab-feedfacebeef"}},
 	{NewUserTag("admin"), UserTag{name: "admin"}},
-	{NewUserTag("admin@local"), UserTag{name: "admin", provider: "local"}},
-	{NewUserTag("admin@foobar"), UserTag{name: "admin", provider: "foobar"}},
+	{NewUserTag("admin@local"), UserTag{name: "admin", domain: "local"}},
+	{NewUserTag("admin@foobar"), UserTag{name: "admin", domain: "foobar"}},
 	{NewNetworkTag("eth0"), NetworkTag{name: "eth0"}},
 	{NewActionTag("01234567-aaaa-4bbb-8ccc-012345678901"), ActionTag{ID: stringToUUID("01234567-aaaa-4bbb-8ccc-012345678901")}},
 }
