@@ -9,7 +9,8 @@ import (
 )
 
 const (
-	UserTagKind = "user"
+	UserTagKind     = "user"
+	LocalUserDomain = "local"
 )
 
 var (
@@ -24,7 +25,7 @@ var (
 // IsValidUser returns whether id is a valid user id.
 // Valid users may or may not be qualified with an
 // @domain suffix. Examples of valid users include
-// bob, bob@somewhere, bob@somewhere-else, 0-a-f@123.
+// bob, bob@local, bob@somewhere-else, 0-a-f@123.
 func IsValidUser(id string) bool {
 	return validName.MatchString(id)
 }
@@ -38,9 +39,9 @@ func IsValidUserName(name string) bool {
 }
 
 // IsValidUserDomain returns whether the given user
-// domain is valid. Local users have an empty domain.
+// domain is valid.
 func IsValidUserDomain(domain string) bool {
-	return domain == "" || validUserName.MatchString(domain)
+	return validUserName.MatchString(domain)
 }
 
 // UserTag represents a user that may be stored locally
@@ -68,15 +69,25 @@ func (t UserTag) Id() string {
 // without its associated domain.
 func (t UserTag) Name() string { return t.name }
 
-// IsLocal returns true if the tag represents a local user.
-func (t UserTag) IsLocal() bool {
-	return t.Domain() == ""
+// Canonical returns the user name and its domain in canonical form.
+// Specifically, user tags in the local domain will always return an
+// @local prefix, regardless of the id the user was created with. This
+// is the only difference from the Id method.
+func (t UserTag) Canonical() string {
+	return t.name + "@" + t.Domain()
 }
 
-// Domain returns the user domain. Users in the local database are from
-// the local domain, represented as the empty string. Other users are
-// considered 'remote' users.
+// IsLocal returns true if the tag represents a local user.
+func (t UserTag) IsLocal() bool {
+	return t.Domain() == LocalUserDomain
+}
+
+// Domain returns the user domain. Users in the local database
+// are from the LocalDomain. Other users are considered 'remote' users.
 func (t UserTag) Domain() string {
+	if t.domain == "" {
+		return LocalUserDomain
+	}
 	return t.domain
 }
 
@@ -109,7 +120,7 @@ func NewLocalUserTag(name string) UserTag {
 	if !IsValidUserName(name) {
 		panic(fmt.Sprintf("invalid user name %q", name))
 	}
-	return UserTag{name: name}
+	return UserTag{name: name, domain: LocalUserDomain}
 }
 
 // ParseUserTag parses a user tag string.
