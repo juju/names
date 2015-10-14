@@ -21,27 +21,26 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 		string   string
 		name     string
 		domain   string
-		isLocal  bool
 		username string
 	}{
 		{
-			input:   "bob",
-			string:  "user-bob",
-			name:    "bob",
-			domain:  "",
-			isLocal: true,
+			input:    "bob",
+			string:   "user-bob",
+			name:     "bob",
+			domain:   names.LocalUserDomain,
+			username: "bob@local",
 		}, {
-			input:   "bob@local",
-			string:  "user-bob@local",
-			name:    "bob",
-			domain:  "local",
-			isLocal: false,
+			input:    "bob@local",
+			string:   "user-bob@local",
+			name:     "bob",
+			domain:   names.LocalUserDomain,
+			username: "bob@local",
 		}, {
-			input:   "bob@foo",
-			string:  "user-bob@foo",
-			name:    "bob",
-			domain:  "foo",
-			isLocal: false,
+			input:    "bob@foo",
+			string:   "user-bob@foo",
+			name:     "bob",
+			domain:   "foo",
+			username: "bob@foo",
 		},
 	} {
 		c.Logf("test %d: %s", i, t.input)
@@ -50,7 +49,8 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 		c.Check(userTag.Id(), gc.Equals, t.input)
 		c.Check(userTag.Name(), gc.Equals, t.name)
 		c.Check(userTag.Domain(), gc.Equals, t.domain)
-		c.Check(userTag.IsLocal(), gc.Equals, t.domain == "")
+		c.Check(userTag.IsLocal(), gc.Equals, t.domain == names.LocalUserDomain)
+		c.Check(userTag.Canonical(), gc.Equals, t.username)
 	}
 }
 
@@ -60,16 +60,19 @@ var withDomainTests = []struct {
 	expectId string
 }{{
 	id:       "bob",
-	domain:   "",
-	expectId: "bob",
+	domain:   names.LocalUserDomain,
+	expectId: "bob@local",
 }, {
-	id:       "bob",
+	id:       "bob@local",
 	domain:   "foo",
 	expectId: "bob@foo",
 }, {
+	id:     "bob@local",
+	domain: "",
+}, {
 	id:       "bob@foo",
-	domain:   "",
-	expectId: "bob",
+	domain:   names.LocalUserDomain,
+	expectId: "bob@local",
 }, {
 	id:     "bob",
 	domain: "@foo",
@@ -136,7 +139,7 @@ func (s *userSuite) TestIsValidUser(c *gc.C) {
 	}
 }
 
-func (s *userSuite) TestIsValidUserName(c *gc.C) {
+func (s *userSuite) TestIsValidUserNameOrDomain(c *gc.C) {
 	for i, t := range []struct {
 		string string
 		expect bool
@@ -182,54 +185,6 @@ func (s *userSuite) TestIsValidUserName(c *gc.C) {
 	} {
 		c.Logf("test %d: %s", i, t.string)
 		c.Assert(names.IsValidUserName(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
-	}
-}
-
-func (s *userSuite) TestIsValidDomain(c *gc.C) {
-	for i, t := range []struct {
-		string string
-		expect bool
-	}{
-		{"", true},
-		{"bob", true},
-		{"Bob", true},
-		{"bOB", true},
-		{"b^b", false},
-		{"bob1", true},
-		{"bob-1", true},
-		{"bob+1", true},
-		{"bob+", false},
-		{"+bob", false},
-		{"bob.1", true},
-		{"1bob", true},
-		{"1-bob", true},
-		{"1+bob", true},
-		{"1.bob", true},
-		{"jim.bob+99-1.", false},
-		{"a", false},
-		{"0foo", true},
-		{"foo bar", false},
-		{"bar{}", false},
-		{"bar+foo", true},
-		{"bar_foo", false},
-		{"bar!", false},
-		{"bar^", false},
-		{"bar*", false},
-		{"foo=bar", false},
-		{"foo?", false},
-		{"[bar]", false},
-		{"'foo'", false},
-		{"%bar", false},
-		{"&bar", false},
-		{"#1foo", false},
-		{"bar@ram.u", false},
-		{"bar@local", false},
-		{"bar@ubuntuone", false},
-		{"bar@", false},
-		{"@local", false},
-		{"not/valid", false},
-	} {
-		c.Logf("test %d: %s", i, t.string)
 		c.Assert(names.IsValidUserDomain(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
 	}
 }
@@ -274,11 +229,11 @@ func (s *userSuite) TestParseUserTag(c *gc.C) {
 
 func (s *userSuite) TestNewLocalUserTag(c *gc.C) {
 	user := names.NewLocalUserTag("bob")
-	c.Assert(user.Id(), gc.Equals, "bob")
+	c.Assert(user.Canonical(), gc.Equals, "bob@local")
 	c.Assert(user.Name(), gc.Equals, "bob")
-	c.Assert(user.Domain(), gc.Equals, "")
+	c.Assert(user.Domain(), gc.Equals, "local")
 	c.Assert(user.IsLocal(), gc.Equals, true)
-	c.Assert(user.String(), gc.Equals, "user-bob")
+	c.Assert(user.String(), gc.Equals, "user-bob@local")
 
 	c.Assert(func() { names.NewLocalUserTag("bob@local") }, gc.PanicMatches, `invalid user name "bob@local"`)
 	c.Assert(func() { names.NewLocalUserTag("") }, gc.PanicMatches, `invalid user name ""`)
