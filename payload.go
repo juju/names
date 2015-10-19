@@ -12,12 +12,14 @@ const (
 	// PayloadTagKind is used as the prefix for the string
 	// representation of payload tags.
 	PayloadTagKind = "payload"
+
+	validPayloadClass = `(?:[a-zA-Z](?:[-\w]*[a-zA-Z0-9])?)`
 )
 
 var (
 	// TODO(ericsnow) Should we require that the class string be
 	// a valid identifier ("[a-zA-Z]?
-	validPayload = regexp.MustCompile("^(?P<class>[^/]+)/(?P<rawid>.+)$")
+	validPayload = regexp.MustCompile(fmt.Sprintf(`^(?P<class>%s)/(?P<rawid>.+)$`, validPayloadClass))
 )
 
 // IsValidPayload returns whether fullID is a valid Juju ID for
