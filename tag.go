@@ -170,7 +170,7 @@ func ParseTag(tag string) (Tag, error) {
 		if !IsValidPayload(id) {
 			return nil, invalidTagError(tag, kind)
 		}
-		return parsePayloadFullIDEncoded(id)
+		return NewPayloadTag(id), nil
 	default:
 		return nil, invalidTagError(tag, "")
 	}
