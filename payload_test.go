@@ -15,15 +15,15 @@ var _ = gc.Suite(&payloadSuite{})
 type payloadSuite struct{}
 
 type payloadTest struct {
-	input  string
-	string string
-	class  string
-	rawID  string
+	input string
+	id    string
+	class string
+	rawID string
 }
 
 func (t payloadTest) check(c *gc.C, tag names.PayloadTag) {
-	c.Check(tag.String(), gc.Equals, t.string)
-	c.Check(tag.Id(), gc.Equals, t.input)
+	c.Check(tag.Id(), gc.Equals, t.id)
+	c.Check(tag.String(), gc.Equals, names.PayloadTagKind+"-"+t.id)
 	c.Check(tag.Class(), gc.Equals, t.class)
 	c.Check(tag.RawID(), gc.Equals, t.rawID)
 }
@@ -31,30 +31,30 @@ func (t payloadTest) check(c *gc.C, tag names.PayloadTag) {
 func (s *payloadSuite) TestPayloadTag(c *gc.C) {
 	for i, test := range []payloadTest{
 		{
-			input:  "spam/eggs",
-			string: "payload-spam/eggs",
-			class:  "spam",
-			rawID:  "eggs",
+			input: "spam/eggs",
+			id:    "spam/ZWdncw==",
+			class: "spam",
+			rawID: "eggs",
 		}, {
-			input:  "spam/spam-eggs-and-spam",
-			string: "payload-spam/spam-eggs-and-spam",
-			class:  "spam",
-			rawID:  "spam-eggs-and-spam",
+			input: "spam/spam-eggs-and-spam",
+			id:    "spam/c3BhbS1lZ2dzLWFuZC1zcGFt",
+			class: "spam",
+			rawID: "spam-eggs-and-spam",
 		}, {
-			input:  "spam/spam/spam/spam...",
-			string: "payload-spam/spam/spam/spam...",
-			class:  "spam",
-			rawID:  "spam/spam/spam...",
+			input: "spam/spam/spam/spam...",
+			id:    "spam/c3BhbS9zcGFtL3NwYW0uLi4=",
+			class: "spam",
+			rawID: "spam/spam/spam...",
 		}, {
-			input:  "spam/f47ac10b-58cc-4372-a567-0e02b2c3d479",
-			string: "payload-spam/f47ac10b-58cc-4372-a567-0e02b2c3d479",
-			class:  "spam",
-			rawID:  "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+			input: "spam/f47ac10b-58cc-4372-a567-0e02b2c3d479",
+			id:    "spam/ZjQ3YWMxMGItNThjYy00MzcyLWE1NjctMGUwMmIyYzNkNDc5",
+			class: "spam",
+			rawID: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
 		}, {
-			input:  "spam/3f9064e777bfd5ffc24553580f95111bb0ec82ed",
-			string: "payload-spam/3f9064e777bfd5ffc24553580f95111bb0ec82ed",
-			class:  "spam",
-			rawID:  "3f9064e777bfd5ffc24553580f95111bb0ec82ed",
+			input: "spam/3f9064e777bfd5ffc24553580f95111bb0ec82ed",
+			id:    "spam/M2Y5MDY0ZTc3N2JmZDVmZmMyNDU1MzU4MGY5NTExMWJiMGVjODJlZA==",
+			class: "spam",
+			rawID: "3f9064e777bfd5ffc24553580f95111bb0ec82ed",
 		},
 	} {
 		c.Logf("test %d: %s", i, test.input)
@@ -147,7 +147,7 @@ func (s *payloadSuite) TestParsePayloadFullIDOkay(c *gc.C) {
 		tag, err := names.ParsePayloadFullID(fullID)
 		c.Assert(err, jc.ErrorIsNil)
 
-		c.Check(tag.Id(), gc.Equals, fullID)
+		c.Check(tag.FullID(), gc.Equals, fullID)
 	}
 }
 
@@ -195,10 +195,7 @@ func (s *payloadSuite) TestParsePayloadTag(c *gc.C) {
 		tag: "payload-/eggs",
 		err: names.InvalidTagError("payload-/eggs", names.PayloadTagKind),
 	}, {
-		tag:      "payload-spam/eggs",
-		expected: names.NewPayloadTag("spam", "eggs"),
-	}, {
-		tag:      "payload-spam/eggs",
+		tag:      "payload-spam/ZWdncw==",
 		expected: names.NewPayloadTag("spam", "eggs"),
 	}, {
 		tag: "spam/eggs",
