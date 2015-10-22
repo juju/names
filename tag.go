@@ -42,6 +42,12 @@ type Tag interface {
 	fmt.Stringer // all Tags should be able to print themselves
 }
 
+// tagString returns the canonical string representation of a tag.
+// It round-trips with splitTag().
+func tagString(tag Tag) string {
+	return tag.Kind() + "-" + tag.Id()
+}
+
 // TagKind returns one of the *TagKind constants for the given tag, or
 // an error if none matches.
 func TagKind(tag string) (string, error) {
@@ -57,7 +63,7 @@ func validKinds(kind string) bool {
 	case UnitTagKind, MachineTagKind, ServiceTagKind, EnvironTagKind, UserTagKind,
 		RelationTagKind, NetworkTagKind, ActionTagKind, VolumeTagKind,
 		CharmTagKind, StorageTagKind, FilesystemTagKind, IPAddressTagKind,
-		SpaceTagKind, SubnetTagKind:
+		SpaceTagKind, SubnetTagKind, PayloadTagKind:
 		return true
 	}
 	return false
@@ -160,6 +166,11 @@ func ParseTag(tag string) (Tag, error) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewSpaceTag(id), nil
+	case PayloadTagKind:
+		if !IsValidPayload(id) {
+			return nil, invalidTagError(tag, kind)
+		}
+		return NewPayloadTag(id), nil
 	default:
 		return nil, invalidTagError(tag, "")
 	}
