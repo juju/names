@@ -135,18 +135,3 @@ func ParseUserTag(tag string) (UserTag, error) {
 	}
 	return ut, nil
 }
-
-// TODO(ericsnow) Remove LocalProvider, Username and Provider.
-
-// LocalProvider is a legacy alias for LocalUserDomain.
-const LocalProvider = LocalUserDomain
-
-// Username is a legacy alias for Canonical().
-func (t UserTag) Username() string {
-	return t.Canonical()
-}
-
-// Provider is a legacy alias for Domain().
-func (t UserTag) Provider() string {
-	return t.Domain()
-}
