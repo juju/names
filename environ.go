@@ -3,17 +3,12 @@
 
 package names
 
-import (
-	"regexp"
-)
-
+// EnvironTagKind is DEPRECATED: model tags are used instead.
 const EnvironTagKind = "environment"
 
 type EnvironTag struct {
 	uuid string
 }
-
-var validUUID = regexp.MustCompile(`[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}`)
 
 // NewEnvironTag returns the tag of an environment with the given environment UUID.
 func NewEnvironTag(uuid string) EnvironTag {

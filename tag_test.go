@@ -22,6 +22,7 @@ var tagKindTests = []struct {
 	{tag: "machine-42", kind: names.MachineTagKind},
 	{tag: "service-foo", kind: names.ServiceTagKind},
 	{tag: "environment-42", kind: names.EnvironTagKind},
+	{tag: "model-42", kind: names.ModelTagKind},
 	{tag: "user-admin", kind: names.UserTagKind},
 	{tag: "relation-service1.rel1#other-svc.other-rel2", kind: names.RelationTagKind},
 	{tag: "relation-service.peerRelation", kind: names.RelationTagKind},
@@ -109,6 +110,11 @@ var parseTagTests = []struct {
 	expectType: names.EnvironTag{},
 	resultId:   "f47ac10b-58cc-4372-a567-0e02b2c3d479",
 }, {
+	tag:        "model-f47ac10b-58cc-4372-a567-0e02b2c3d479",
+	expectKind: names.ModelTagKind,
+	expectType: names.ModelTag{},
+	resultId:   "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+}, {
 	tag:        "relation-my-svc1.myrel1#other-svc.other-rel2",
 	expectKind: names.RelationTagKind,
 	expectType: names.RelationTag{},
@@ -123,6 +129,11 @@ var parseTagTests = []struct {
 	expectKind: names.EnvironTagKind,
 	expectType: names.EnvironTag{},
 	resultErr:  `"environment-/" is not a valid environment tag`,
+}, {
+	tag:        "model-/",
+	expectKind: names.ModelTagKind,
+	expectType: names.ModelTag{},
+	resultErr:  `"model-/" is not a valid model tag`,
 }, {
 	tag:        "user-foo",
 	expectKind: names.UserTagKind,
@@ -218,6 +229,7 @@ var makeTag = map[string]func(string) names.Tag{
 	names.ServiceTagKind:    func(tag string) names.Tag { return names.NewServiceTag(tag) },
 	names.RelationTagKind:   func(tag string) names.Tag { return names.NewRelationTag(tag) },
 	names.EnvironTagKind:    func(tag string) names.Tag { return names.NewEnvironTag(tag) },
+	names.ModelTagKind:      func(tag string) names.Tag { return names.NewModelTag(tag) },
 	names.UserTagKind:       func(tag string) names.Tag { return names.NewUserTag(tag) },
 	names.NetworkTagKind:    func(tag string) names.Tag { return names.NewNetworkTag(tag) },
 	names.ActionTagKind:     func(tag string) names.Tag { return names.NewActionTag(tag) },
