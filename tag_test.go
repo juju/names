@@ -112,7 +112,7 @@ var parseTagTests = []struct {
 }, {
 	tag:        "model-f47ac10b-58cc-4372-a567-0e02b2c3d479",
 	expectKind: names.ModelTagKind,
-	expectType: names.EnvironModel{},
+	expectType: names.ModelTag{},
 	resultId:   "f47ac10b-58cc-4372-a567-0e02b2c3d479",
 }, {
 	tag:        "relation-my-svc1.myrel1#other-svc.other-rel2",
@@ -132,7 +132,7 @@ var parseTagTests = []struct {
 }, {
 	tag:        "model-/",
 	expectKind: names.ModelTagKind,
-	expectType: names.EnvironModel{},
+	expectType: names.ModelTag{},
 	resultErr:  `"model-/" is not a valid model tag`,
 }, {
 	tag:        "user-foo",
