@@ -55,5 +55,8 @@ func ActionReceiverTag(name string) (Tag, error) {
 		// TODO(jcw4) enable when leader elections complete
 		//return NewServiceTag(name), nil
 	}
+	if IsValidMachine(name) {
+		return NewMachineTag(name), nil
+	}
 	return nil, fmt.Errorf("invalid actionreceiver name %q", name)
 }
