@@ -46,6 +46,7 @@ func (s *actionSuite) TestActionReceiverTag(c *gc.C) {
 	}{
 		{name: "mysql", valid: false},
 		{name: "mysql/3", expected: names.NewUnitTag("mysql/3"), valid: true},
+		{name: "3", expected: names.NewMachineTag("3"), valid: true},
 	}
 
 	for _, tcase := range testCases {
