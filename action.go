@@ -6,6 +6,7 @@ package names
 import (
 	"fmt"
 
+	"github.com/juju/errors"
 	"github.com/juju/utils"
 )
 
@@ -47,6 +48,8 @@ func IsValidAction(id string) bool {
 	return utils.IsValidUUIDString(id)
 }
 
+// ActionReceiverTag returns an ActionReceiver Tag from a
+// machine or unit name.
 func ActionReceiverTag(name string) (Tag, error) {
 	if IsValidUnit(name) {
 		return NewUnitTag(name), nil
@@ -59,4 +62,18 @@ func ActionReceiverTag(name string) (Tag, error) {
 		return NewMachineTag(name), nil
 	}
 	return nil, fmt.Errorf("invalid actionreceiver name %q", name)
+}
+
+// ActionReceiverFrom Tag returns an ActionReceiver tag from
+// a machine or unit tag.
+func ActionReceiverFromTag(tag string) (Tag, error) {
+	unitTag, err := ParseUnitTag(tag)
+	if err == nil {
+		return unitTag, nil
+	}
+	machineTag, err := ParseMachineTag(tag)
+	if err == nil {
+		return machineTag, nil
+	}
+	return nil, errors.Errorf("invalid actionreceiver tag %q", tag)
 }
