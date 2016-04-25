@@ -21,7 +21,6 @@ var tagEqualityTests = []struct {
 	{NewUserTag("admin"), UserTag{name: "admin"}},
 	{NewUserTag("admin@local"), UserTag{name: "admin", domain: "local"}},
 	{NewUserTag("admin@foobar"), UserTag{name: "admin", domain: "foobar"}},
-	{NewNetworkTag("eth0"), NetworkTag{name: "eth0"}},
 	{NewActionTag("01234567-aaaa-4bbb-8ccc-012345678901"), ActionTag{ID: stringToUUID("01234567-aaaa-4bbb-8ccc-012345678901")}},
 }
 

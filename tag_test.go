@@ -29,7 +29,6 @@ var tagKindTests = []struct {
 	{tag: "foo", err: `"foo" is not a valid tag`},
 	{tag: "unit", err: `"unit" is not a valid tag`},
 	{tag: "network", err: `"network" is not a valid tag`},
-	{tag: "network-42", kind: names.NetworkTagKind},
 	{tag: "ab01cd23-0123-4edc-9a8b-fedcba987654", err: `"ab01cd23-0123-4edc-9a8b-fedcba987654" is not a valid tag`},
 	{tag: "action-ab01cd23-0123-4edc-9a8b-fedcba987654", kind: names.ActionTagKind},
 	{tag: "volume-0", kind: names.VolumeTagKind},
@@ -150,16 +149,6 @@ var parseTagTests = []struct {
 	expectType: names.UserTag{},
 	resultErr:  `"user-/" is not a valid user tag`,
 }, {
-	tag:        "network-",
-	expectKind: names.NetworkTagKind,
-	expectType: names.NetworkTag{},
-	resultErr:  `"network-" is not a valid network tag`,
-}, {
-	tag:        "network-mynet1",
-	expectKind: names.NetworkTagKind,
-	expectType: names.NetworkTag{},
-	resultId:   "mynet1",
-}, {
 	tag:        "action-00000000-abcd",
 	expectKind: names.ActionTagKind,
 	expectType: names.ActionTag{},
@@ -231,7 +220,6 @@ var makeTag = map[string]func(string) names.Tag{
 	names.EnvironTagKind:    func(tag string) names.Tag { return names.NewEnvironTag(tag) },
 	names.ModelTagKind:      func(tag string) names.Tag { return names.NewModelTag(tag) },
 	names.UserTagKind:       func(tag string) names.Tag { return names.NewUserTag(tag) },
-	names.NetworkTagKind:    func(tag string) names.Tag { return names.NewNetworkTag(tag) },
 	names.ActionTagKind:     func(tag string) names.Tag { return names.NewActionTag(tag) },
 	names.VolumeTagKind:     func(tag string) names.Tag { return names.NewVolumeTag(tag) },
 	names.FilesystemTagKind: func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
