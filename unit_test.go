@@ -21,25 +21,67 @@ func (s *unitSuite) TestUnitTag(c *gc.C) {
 
 var unitNameTests = []struct {
 	pattern string
+	tag     string
 	valid   bool
 	service string
 }{
-	{pattern: "wordpress/42", valid: true, service: "wordpress"},
-	{pattern: "rabbitmq-server/123", valid: true, service: "rabbitmq-server"},
-	{pattern: "foo", valid: false},
-	{pattern: "foo/", valid: false},
-	{pattern: "bar/foo", valid: false},
-	{pattern: "20/20", valid: false},
-	{pattern: "foo-55", valid: false},
-	{pattern: "foo-bar/123", valid: true, service: "foo-bar"},
-	{pattern: "foo-bar/123/", valid: false},
-	{pattern: "foo-bar/123-not", valid: false},
+	{
+		pattern: "wordpress/42",
+		tag:     "unit-wordpress-42",
+		valid:   true,
+		service: "wordpress",
+	}, {
+		pattern: "rabbitmq-server/123",
+		tag:     "unit-rabbitmq-server-123",
+		valid:   true,
+		service: "rabbitmq-server",
+	}, {
+		pattern: "foo",
+		valid:   false,
+	}, {
+		pattern: "foo/",
+		valid:   false,
+	}, {
+		pattern: "bar/foo",
+		valid:   false,
+	}, {
+		pattern: "20/20",
+		valid:   false,
+	}, {
+		pattern: "foo-55",
+		valid:   false,
+	}, {
+		pattern: "foo-bar/123",
+		tag:     "unit-foo-bar-123",
+		valid:   true,
+		service: "foo-bar",
+	}, {
+		pattern: "foo-bar/123/",
+		tag:     "unit-foo-bar-123",
+		valid:   false,
+	}, {
+		pattern: "foo-bar/123-not",
+		valid:   false,
+	},
 }
 
 func (s *unitSuite) TestUnitNameFormats(c *gc.C) {
 	for i, test := range unitNameTests {
 		c.Logf("test %d: %q", i, test.pattern)
 		c.Assert(names.IsValidUnit(test.pattern), gc.Equals, test.valid)
+	}
+}
+
+func (s *unitSuite) TestUnitTagFromName(c *gc.C) {
+	for i, test := range unitNameTests {
+		c.Logf("test %d: %q", i, test.pattern)
+		tag, err := names.NewUnitTagFromName(test.pattern)
+		if test.valid {
+			c.Check(err, gc.IsNil)
+			c.Check(tag.String(), gc.Equals, test.tag)
+		} else {
+			c.Check(err, gc.ErrorMatches, fmt.Sprintf("%q is not a valid unit name", test.pattern))
+		}
 	}
 }
 
