@@ -39,7 +39,9 @@ func (s *payloadSuite) TestIsValidPayload(c *gc.C) {
 		expect bool
 	}{
 		{"", false},
+		{"spam-", false},
 		{"spam", true},
+		{"spam-and-eggs", true},
 
 		{"f47ac10b-58cc-4372-a567-0e02b2c3d479", true},
 	} {

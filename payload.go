@@ -14,7 +14,7 @@ const (
 	// representation of payload tags.
 	PayloadTagKind = "payload"
 
-	payloadClass = "([a-zA-Z][a-zA-Z0-9]*)"
+	payloadClass = "([a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)"
 )
 
 var validPayload = regexp.MustCompile("^" + payloadClass + "$")
