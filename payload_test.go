@@ -39,7 +39,9 @@ func (s *payloadSuite) TestIsValidPayload(c *gc.C) {
 		expect bool
 	}{
 		{"", false},
-		{"spam", false},
+		{"spam-", false},
+		{"spam", true},
+		{"spam-and-eggs", true},
 
 		{"f47ac10b-58cc-4372-a567-0e02b2c3d479", true},
 	} {
@@ -62,11 +64,14 @@ func (s *payloadSuite) TestParsePayloadTag(c *gc.C) {
 		tag: "payload-",
 		err: names.InvalidTagError("payload-", names.PayloadTagKind),
 	}, {
-		tag: "payload-spam",
-		err: names.InvalidTagError("payload-spam", names.PayloadTagKind),
+		tag:      "payload-spam",
+		expected: names.NewPayloadTag("spam"),
 	}, {
 		tag:      "payload-f47ac10b-58cc-4372-a567-0e02b2c3d479",
 		expected: names.NewPayloadTag("f47ac10b-58cc-4372-a567-0e02b2c3d479"),
+	}, {
+		tag: "spam",
+		err: names.InvalidTagError("spam", ""),
 	}, {
 		tag: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
 		err: names.InvalidTagError("f47ac10b-58cc-4372-a567-0e02b2c3d479", ""),

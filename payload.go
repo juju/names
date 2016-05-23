@@ -4,6 +4,8 @@
 package names
 
 import (
+	"regexp"
+
 	"github.com/juju/utils"
 )
 
@@ -11,12 +13,22 @@ const (
 	// PayloadTagKind is used as the prefix for the string
 	// representation of payload tags.
 	PayloadTagKind = "payload"
+
+	// This can be expanded later, as needed.
+	payloadClass = "([a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)"
 )
 
+var validPayload = regexp.MustCompile("^" + payloadClass + "$")
+
 // IsValidPayload returns whether id is a valid Juju ID for
-// a charm payload. The ID must be a valid UUID.
+// a charm payload. The ID must be a valid alpha-numeric (plus hyphens).
 func IsValidPayload(id string) bool {
-	return utils.IsValidUUIDString(id)
+	return validPayload.MatchString(id)
+}
+
+// For compatibility with Juju 1.25, UUIDs are also supported.
+func isValidPayload(id string) bool {
+	return IsValidPayload(id) || utils.IsValidUUIDString(id)
 }
 
 // PayloadTag represents a charm payload.
