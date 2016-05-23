@@ -14,6 +14,7 @@ const (
 	// representation of payload tags.
 	PayloadTagKind = "payload"
 
+	// This can be expanded later, as needed.
 	payloadClass = "([a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)"
 )
 
