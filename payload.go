@@ -21,10 +21,14 @@ const (
 var validPayload = regexp.MustCompile("^" + payloadClass + "$")
 
 // IsValidPayload returns whether id is a valid Juju ID for
-// a charm payload. The ID must be a valid "identifier". For
-// compatibility with Juju 1.25, UUIDs are also supported.
+// a charm payload. The ID must be a valid alpha-numeric (plus hyphens).
 func IsValidPayload(id string) bool {
-	return validPayload.MatchString(id) || utils.IsValidUUIDString(id)
+	return validPayload.MatchString(id)
+}
+
+// For compatibility with Juju 1.25, UUIDs are also supported.
+func isValidPayload(id string) bool {
+	return IsValidPayload(id) || utils.IsValidUUIDString(id)
 }
 
 // PayloadTag represents a charm payload.

@@ -167,7 +167,7 @@ func ParseTag(tag string) (Tag, error) {
 		}
 		return NewSpaceTag(id), nil
 	case PayloadTagKind:
-		if !IsValidPayload(id) {
+		if !isValidPayload(id) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewPayloadTag(id), nil
