@@ -20,7 +20,7 @@ var tagKindTests = []struct {
 }{
 	{tag: "unit-wordpress-42", kind: names.UnitTagKind},
 	{tag: "machine-42", kind: names.MachineTagKind},
-	{tag: "app-foo", kind: names.ApplicationTagKind},
+	{tag: "application-foo", kind: names.ApplicationTagKind},
 	{tag: "environment-42", kind: names.EnvironTagKind},
 	{tag: "model-42", kind: names.ModelTagKind},
 	{tag: "user-admin", kind: names.UserTagKind},
@@ -94,15 +94,15 @@ var parseTagTests = []struct {
 	expectType: names.UnitTag{},
 	resultErr:  `"unit-#" is not a valid unit tag`,
 }, {
-	tag:        "app-wordpress",
+	tag:        "application-wordpress",
 	expectKind: names.ApplicationTagKind,
 	expectType: names.ApplicationTag{},
 	resultId:   "wordpress",
 }, {
-	tag:        "app-#",
+	tag:        "application-#",
 	expectKind: names.ApplicationTagKind,
 	expectType: names.ApplicationTag{},
-	resultErr:  `"app-#" is not a valid app tag`,
+	resultErr:  `"application-#" is not a valid application tag`,
 }, {
 	tag:        "environment-f47ac10b-58cc-4372-a567-0e02b2c3d479",
 	expectKind: names.EnvironTagKind,

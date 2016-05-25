@@ -59,14 +59,14 @@ var parseApplicationTagTests = []struct {
 	tag: "",
 	err: names.InvalidTagError("", ""),
 }, {
-	tag:      "app-dave",
+	tag:      "application-dave",
 	expected: names.NewApplicationTag("dave"),
 }, {
 	tag: "dave",
 	err: names.InvalidTagError("dave", ""),
 }, {
-	tag: "app-dave/0",
-	err: names.InvalidTagError("app-dave/0", names.ApplicationTagKind),
+	tag: "application-dave/0",
+	err: names.InvalidTagError("application-dave/0", names.ApplicationTagKind),
 }, {
 	tag: "application",
 	err: names.InvalidTagError("application", ""),

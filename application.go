@@ -7,7 +7,7 @@ import (
 	"regexp"
 )
 
-const ApplicationTagKind = "app"
+const ApplicationTagKind = "application"
 
 const (
 	ApplicationSnippet = "(?:[a-z][a-z0-9]*(?:-[a-z0-9]*[a-z][a-z0-9]*)*)"

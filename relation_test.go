@@ -77,8 +77,8 @@ var parseRelationTagTests = []struct {
 	tag: "dave",
 	err: names.InvalidTagError("dave", ""),
 }, {
-	tag: "app-dave",
-	err: names.InvalidTagError("app-dave", names.RelationTagKind),
+	tag: "application-dave",
+	err: names.InvalidTagError("application-dave", names.RelationTagKind),
 }}
 
 func (s *relationSuite) TestParseRelationTag(c *gc.C) {

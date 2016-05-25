@@ -31,8 +31,8 @@ var parseModelTagTests = []struct {
 	//	tag: "model-",
 	//	err: names.InvalidTagError("model", ""),
 }, {
-	tag: "app-dave",
-	err: names.InvalidTagError("app-dave", names.ModelTagKind),
+	tag: "application-dave",
+	err: names.InvalidTagError("application-dave", names.ModelTagKind),
 }}
 
 func (s *modelSuite) TestParseModelTag(c *gc.C) {

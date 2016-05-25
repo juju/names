@@ -213,8 +213,8 @@ func (s *userSuite) TestParseUserTag(c *gc.C) {
 		tag: "unit-dave",
 		err: names.InvalidTagError("unit-dave", names.UnitTagKind), // not a valid unit name either
 	}, {
-		tag: "app-dave",
-		err: names.InvalidTagError("app-dave", names.UserTagKind),
+		tag: "application-dave",
+		err: names.InvalidTagError("application-dave", names.UserTagKind),
 	}} {
 		c.Logf("test %d: %s", i, t.tag)
 		got, err := names.ParseUserTag(t.tag)

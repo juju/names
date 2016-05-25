@@ -24,7 +24,7 @@ var parseActionTagTests = []struct {
 	{tag: "action-012345678", err: names.InvalidTagError("action-012345678", "action")},
 	{tag: "action-1234567", err: names.InvalidTagError("action-1234567", "action")},
 	{tag: "bob", err: names.InvalidTagError("bob", "")},
-	{tag: "app-ned", err: names.InvalidTagError("app-ned", names.ActionTagKind)}}
+	{tag: "application-ned", err: names.InvalidTagError("application-ned", names.ActionTagKind)}}
 
 func (s *actionSuite) TestParseActionTag(c *gc.C) {
 	for i, t := range parseActionTagTests {

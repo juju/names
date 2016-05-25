@@ -31,8 +31,8 @@ var parseEnvironTagTests = []struct {
 	//	tag: "environment-",
 	//	err: names.InvalidTagError("environment", ""),
 }, {
-	tag: "app-dave",
-	err: names.InvalidTagError("app-dave", names.EnvironTagKind),
+	tag: "application-dave",
+	err: names.InvalidTagError("application-dave", names.EnvironTagKind),
 }}
 
 func (s *environSuite) TestParseEnvironTag(c *gc.C) {
