@@ -6,7 +6,7 @@ package names_test
 import (
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names"
+	"gopkg.in/juju/names.v2"
 )
 
 type modelSuite struct{}
@@ -31,8 +31,8 @@ var parseModelTagTests = []struct {
 	//	tag: "model-",
 	//	err: names.InvalidTagError("model", ""),
 }, {
-	tag: "service-dave",
-	err: names.InvalidTagError("service-dave", names.ModelTagKind),
+	tag: "app-dave",
+	err: names.InvalidTagError("app-dave", names.ModelTagKind),
 }}
 
 func (s *modelSuite) TestParseModelTag(c *gc.C) {

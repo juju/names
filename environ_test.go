@@ -6,7 +6,7 @@ package names_test
 import (
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names"
+	"gopkg.in/juju/names.v2"
 )
 
 type environSuite struct{}
@@ -31,8 +31,8 @@ var parseEnvironTagTests = []struct {
 	//	tag: "environment-",
 	//	err: names.InvalidTagError("environment", ""),
 }, {
-	tag: "service-dave",
-	err: names.InvalidTagError("service-dave", names.EnvironTagKind),
+	tag: "app-dave",
+	err: names.InvalidTagError("app-dave", names.EnvironTagKind),
 }}
 
 func (s *environSuite) TestParseEnvironTag(c *gc.C) {

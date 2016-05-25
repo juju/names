@@ -14,7 +14,7 @@ var snippets = []struct {
 	{"ContainerSnippet", ContainerSnippet},
 	{"MachineSnippet", MachineSnippet},
 	{"NumberSnippet", NumberSnippet},
-	{"ServiceSnippet", ServiceSnippet},
+	{"ApplicationSnippet", ApplicationSnippet},
 	{"RelationSnippet", RelationSnippet},
 }
 

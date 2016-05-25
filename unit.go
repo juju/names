@@ -11,7 +11,7 @@ import (
 
 const UnitTagKind = "unit"
 
-var validUnit = regexp.MustCompile("^(" + ServiceSnippet + ")/" + NumberSnippet + "$")
+var validUnit = regexp.MustCompile("^(" + ApplicationSnippet + ")/" + NumberSnippet + "$")
 
 type UnitTag struct {
 	name string
@@ -49,9 +49,9 @@ func IsValidUnit(name string) bool {
 	return validUnit.MatchString(name)
 }
 
-// UnitService returns the name of the service that the unit is
+// UnitApplication returns the name of the application that the unit is
 // associated with. It returns an error if unitName is not a valid unit name.
-func UnitService(unitName string) (string, error) {
+func UnitApplication(unitName string) (string, error) {
 	s := validUnit.FindStringSubmatch(unitName)
 	if s == nil {
 		return "", fmt.Errorf("%q is not a valid unit name", unitName)
@@ -70,7 +70,7 @@ func tagFromUnitName(unitName string) (UnitTag, bool) {
 }
 
 func unitTagSuffixToId(s string) string {
-	// Replace only the last "-" with "/", as it is valid for service
+	// Replace only the last "-" with "/", as it is valid for application
 	// names to contain hyphens.
 	if i := strings.LastIndex(s, "-"); i > 0 {
 		s = s[:i] + "/" + s[i+1:]

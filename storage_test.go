@@ -8,7 +8,7 @@ import (
 
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names"
+	"gopkg.in/juju/names.v2"
 )
 
 type storageSuite struct{}
@@ -38,7 +38,7 @@ func (s *storageSuite) TestParseStorageTag(c *gc.C) {
 	assertParseStorageTagInvalid(c, "machine-0", names.InvalidTagError("machine-0", names.StorageTagKind))
 }
 
-func (s *serviceSuite) TestStorageName(c *gc.C) {
+func (s *applicationSuite) TestStorageName(c *gc.C) {
 	assertStorageNameValid(c, "shared-fs/0", "shared-fs")
 	assertStorageNameInvalid(c, "storage-shared-fs-0")
 }

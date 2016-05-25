@@ -8,7 +8,7 @@ import (
 
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names"
+	"gopkg.in/juju/names.v2"
 )
 
 type filesystemSuite struct{}

@@ -6,14 +6,14 @@ package names_test
 import (
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names"
+	"gopkg.in/juju/names.v2"
 )
 
-type serviceSuite struct{}
+type applicationSuite struct{}
 
-var _ = gc.Suite(&serviceSuite{})
+var _ = gc.Suite(&applicationSuite{})
 
-var serviceNameTests = []struct {
+var applicationNameTests = []struct {
 	pattern string
 	valid   bool
 }{
@@ -32,10 +32,10 @@ var serviceNameTests = []struct {
 	{pattern: "foo-2", valid: false},
 }
 
-func (s *serviceSuite) TestServiceNameFormats(c *gc.C) {
-	assertService := func(s string, expect bool) {
-		c.Assert(names.IsValidService(s), gc.Equals, expect)
-		// Check that anything that is considered a valid service name
+func (s *applicationSuite) TestApplicationNameFormats(c *gc.C) {
+	assertApplication := func(s string, expect bool) {
+		c.Assert(names.IsValidApplication(s), gc.Equals, expect)
+		// Check that anything that is considered a valid application name
 		// is also (in)valid if a(n) (in)valid unit designator is added
 		// to it.
 		c.Assert(names.IsValidUnit(s+"/0"), gc.Equals, expect)
@@ -45,13 +45,13 @@ func (s *serviceSuite) TestServiceNameFormats(c *gc.C) {
 		c.Assert(names.IsValidUnit(s+"/"), gc.Equals, false)
 	}
 
-	for i, test := range serviceNameTests {
+	for i, test := range applicationNameTests {
 		c.Logf("test %d: %q", i, test.pattern)
-		assertService(test.pattern, test.valid)
+		assertApplication(test.pattern, test.valid)
 	}
 }
 
-var parseServiceTagTests = []struct {
+var parseApplicationTagTests = []struct {
 	tag      string
 	expected names.Tag
 	err      error
@@ -59,26 +59,26 @@ var parseServiceTagTests = []struct {
 	tag: "",
 	err: names.InvalidTagError("", ""),
 }, {
-	tag:      "service-dave",
-	expected: names.NewServiceTag("dave"),
+	tag:      "app-dave",
+	expected: names.NewApplicationTag("dave"),
 }, {
 	tag: "dave",
 	err: names.InvalidTagError("dave", ""),
 }, {
-	tag: "service-dave/0",
-	err: names.InvalidTagError("service-dave/0", names.ServiceTagKind),
+	tag: "app-dave/0",
+	err: names.InvalidTagError("app-dave/0", names.ApplicationTagKind),
 }, {
-	tag: "service",
-	err: names.InvalidTagError("service", ""),
+	tag: "application",
+	err: names.InvalidTagError("application", ""),
 }, {
 	tag: "user-dave",
-	err: names.InvalidTagError("user-dave", names.ServiceTagKind),
+	err: names.InvalidTagError("user-dave", names.ApplicationTagKind),
 }}
 
-func (s *serviceSuite) TestParseServiceTag(c *gc.C) {
-	for i, t := range parseServiceTagTests {
+func (s *applicationSuite) TestParseApplicationTag(c *gc.C) {
+	for i, t := range parseApplicationTagTests {
 		c.Logf("test %d: %s", i, t.tag)
-		got, err := names.ParseServiceTag(t.tag)
+		got, err := names.ParseApplicationTag(t.tag)
 		if err != nil || t.err != nil {
 			c.Check(err, gc.DeepEquals, t.err)
 			continue

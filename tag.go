@@ -60,7 +60,7 @@ func TagKind(tag string) (string, error) {
 
 func validKinds(kind string) bool {
 	switch kind {
-	case UnitTagKind, MachineTagKind, ServiceTagKind, EnvironTagKind, UserTagKind,
+	case UnitTagKind, MachineTagKind, ApplicationTagKind, EnvironTagKind, UserTagKind,
 		RelationTagKind, ActionTagKind, VolumeTagKind, CharmTagKind, StorageTagKind,
 		FilesystemTagKind, IPAddressTagKind, SpaceTagKind, SubnetTagKind,
 		PayloadTagKind, ModelTagKind:
@@ -96,11 +96,11 @@ func ParseTag(tag string) (Tag, error) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewMachineTag(id), nil
-	case ServiceTagKind:
-		if !IsValidService(id) {
+	case ApplicationTagKind:
+		if !IsValidApplication(id) {
 			return nil, invalidTagError(tag, kind)
 		}
-		return NewServiceTag(id), nil
+		return NewApplicationTag(id), nil
 	case UserTagKind:
 		if !IsValidUser(id) {
 			return nil, invalidTagError(tag, kind)
