@@ -8,7 +8,7 @@ import (
 
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names"
+	"gopkg.in/juju/names.v2"
 )
 
 type unitSuite struct{}
@@ -20,18 +20,18 @@ func (s *unitSuite) TestUnitTag(c *gc.C) {
 }
 
 var unitNameTests = []struct {
-	pattern string
-	valid   bool
-	service string
+	pattern     string
+	valid       bool
+	application string
 }{
-	{pattern: "wordpress/42", valid: true, service: "wordpress"},
-	{pattern: "rabbitmq-server/123", valid: true, service: "rabbitmq-server"},
+	{pattern: "wordpress/42", valid: true, application: "wordpress"},
+	{pattern: "rabbitmq-server/123", valid: true, application: "rabbitmq-server"},
 	{pattern: "foo", valid: false},
 	{pattern: "foo/", valid: false},
 	{pattern: "bar/foo", valid: false},
 	{pattern: "20/20", valid: false},
 	{pattern: "foo-55", valid: false},
-	{pattern: "foo-bar/123", valid: true, service: "foo-bar"},
+	{pattern: "foo-bar/123", valid: true, application: "foo-bar"},
 	{pattern: "foo-bar/123/", valid: false},
 	{pattern: "foo-bar/123-not", valid: false},
 }
@@ -54,17 +54,17 @@ func (s *unitSuite) TestInvalidUnitTagFormats(c *gc.C) {
 	}
 }
 
-func (s *serviceSuite) TestUnitService(c *gc.C) {
+func (s *applicationSuite) TestUnitApplication(c *gc.C) {
 	for i, test := range unitNameTests {
 		c.Logf("test %d: %q", i, test.pattern)
 		if !test.valid {
 			expect := fmt.Sprintf("%q is not a valid unit name", test.pattern)
-			_, err := names.UnitService(test.pattern)
+			_, err := names.UnitApplication(test.pattern)
 			c.Assert(err, gc.ErrorMatches, expect)
 		} else {
-			result, err := names.UnitService(test.pattern)
+			result, err := names.UnitApplication(test.pattern)
 			c.Assert(err, gc.IsNil)
-			c.Assert(result, gc.Equals, test.service)
+			c.Assert(result, gc.Equals, test.application)
 		}
 	}
 }
@@ -86,8 +86,8 @@ var parseUnitTagTests = []struct {
 	tag: "unit-dave",
 	err: names.InvalidTagError("unit-dave", names.UnitTagKind), // not a valid unit name either
 }, {
-	tag: "service-dave",
-	err: names.InvalidTagError("service-dave", names.UnitTagKind),
+	tag: "application-dave",
+	err: names.InvalidTagError("application-dave", names.UnitTagKind),
 }}
 
 func (s *unitSuite) TestParseUnitTag(c *gc.C) {

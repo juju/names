@@ -13,14 +13,14 @@ const RelationTagKind = "relation"
 
 const RelationSnippet = "[a-z][a-z0-9]*(?:[_-][a-z0-9]+)*"
 
-// Relation keys have the format "service1:relName1 service2:relName2".
-// Except the peer relations, which have the format "service:relName"
-// Relation tags have the format "relation-service1.rel1#service2.rel2".
-// For peer relations, the format is "relation-service.rel"
+// Relation keys have the format "application1:relName1 application2:relName2".
+// Except the peer relations, which have the format "application:relName"
+// Relation tags have the format "relation-application1.rel1#application2.rel2".
+// For peer relations, the format is "relation-application.rel"
 
 var (
-	validRelation     = regexp.MustCompile("^" + ServiceSnippet + ":" + RelationSnippet + " " + ServiceSnippet + ":" + RelationSnippet + "$")
-	validPeerRelation = regexp.MustCompile("^" + ServiceSnippet + ":" + RelationSnippet + "$")
+	validRelation     = regexp.MustCompile("^" + ApplicationSnippet + ":" + RelationSnippet + " " + ApplicationSnippet + ":" + RelationSnippet + "$")
+	validPeerRelation = regexp.MustCompile("^" + ApplicationSnippet + ":" + RelationSnippet + "$")
 )
 
 // IsValidRelation returns whether key is a valid relation key.

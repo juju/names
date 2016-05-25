@@ -6,8 +6,8 @@ package names_test
 import (
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names"
 	jc "github.com/juju/testing/checkers"
+	"gopkg.in/juju/names.v2"
 )
 
 type actionSuite struct{}
@@ -24,7 +24,7 @@ var parseActionTagTests = []struct {
 	{tag: "action-012345678", err: names.InvalidTagError("action-012345678", "action")},
 	{tag: "action-1234567", err: names.InvalidTagError("action-1234567", "action")},
 	{tag: "bob", err: names.InvalidTagError("bob", "")},
-	{tag: "service-ned", err: names.InvalidTagError("service-ned", names.ActionTagKind)}}
+	{tag: "application-ned", err: names.InvalidTagError("application-ned", names.ActionTagKind)}}
 
 func (s *actionSuite) TestParseActionTag(c *gc.C) {
 	for i, t := range parseActionTagTests {

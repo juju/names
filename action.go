@@ -54,9 +54,9 @@ func ActionReceiverTag(name string) (Tag, error) {
 	if IsValidUnit(name) {
 		return NewUnitTag(name), nil
 	}
-	if IsValidService(name) {
+	if IsValidApplication(name) {
 		// TODO(jcw4) enable when leader elections complete
-		//return NewServiceTag(name), nil
+		//return NewApplicationTag(name), nil
 	}
 	if IsValidMachine(name) {
 		return NewMachineTag(name), nil

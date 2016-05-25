@@ -6,7 +6,7 @@ package names_test
 import (
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names"
+	"gopkg.in/juju/names.v2"
 )
 
 type relationSuite struct{}
@@ -46,14 +46,14 @@ var relationNameTests = []struct {
 
 func (s *relationSuite) TestRelationKeyFormats(c *gc.C) {
 	// In order to test all possible combinations, we need
-	// to use the relationNameTests and serviceNameTests
+	// to use the relationNameTests and applicationNameTests
 	// twice to construct all possible keys.
 	for i, testRel := range relationNameTests {
-		for j, testSvc := range serviceNameTests {
+		for j, testSvc := range applicationNameTests {
 			peerKey := testSvc.pattern + ":" + testRel.pattern
 			key := peerKey + " " + peerKey
 			isValid := testSvc.valid && testRel.valid
-			c.Logf("test %d: %q -> valid: %v", i*len(serviceNameTests)+j, key, isValid)
+			c.Logf("test %d: %q -> valid: %v", i*len(applicationNameTests)+j, key, isValid)
 			c.Assert(names.IsValidRelation(key), gc.Equals, isValid)
 			c.Assert(names.IsValidRelation(peerKey), gc.Equals, isValid)
 		}
@@ -77,8 +77,8 @@ var parseRelationTagTests = []struct {
 	tag: "dave",
 	err: names.InvalidTagError("dave", ""),
 }, {
-	tag: "service-dave",
-	err: names.InvalidTagError("service-dave", names.RelationTagKind),
+	tag: "application-dave",
+	err: names.InvalidTagError("application-dave", names.RelationTagKind),
 }}
 
 func (s *relationSuite) TestParseRelationTag(c *gc.C) {

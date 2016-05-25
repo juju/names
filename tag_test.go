@@ -6,7 +6,7 @@ package names_test
 import (
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names"
+	"gopkg.in/juju/names.v2"
 )
 
 type tagSuite struct{}
@@ -20,12 +20,12 @@ var tagKindTests = []struct {
 }{
 	{tag: "unit-wordpress-42", kind: names.UnitTagKind},
 	{tag: "machine-42", kind: names.MachineTagKind},
-	{tag: "service-foo", kind: names.ServiceTagKind},
+	{tag: "application-foo", kind: names.ApplicationTagKind},
 	{tag: "environment-42", kind: names.EnvironTagKind},
 	{tag: "model-42", kind: names.ModelTagKind},
 	{tag: "user-admin", kind: names.UserTagKind},
-	{tag: "relation-service1.rel1#other-svc.other-rel2", kind: names.RelationTagKind},
-	{tag: "relation-service.peerRelation", kind: names.RelationTagKind},
+	{tag: "relation-application1.rel1#other-svc.other-rel2", kind: names.RelationTagKind},
+	{tag: "relation-application.peerRelation", kind: names.RelationTagKind},
 	{tag: "foo", err: `"foo" is not a valid tag`},
 	{tag: "unit", err: `"unit" is not a valid tag`},
 	{tag: "network", err: `"network" is not a valid tag`},
@@ -94,15 +94,15 @@ var parseTagTests = []struct {
 	expectType: names.UnitTag{},
 	resultErr:  `"unit-#" is not a valid unit tag`,
 }, {
-	tag:        "service-wordpress",
-	expectKind: names.ServiceTagKind,
-	expectType: names.ServiceTag{},
+	tag:        "application-wordpress",
+	expectKind: names.ApplicationTagKind,
+	expectType: names.ApplicationTag{},
 	resultId:   "wordpress",
 }, {
-	tag:        "service-#",
-	expectKind: names.ServiceTagKind,
-	expectType: names.ServiceTag{},
-	resultErr:  `"service-#" is not a valid service tag`,
+	tag:        "application-#",
+	expectKind: names.ApplicationTagKind,
+	expectType: names.ApplicationTag{},
+	resultErr:  `"application-#" is not a valid application tag`,
 }, {
 	tag:        "environment-f47ac10b-58cc-4372-a567-0e02b2c3d479",
 	expectKind: names.EnvironTagKind,
@@ -213,20 +213,20 @@ var parseTagTests = []struct {
 }}
 
 var makeTag = map[string]func(string) names.Tag{
-	names.MachineTagKind:    func(tag string) names.Tag { return names.NewMachineTag(tag) },
-	names.UnitTagKind:       func(tag string) names.Tag { return names.NewUnitTag(tag) },
-	names.ServiceTagKind:    func(tag string) names.Tag { return names.NewServiceTag(tag) },
-	names.RelationTagKind:   func(tag string) names.Tag { return names.NewRelationTag(tag) },
-	names.EnvironTagKind:    func(tag string) names.Tag { return names.NewEnvironTag(tag) },
-	names.ModelTagKind:      func(tag string) names.Tag { return names.NewModelTag(tag) },
-	names.UserTagKind:       func(tag string) names.Tag { return names.NewUserTag(tag) },
-	names.ActionTagKind:     func(tag string) names.Tag { return names.NewActionTag(tag) },
-	names.VolumeTagKind:     func(tag string) names.Tag { return names.NewVolumeTag(tag) },
-	names.FilesystemTagKind: func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
-	names.StorageTagKind:    func(tag string) names.Tag { return names.NewStorageTag(tag) },
-	names.IPAddressTagKind:  func(tag string) names.Tag { return names.NewIPAddressTag(tag) },
-	names.SubnetTagKind:     func(tag string) names.Tag { return names.NewSubnetTag(tag) },
-	names.SpaceTagKind:      func(tag string) names.Tag { return names.NewSpaceTag(tag) },
+	names.MachineTagKind:     func(tag string) names.Tag { return names.NewMachineTag(tag) },
+	names.UnitTagKind:        func(tag string) names.Tag { return names.NewUnitTag(tag) },
+	names.ApplicationTagKind: func(tag string) names.Tag { return names.NewApplicationTag(tag) },
+	names.RelationTagKind:    func(tag string) names.Tag { return names.NewRelationTag(tag) },
+	names.EnvironTagKind:     func(tag string) names.Tag { return names.NewEnvironTag(tag) },
+	names.ModelTagKind:       func(tag string) names.Tag { return names.NewModelTag(tag) },
+	names.UserTagKind:        func(tag string) names.Tag { return names.NewUserTag(tag) },
+	names.ActionTagKind:      func(tag string) names.Tag { return names.NewActionTag(tag) },
+	names.VolumeTagKind:      func(tag string) names.Tag { return names.NewVolumeTag(tag) },
+	names.FilesystemTagKind:  func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
+	names.StorageTagKind:     func(tag string) names.Tag { return names.NewStorageTag(tag) },
+	names.IPAddressTagKind:   func(tag string) names.Tag { return names.NewIPAddressTag(tag) },
+	names.SubnetTagKind:      func(tag string) names.Tag { return names.NewSubnetTag(tag) },
+	names.SpaceTagKind:       func(tag string) names.Tag { return names.NewSpaceTag(tag) },
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
