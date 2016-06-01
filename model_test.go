@@ -47,3 +47,32 @@ func (s *modelSuite) TestParseModelTag(c *gc.C) {
 		c.Check(got, gc.Equals, t.expected)
 	}
 }
+
+var modelNameTest = []struct {
+	test     string
+	name     string
+	expected bool
+}{{
+	test:     "Hyphenated true",
+	name:     "foo-bar",
+	expected: true,
+}, {
+	test:     "Whitespsce false",
+	name:     "foo bar",
+	expected: false,
+}, {
+	test:     "Capital false",
+	name:     "fooBar",
+	expected: false,
+}, {
+	test:     "At sign false",
+	name:     "foo@bar",
+	expected: false,
+}}
+
+func (s *modelSuite) TestModelName(c *gc.C) {
+	for i, t := range modelNameTest {
+		c.Logf("test %d: %q", i, t.name)
+		c.Check(names.IsValidModelName(t.name), gc.Equals, t.expected)
+	}
+}
