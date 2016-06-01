@@ -46,6 +46,7 @@ func IsValidModel(id string) bool {
 	return validUUID.MatchString(id)
 }
 
+// IsValidModelName returns whether name is a valid string safe for a model name.
 func IsValidModelName(name string) bool {
 	return validModelName.MatchString(name)
 }
