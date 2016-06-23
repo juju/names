@@ -41,6 +41,8 @@ var tagKindTests = []struct {
 	{tag: "subnet-2001:db8::/32", kind: names.SubnetTagKind},
 	{tag: "space", err: `"space" is not a valid tag`},
 	{tag: "space-42", kind: names.SpaceTagKind},
+	{tag: "cloud", err: `"cloud" is not a valid tag`},
+	{tag: "cloud-aws", kind: names.CloudTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
