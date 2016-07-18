@@ -26,10 +26,9 @@ var parseModelTagTests = []struct {
 }, {
 	tag: "dave",
 	err: names.InvalidTagError("dave", ""),
-	//}, {
-	// TODO(dfc) passes, but should not
-	//	tag: "model-",
-	//	err: names.InvalidTagError("model", ""),
+}, {
+	tag: "model-",
+	err: names.InvalidTagError("model-", names.ModelTagKind),
 }, {
 	tag: "application-dave",
 	err: names.InvalidTagError("application-dave", names.ModelTagKind),
