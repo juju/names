@@ -63,7 +63,7 @@ func validKinds(kind string) bool {
 	case UnitTagKind, MachineTagKind, ApplicationTagKind, EnvironTagKind, UserTagKind,
 		RelationTagKind, ActionTagKind, VolumeTagKind, CharmTagKind, StorageTagKind,
 		FilesystemTagKind, IPAddressTagKind, SpaceTagKind, SubnetTagKind,
-		PayloadTagKind, ModelTagKind, CloudTagKind:
+		PayloadTagKind, ModelTagKind, ControllerTagKind, CloudTagKind:
 		return true
 	}
 	return false
@@ -116,6 +116,12 @@ func ParseTag(tag string) (Tag, error) {
 			return nil, invalidTagError(tag, kind)
 		}
 		return NewModelTag(id), nil
+	case ControllerTagKind:
+		if !IsValidController(id) {
+			return nil, invalidTagError(tag, kind)
+		}
+		return NewControllerTag(id), nil
+
 	case RelationTagKind:
 		id = relationTagSuffixToKey(id)
 		if !IsValidRelation(id) {
