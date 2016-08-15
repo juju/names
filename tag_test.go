@@ -43,6 +43,8 @@ var tagKindTests = []struct {
 	{tag: "space-42", kind: names.SpaceTagKind},
 	{tag: "cloud", err: `"cloud" is not a valid tag`},
 	{tag: "cloud-aws", kind: names.CloudTagKind},
+	{tag: "cloudcred", err: `"cloudcred" is not a valid tag`},
+	{tag: "cloudcred-aws-admin-foo", kind: names.CloudCredentialTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -212,23 +214,35 @@ var parseTagTests = []struct {
 	expectKind: names.SpaceTagKind,
 	expectType: names.SpaceTag{},
 	resultId:   "myspace1",
+}, {
+	tag:        "cloud-aws",
+	expectKind: names.CloudTagKind,
+	expectType: names.CloudTag{},
+	resultId:   "aws",
+}, {
+	tag:        "cloudcred-aws-admin-foo",
+	expectKind: names.CloudCredentialTagKind,
+	expectType: names.CloudCredentialTag{},
+	resultId:   "aws/admin/foo",
 }}
 
 var makeTag = map[string]func(string) names.Tag{
-	names.MachineTagKind:     func(tag string) names.Tag { return names.NewMachineTag(tag) },
-	names.UnitTagKind:        func(tag string) names.Tag { return names.NewUnitTag(tag) },
-	names.ApplicationTagKind: func(tag string) names.Tag { return names.NewApplicationTag(tag) },
-	names.RelationTagKind:    func(tag string) names.Tag { return names.NewRelationTag(tag) },
-	names.EnvironTagKind:     func(tag string) names.Tag { return names.NewEnvironTag(tag) },
-	names.ModelTagKind:       func(tag string) names.Tag { return names.NewModelTag(tag) },
-	names.UserTagKind:        func(tag string) names.Tag { return names.NewUserTag(tag) },
-	names.ActionTagKind:      func(tag string) names.Tag { return names.NewActionTag(tag) },
-	names.VolumeTagKind:      func(tag string) names.Tag { return names.NewVolumeTag(tag) },
-	names.FilesystemTagKind:  func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
-	names.StorageTagKind:     func(tag string) names.Tag { return names.NewStorageTag(tag) },
-	names.IPAddressTagKind:   func(tag string) names.Tag { return names.NewIPAddressTag(tag) },
-	names.SubnetTagKind:      func(tag string) names.Tag { return names.NewSubnetTag(tag) },
-	names.SpaceTagKind:       func(tag string) names.Tag { return names.NewSpaceTag(tag) },
+	names.MachineTagKind:         func(tag string) names.Tag { return names.NewMachineTag(tag) },
+	names.UnitTagKind:            func(tag string) names.Tag { return names.NewUnitTag(tag) },
+	names.ApplicationTagKind:     func(tag string) names.Tag { return names.NewApplicationTag(tag) },
+	names.RelationTagKind:        func(tag string) names.Tag { return names.NewRelationTag(tag) },
+	names.EnvironTagKind:         func(tag string) names.Tag { return names.NewEnvironTag(tag) },
+	names.ModelTagKind:           func(tag string) names.Tag { return names.NewModelTag(tag) },
+	names.UserTagKind:            func(tag string) names.Tag { return names.NewUserTag(tag) },
+	names.ActionTagKind:          func(tag string) names.Tag { return names.NewActionTag(tag) },
+	names.VolumeTagKind:          func(tag string) names.Tag { return names.NewVolumeTag(tag) },
+	names.FilesystemTagKind:      func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
+	names.StorageTagKind:         func(tag string) names.Tag { return names.NewStorageTag(tag) },
+	names.IPAddressTagKind:       func(tag string) names.Tag { return names.NewIPAddressTag(tag) },
+	names.SubnetTagKind:          func(tag string) names.Tag { return names.NewSubnetTag(tag) },
+	names.SpaceTagKind:           func(tag string) names.Tag { return names.NewSpaceTag(tag) },
+	names.CloudTagKind:           func(tag string) names.Tag { return names.NewCloudTag(tag) },
+	names.CloudCredentialTagKind: func(tag string) names.Tag { return names.NewCloudCredentialTag(tag) },
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {

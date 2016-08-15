@@ -29,7 +29,7 @@ var (
 	CharmNameSnippet = "[a-z][a-z0-9]*(-[a-z0-9]*[a-z][a-z0-9]*)*"
 
 	localSchemaSnippet      = "local:"
-	charmStoreSchemaSnippet = "cs:(~" + validUserPart + "/)?"
+	charmStoreSchemaSnippet = "cs:(~" + validUserNameSnippet + "/)?"
 	revisionSnippet         = "(-1|0|[1-9][0-9]*)"
 
 	validCharmRegEx = regexp.MustCompile("^(" +

@@ -17,9 +17,10 @@ var (
 	// TODO this does not allow single character usernames or
 	// domains. Is that deliberate?
 	// https://github.com/juju/names/issues/54
-	validUserPart = "[a-zA-Z0-9][a-zA-Z0-9.+-]*[a-zA-Z0-9]"
-	validName     = regexp.MustCompile(fmt.Sprintf("^(?P<name>%s)(?:@(?P<domain>%s))?$", validUserPart, validUserPart))
-	validUserName = regexp.MustCompile("^" + validUserPart + "$")
+	validUserNameSnippet = "[a-zA-Z0-9][a-zA-Z0-9.+-]*[a-zA-Z0-9]"
+	validUserSnippet     = fmt.Sprintf("(?:%s(?:@%s)?)", validUserNameSnippet, validUserNameSnippet)
+	validName            = regexp.MustCompile(fmt.Sprintf("^(?P<name>%s)(?:@(?P<domain>%s))?$", validUserNameSnippet, validUserNameSnippet))
+	validUserName        = regexp.MustCompile("^" + validUserNameSnippet + "$")
 )
 
 // IsValidUser returns whether id is a valid user id.
