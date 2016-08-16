@@ -25,14 +25,14 @@ func (s *cloudCredentialSuite) TestCloudCredentialTag(c *gc.C) {
 		{
 			input:     "aws/bob/foo",
 			canonical: "aws/bob@local/foo",
-			string:    "cloudcred-aws-bob-foo",
+			string:    "cloudcred-aws_bob_foo",
 			cloud:     names.NewCloudTag("aws"),
 			owner:     names.NewUserTag("bob"),
 			name:      "foo",
 		}, {
 			input:     "aws/bob@remote/foo",
 			canonical: "aws/bob@remote/foo",
-			string:    "cloudcred-aws-bob@remote-foo",
+			string:    "cloudcred-aws_bob@remote_foo",
 			cloud:     names.NewCloudTag("aws"),
 			owner:     names.NewUserTag("bob@remote"),
 			name:      "foo",
@@ -92,8 +92,11 @@ func (s *cloudCredentialSuite) TestParseCloudCredentialTag(c *gc.C) {
 		tag: "",
 		err: names.InvalidTagError("", ""),
 	}, {
-		tag:      "cloudcred-aws-bob-foo",
+		tag:      "cloudcred-aws_bob_foo",
 		expected: names.NewCloudCredentialTag("aws/bob/foo"),
+	}, {
+		tag:      "cloudcred-aws-china_bob_foo-manchu",
+		expected: names.NewCloudCredentialTag("aws-china/bob/foo-manchu"),
 	}, {
 		tag: "foo",
 		err: names.InvalidTagError("foo", ""),

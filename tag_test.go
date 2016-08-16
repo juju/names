@@ -44,7 +44,7 @@ var tagKindTests = []struct {
 	{tag: "cloud", err: `"cloud" is not a valid tag`},
 	{tag: "cloud-aws", kind: names.CloudTagKind},
 	{tag: "cloudcred", err: `"cloudcred" is not a valid tag`},
-	{tag: "cloudcred-aws-admin-foo", kind: names.CloudCredentialTagKind},
+	{tag: "cloudcred-aws_admin_foo", kind: names.CloudCredentialTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -220,7 +220,7 @@ var parseTagTests = []struct {
 	expectType: names.CloudTag{},
 	resultId:   "aws",
 }, {
-	tag:        "cloudcred-aws-admin-foo",
+	tag:        "cloudcred-aws_admin_foo",
 	expectKind: names.CloudCredentialTagKind,
 	expectType: names.CloudCredentialTag{},
 	resultId:   "aws/admin/foo",
