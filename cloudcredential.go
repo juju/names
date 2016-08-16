@@ -39,7 +39,7 @@ func (t CloudCredentialTag) Id() string {
 
 // String is part of the Tag interface.
 func (t CloudCredentialTag) String() string {
-	return fmt.Sprintf("%s-%s-%s-%s", t.Kind(), t.cloud.Id(), t.owner.Id(), t.name)
+	return fmt.Sprintf("%s-%s_%s_%s", t.Kind(), t.cloud.Id(), t.owner.Id(), t.name)
 }
 
 // Canonical returns the cloud credential ID in canonical form.
@@ -110,5 +110,5 @@ func IsValidCloudCredentialName(name string) bool {
 }
 
 func cloudCredentialTagSuffixToId(s string) string {
-	return strings.Replace(s, "-", "/", -1)
+	return strings.Replace(s, "_", "/", -1)
 }
