@@ -22,11 +22,24 @@ func (t UnitTag) Kind() string   { return UnitTagKind }
 func (t UnitTag) Id() string     { return unitTagSuffixToId(t.name) }
 
 // NewUnitTag returns the tag for the unit with the given name.
-// It will panic if the given unit name is not valid.
-func NewUnitTag(unitName string) UnitTag {
+// It will return an error if the given unit name is not valid.
+func NewUnitTagFromName(unitName string) (UnitTag, error) {
 	tag, ok := tagFromUnitName(unitName)
 	if !ok {
-		panic(fmt.Sprintf("%q is not a valid unit name", unitName))
+		return UnitTag{}, fmt.Errorf("%q is not a valid unit name", unitName)
+	}
+	return tag, nil
+}
+
+// NewUnitTag returns the tag for the unit with the given name.
+// It will panic if the given unit name is not valid.
+//
+// In almost all cases it is more desirable to call NewUnitTagFromName which
+// returns errors instead of panicing.
+func NewUnitTag(unitName string) UnitTag {
+	tag, err := NewUnitTagFromName(unitName)
+	if err != nil {
+		panic(err)
 	}
 	return tag
 }
