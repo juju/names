@@ -36,6 +36,20 @@ func (s *cloudCredentialSuite) TestCloudCredentialTag(c *gc.C) {
 			cloud:     names.NewCloudTag("aws"),
 			owner:     names.NewUserTag("bob@remote"),
 			name:      "foo",
+		}, {
+			input:     "aws/bob@remote/foo@somewhere.com",
+			canonical: "aws/bob@remote/foo@somewhere.com",
+			string:    "cloudcred-aws_bob@remote_foo@somewhere.com",
+			cloud:     names.NewCloudTag("aws"),
+			owner:     names.NewUserTag("bob@remote"),
+			name:      "foo@somewhere.com",
+		}, {
+			input:     "aws/bob@remote/foo_bar",
+			canonical: "aws/bob@remote/foo_bar",
+			string:    `cloudcred-aws_bob@remote_foo%5fbar`,
+			cloud:     names.NewCloudTag("aws"),
+			owner:     names.NewUserTag("bob@remote"),
+			name:      "foo_bar",
 		},
 	} {
 		c.Logf("test %d: %s", i, t.input)
@@ -75,11 +89,13 @@ func (s *cloudCredentialSuite) TestIsValidCloudCredentialName(c *gc.C) {
 		{"foo", true},
 		{"f00b4r", true},
 		{"foo-bar", true},
+		{"foo@bar", true},
+		{"foo_bar", true},
 		{"123", false},
 		{"0foo", false},
 	} {
 		c.Logf("test %d: %s", i, t.string)
-		c.Assert(names.IsValidCloudCredentialName(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
+		c.Check(names.IsValidCloudCredentialName(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
 	}
 }
 
@@ -97,6 +113,12 @@ func (s *cloudCredentialSuite) TestParseCloudCredentialTag(c *gc.C) {
 	}, {
 		tag:      "cloudcred-aws-china_bob_foo-manchu",
 		expected: names.NewCloudCredentialTag("aws-china/bob/foo-manchu"),
+	}, {
+		tag:      "cloudcred-aws-china_bob_foo@somewhere.com",
+		expected: names.NewCloudCredentialTag("aws-china/bob/foo@somewhere.com"),
+	}, {
+		tag:      `cloudcred-aws-china_bob_foo%5fbar`,
+		expected: names.NewCloudCredentialTag("aws-china/bob/foo_bar"),
 	}, {
 		tag: "foo",
 		err: names.InvalidTagError("foo", ""),

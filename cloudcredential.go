@@ -5,6 +5,7 @@ package names
 
 import (
 	"fmt"
+	"net/url"
 	"regexp"
 	"strings"
 )
@@ -12,7 +13,7 @@ import (
 const CloudCredentialTagKind = "cloudcred"
 
 var (
-	cloudCredentialNameSnippet = "[a-zA-Z][a-zA-Z0-9.-]*"
+	cloudCredentialNameSnippet = "[a-zA-Z][a-zA-Z0-9.@_-]*"
 	validCloudCredentialName   = regexp.MustCompile("^" + cloudCredentialNameSnippet + "$")
 	validCloudCredential       = regexp.MustCompile(
 		"^" +
@@ -37,9 +38,16 @@ func (t CloudCredentialTag) Id() string {
 	return t.id(false)
 }
 
+func quoteCredentialSeparator(in string) string {
+	return strings.Replace(in, "_", `%5f`, -1)
+}
+
 // String is part of the Tag interface.
 func (t CloudCredentialTag) String() string {
-	return fmt.Sprintf("%s-%s_%s_%s", t.Kind(), t.cloud.Id(), t.owner.Id(), t.name)
+	return fmt.Sprintf("%s-%s_%s_%s", t.Kind(),
+		quoteCredentialSeparator(t.cloud.Id()),
+		quoteCredentialSeparator(t.owner.Id()),
+		quoteCredentialSeparator(t.name))
 }
 
 // Canonical returns the cloud credential ID in canonical form.
@@ -109,6 +117,7 @@ func IsValidCloudCredentialName(name string) bool {
 	return validCloudCredentialName.MatchString(name)
 }
 
-func cloudCredentialTagSuffixToId(s string) string {
-	return strings.Replace(s, "_", "/", -1)
+func cloudCredentialTagSuffixToId(s string) (string, error) {
+	s = strings.Replace(s, "_", "/", -1)
+	return url.QueryUnescape(s)
 }
