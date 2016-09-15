@@ -220,10 +220,10 @@ var parseTagTests = []struct {
 	expectType: names.CloudTag{},
 	resultId:   "aws",
 }, {
-	tag:        "cloudcred-aws_admin_foo",
+	tag:        "cloudcred-aws_admin_foo%5fbar",
 	expectKind: names.CloudCredentialTagKind,
 	expectType: names.CloudCredentialTag{},
-	resultId:   "aws/admin/foo",
+	resultId:   "aws/admin/foo_bar",
 }}
 
 var makeTag = map[string]func(string) names.Tag{

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/juju/errors"
 	"github.com/juju/utils"
 )
 
@@ -183,7 +184,10 @@ func ParseTag(tag string) (Tag, error) {
 		}
 		return NewCloudTag(id), nil
 	case CloudCredentialTagKind:
-		id = cloudCredentialTagSuffixToId(id)
+		id, err = cloudCredentialTagSuffixToId(id)
+		if err != nil {
+			return nil, errors.Wrap(err, invalidTagError(tag, kind))
+		}
 		if !IsValidCloudCredential(id) {
 			return nil, invalidTagError(tag, kind)
 		}
