@@ -27,7 +27,7 @@ const CharmTagKind = "charm"
 //
 // V3 is of the form
 // schema:user/name/series/revision
-// with the same fields.
+// with the same fields and constraints as the V1 format.
 
 var (
 	// SeriesSnippet is a regular expression representing series

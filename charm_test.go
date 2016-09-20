@@ -17,7 +17,7 @@ type charmSuite struct{}
 var _ = gc.Suite(&charmSuite{})
 
 var validCharmURLs = []string{"charm",
-	// Old-style charm urls.
+	// V1 charm urls.
 	"local:charm",
 	"local:charm--1",
 	"local:charm-1",
@@ -40,7 +40,7 @@ var validCharmURLs = []string{"charm",
 	"series/charm",
 	"series/charm-1",
 
-	// New-style charm urls.
+	// V3 charm urls.
 	"local:charm-with-long2-name/series/2",
 	"local:charm-with-long2-name/series",
 	"local:charm-with-long2-name/2",
