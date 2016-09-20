@@ -11,7 +11,11 @@ import (
 // CharmTagKind specifies charm tag kind
 const CharmTagKind = "charm"
 
-// Valid charm url is of the form
+// Valid charm url can be either in V1 or V3 format. (V2 is a
+// charmstore web URL like https://jujucharms.com/postgresql/105, but
+// that's not valid as a tag.)
+//
+// V1 is of the form:
 // schema:~user/series/name-revision
 // where
 //     schema    is optional and can be either "local" or "cs".
@@ -20,6 +24,10 @@ const CharmTagKind = "charm"
 //     series    is optional and is a valid series name
 //     name      is mandatory and is the name of the charm
 //     revision  is optional and can be -1 if revision is unset
+//
+// V3 is of the form
+// schema:user/name/series/revision
+// with the same fields.
 
 var (
 	// SeriesSnippet is a regular expression representing series
@@ -28,15 +36,24 @@ var (
 	// CharmNameSnippet is a regular expression representing charm name
 	CharmNameSnippet = "[a-z][a-z0-9]*(-[a-z0-9]*[a-z][a-z0-9]*)*"
 
-	localSchemaSnippet      = "local:"
-	charmStoreSchemaSnippet = "cs:(~" + validUserNameSnippet + "/)?"
-	revisionSnippet         = "(-1|0|[1-9][0-9]*)"
+	localSchemaSnippet        = "local:"
+	v1CharmStoreSchemaSnippet = "cs:(~" + validUserNameSnippet + "/)?"
+	revisionSnippet           = "(-1|0|[1-9][0-9]*)"
 
-	validCharmRegEx = regexp.MustCompile("^(" +
+	validV1CharmRegEx = regexp.MustCompile("^(" +
 		localSchemaSnippet + "|" +
-		charmStoreSchemaSnippet + ")?(" +
+		v1CharmStoreSchemaSnippet + ")?(" +
 		SeriesSnippet + "/)?" +
 		CharmNameSnippet + "(-" +
+		revisionSnippet + ")?$")
+
+	v3CharmStoreSchemaSnippet = "(cs:)?(" + validUserNameSnippet + "/)?"
+
+	validV3CharmRegEx = regexp.MustCompile("^(" +
+		localSchemaSnippet + "|" +
+		v3CharmStoreSchemaSnippet + ")" +
+		CharmNameSnippet + "(/" +
+		SeriesSnippet + ")?(/" +
 		revisionSnippet + ")?$")
 )
 
@@ -84,5 +101,5 @@ func ParseCharmTag(charmTag string) (CharmTag, error) {
 
 // IsValidCharm returns whether name is a valid charm url.
 func IsValidCharm(url string) bool {
-	return validCharmRegEx.MatchString(url)
+	return validV1CharmRegEx.MatchString(url) || validV3CharmRegEx.MatchString(url)
 }

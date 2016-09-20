@@ -17,6 +17,7 @@ type charmSuite struct{}
 var _ = gc.Suite(&charmSuite{})
 
 var validCharmURLs = []string{"charm",
+	// Old-style charm urls.
 	"local:charm",
 	"local:charm--1",
 	"local:charm-1",
@@ -28,6 +29,7 @@ var validCharmURLs = []string{"charm",
 	"cs:~user/series/charm",
 	"cs:~user/series/charm-1",
 	"cs:series/charm",
+	"cs:series/charm-with-long-name",
 	"cs:series/charm-3",
 	"cs:series/charm-0",
 	"cs:charm",
@@ -37,6 +39,25 @@ var validCharmURLs = []string{"charm",
 	"charm-1",
 	"series/charm",
 	"series/charm-1",
+
+	// New-style charm urls.
+	"local:charm-with-long2-name/series/2",
+	"local:charm-with-long2-name/series",
+	"local:charm-with-long2-name/2",
+	"cs:user/charm-with-long-name/series/2",
+	"cs:charm-with-long2-name/series/2",
+	"cs:user/charm-with-long-name/2",
+	"cs:user/charm-with-long-name/series",
+	"cs:charm-with-long-name/2",
+	"cs:charm-with-long-name/series",
+	"cs:user/charm-with-long-name",
+	"user/charm-with-long-name/series/2",
+	"charm-with-long2-name/series/2",
+	"user/charm-with-long-name/2",
+	"user/charm-with-long-name/series",
+	"charm-with-long-name/2",
+	"charm-with-long-name/series",
+	"user/charm-with-long-name",
 }
 
 func (s *charmSuite) TestValidCharmURLs(c *gc.C) {
@@ -54,6 +75,7 @@ func (s *charmSuite) TestInvalidCharmURLs(c *gc.C) {
 		"local:charm--2",             // false: only -1 is a valid negative revision
 		"blah:charm-2",               // false: invalid schema
 		"local:series/charm-01",      // false: revision is funny
+		"local:user/name/series/2",   // false: local charms can't have users
 	}
 	for _, url := range invalidURLs {
 		c.Logf("Processing tag %q", url)
@@ -71,7 +93,6 @@ func (s *charmSuite) TestParseCharmTagValid(c *gc.C) {
 func (s *charmSuite) TestParseCharmTagInvalid(c *gc.C) {
 	invalidTags := []string{"",
 		"blah",
-		"charm-blah/0",
 		"charm",
 		"user-blah",
 	}
