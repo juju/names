@@ -35,7 +35,7 @@ func (t CloudCredentialTag) Kind() string { return CloudCredentialTagKind }
 
 // Id is part of the Tag interface.
 func (t CloudCredentialTag) Id() string {
-	return t.id(false)
+	return fmt.Sprintf("%s/%s/%s", t.cloud.Id(), t.owner.Id(), t.name)
 }
 
 func quoteCredentialSeparator(in string) string {
@@ -48,22 +48,6 @@ func (t CloudCredentialTag) String() string {
 		quoteCredentialSeparator(t.cloud.Id()),
 		quoteCredentialSeparator(t.owner.Id()),
 		quoteCredentialSeparator(t.name))
-}
-
-// Canonical returns the cloud credential ID in canonical form.
-// Specifically, the user tag portion will be canonicalized.
-func (t CloudCredentialTag) Canonical() string {
-	return t.id(true)
-}
-
-func (t CloudCredentialTag) id(canonical bool) string {
-	var ownerId string
-	if canonical {
-		ownerId = t.owner.Canonical()
-	} else {
-		ownerId = t.owner.Id()
-	}
-	return fmt.Sprintf("%s/%s/%s", t.cloud.Id(), ownerId, t.name)
 }
 
 // Cloud returns the tag of the cloud to which the credential pertains.

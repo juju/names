@@ -15,41 +15,36 @@ var _ = gc.Suite(&cloudCredentialSuite{})
 
 func (s *cloudCredentialSuite) TestCloudCredentialTag(c *gc.C) {
 	for i, t := range []struct {
-		input     string
-		string    string
-		cloud     names.CloudTag
-		owner     names.UserTag
-		name      string
-		canonical string
+		input  string
+		string string
+		cloud  names.CloudTag
+		owner  names.UserTag
+		name   string
 	}{
 		{
-			input:     "aws/bob/foo",
-			canonical: "aws/bob@local/foo",
-			string:    "cloudcred-aws_bob_foo",
-			cloud:     names.NewCloudTag("aws"),
-			owner:     names.NewUserTag("bob"),
-			name:      "foo",
+			input:  "aws/bob/foo",
+			string: "cloudcred-aws_bob_foo",
+			cloud:  names.NewCloudTag("aws"),
+			owner:  names.NewUserTag("bob"),
+			name:   "foo",
 		}, {
-			input:     "aws/bob@remote/foo",
-			canonical: "aws/bob@remote/foo",
-			string:    "cloudcred-aws_bob@remote_foo",
-			cloud:     names.NewCloudTag("aws"),
-			owner:     names.NewUserTag("bob@remote"),
-			name:      "foo",
+			input:  "aws/bob@remote/foo",
+			string: "cloudcred-aws_bob@remote_foo",
+			cloud:  names.NewCloudTag("aws"),
+			owner:  names.NewUserTag("bob@remote"),
+			name:   "foo",
 		}, {
-			input:     "aws/bob@remote/foo@somewhere.com",
-			canonical: "aws/bob@remote/foo@somewhere.com",
-			string:    "cloudcred-aws_bob@remote_foo@somewhere.com",
-			cloud:     names.NewCloudTag("aws"),
-			owner:     names.NewUserTag("bob@remote"),
-			name:      "foo@somewhere.com",
+			input:  "aws/bob@remote/foo@somewhere.com",
+			string: "cloudcred-aws_bob@remote_foo@somewhere.com",
+			cloud:  names.NewCloudTag("aws"),
+			owner:  names.NewUserTag("bob@remote"),
+			name:   "foo@somewhere.com",
 		}, {
-			input:     "aws/bob@remote/foo_bar",
-			canonical: "aws/bob@remote/foo_bar",
-			string:    `cloudcred-aws_bob@remote_foo%5fbar`,
-			cloud:     names.NewCloudTag("aws"),
-			owner:     names.NewUserTag("bob@remote"),
-			name:      "foo_bar",
+			input:  "aws/bob@remote/foo_bar",
+			string: `cloudcred-aws_bob@remote_foo%5fbar`,
+			cloud:  names.NewCloudTag("aws"),
+			owner:  names.NewUserTag("bob@remote"),
+			name:   "foo_bar",
 		},
 	} {
 		c.Logf("test %d: %s", i, t.input)
@@ -59,7 +54,6 @@ func (s *cloudCredentialSuite) TestCloudCredentialTag(c *gc.C) {
 		c.Check(cloudTag.Cloud(), gc.Equals, t.cloud)
 		c.Check(cloudTag.Owner(), gc.Equals, t.owner)
 		c.Check(cloudTag.Name(), gc.Equals, t.name)
-		c.Check(cloudTag.Canonical(), gc.Equals, t.canonical)
 	}
 }
 
