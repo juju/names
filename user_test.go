@@ -27,14 +27,12 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 			input:    "bob",
 			string:   "user-bob",
 			name:     "bob",
-			domain:   names.LocalUserDomain,
-			username: "bob@local",
+			username: "bob",
 		}, {
 			input:    "bob@local",
-			string:   "user-bob@local",
+			string:   "user-bob",
 			name:     "bob",
-			domain:   names.LocalUserDomain,
-			username: "bob@local",
+			username: "bob",
 		}, {
 			input:    "bob@foo",
 			string:   "user-bob@foo",
@@ -46,11 +44,10 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 		c.Logf("test %d: %s", i, t.input)
 		userTag := names.NewUserTag(t.input)
 		c.Check(userTag.String(), gc.Equals, t.string)
-		c.Check(userTag.Id(), gc.Equals, t.input)
+		c.Check(userTag.Id(), gc.Equals, t.username)
 		c.Check(userTag.Name(), gc.Equals, t.name)
 		c.Check(userTag.Domain(), gc.Equals, t.domain)
-		c.Check(userTag.IsLocal(), gc.Equals, t.domain == names.LocalUserDomain)
-		c.Check(userTag.Canonical(), gc.Equals, t.username)
+		c.Check(userTag.IsLocal(), gc.Equals, t.domain == "")
 	}
 }
 
@@ -61,7 +58,7 @@ var withDomainTests = []struct {
 }{{
 	id:       "bob",
 	domain:   names.LocalUserDomain,
-	expectId: "bob@local",
+	expectId: "bob",
 }, {
 	id:       "bob@local",
 	domain:   "foo",
@@ -72,7 +69,7 @@ var withDomainTests = []struct {
 }, {
 	id:       "bob@foo",
 	domain:   names.LocalUserDomain,
-	expectId: "bob@local",
+	expectId: "bob",
 }, {
 	id:     "bob",
 	domain: "@foo",
@@ -229,11 +226,10 @@ func (s *userSuite) TestParseUserTag(c *gc.C) {
 
 func (s *userSuite) TestNewLocalUserTag(c *gc.C) {
 	user := names.NewLocalUserTag("bob")
-	c.Assert(user.Canonical(), gc.Equals, "bob@local")
 	c.Assert(user.Name(), gc.Equals, "bob")
-	c.Assert(user.Domain(), gc.Equals, "local")
+	c.Assert(user.Domain(), gc.Equals, "")
 	c.Assert(user.IsLocal(), gc.Equals, true)
-	c.Assert(user.String(), gc.Equals, "user-bob@local")
+	c.Assert(user.String(), gc.Equals, "user-bob")
 
 	c.Assert(func() { names.NewLocalUserTag("bob@local") }, gc.PanicMatches, `invalid user name "bob@local"`)
 	c.Assert(func() { names.NewLocalUserTag("") }, gc.PanicMatches, `invalid user name ""`)
