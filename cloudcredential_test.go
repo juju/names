@@ -130,3 +130,16 @@ func (s *cloudCredentialSuite) TestParseCloudCredentialTag(c *gc.C) {
 		c.Check(got, gc.Equals, t.expected)
 	}
 }
+
+func (s *cloudCredentialSuite) TestIsZero(c *gc.C) {
+	c.Assert(names.CloudCredentialTag{}.IsZero(), gc.Equals, true)
+	c.Assert(names.NewCloudCredentialTag("aws/bob/foo").IsZero(), gc.Equals, false)
+}
+
+func (s *cloudCredentialSuite) TestZeroString(c *gc.C) {
+	c.Assert(names.CloudCredentialTag{}.String(), gc.Equals, "")
+}
+
+func (s *cloudCredentialSuite) TestZeroId(c *gc.C) {
+	c.Assert(names.CloudCredentialTag{}.Id(), gc.Equals, "")
+}

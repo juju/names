@@ -30,11 +30,20 @@ type CloudCredentialTag struct {
 	name  string
 }
 
+// IsZero reports whether t is zero.
+func (t CloudCredentialTag) IsZero() bool {
+	return t == CloudCredentialTag{}
+}
+
 // Kind is part of the Tag interface.
 func (t CloudCredentialTag) Kind() string { return CloudCredentialTagKind }
 
-// Id is part of the Tag interface.
+// Id implements Tag.Id. It returns the empty string
+// if t is zero.
 func (t CloudCredentialTag) Id() string {
+	if t.IsZero() {
+		return ""
+	}
 	return fmt.Sprintf("%s/%s/%s", t.cloud.Id(), t.owner.Id(), t.name)
 }
 
@@ -42,8 +51,12 @@ func quoteCredentialSeparator(in string) string {
 	return strings.Replace(in, "_", `%5f`, -1)
 }
 
-// String is part of the Tag interface.
+// String implements Tag.String. It returns the empty
+// string if t is zero.
 func (t CloudCredentialTag) String() string {
+	if t.IsZero() {
+		return ""
+	}
 	return fmt.Sprintf("%s-%s_%s_%s", t.Kind(),
 		quoteCredentialSeparator(t.cloud.Id()),
 		quoteCredentialSeparator(t.owner.Id()),
