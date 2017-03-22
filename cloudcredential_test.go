@@ -45,6 +45,12 @@ func (s *cloudCredentialSuite) TestCloudCredentialTag(c *gc.C) {
 			cloud:  names.NewCloudTag("aws"),
 			owner:  names.NewUserTag("bob@remote"),
 			name:   "foo_bar",
+		}, {
+			input:  "google/bob+bob@remote/foo_bar",
+			string: `cloudcred-google_bob+bob@remote_foo%5fbar`,
+			cloud:  names.NewCloudTag("google"),
+			owner:  names.NewUserTag("bob+bob@remote"),
+			name:   "foo_bar",
 		},
 	} {
 		c.Logf("test %d: %s", i, t.input)
@@ -65,6 +71,7 @@ func (s *cloudCredentialSuite) TestIsValidCloudCredential(c *gc.C) {
 		{"", false},
 		{"aws/bob/foo", true},
 		{"aws/bob@local/foo", true},
+		{"google/bob+bob@local/foo", true},
 		{"/bob/foo", false},
 		{"aws//foo", false},
 		{"aws/bob/", false},
@@ -84,6 +91,7 @@ func (s *cloudCredentialSuite) TestIsValidCloudCredentialName(c *gc.C) {
 		{"f00b4r", true},
 		{"foo-bar", true},
 		{"foo@bar", true},
+		{"foo+foo@bar", true},
 		{"foo_bar", true},
 		{"123", false},
 		{"0foo", false},
