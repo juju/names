@@ -46,6 +46,7 @@ var tagKindTests = []struct {
 	{tag: "cloud-aws", kind: names.CloudTagKind},
 	{tag: "cloudcred", err: `"cloudcred" is not a valid tag`},
 	{tag: "cloudcred-aws_admin_foo", kind: names.CloudCredentialTagKind},
+	{tag: "caasmodel-57", kind: names.CAASModelTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -235,6 +236,16 @@ var parseTagTests = []struct {
 	expectKind: names.CloudCredentialTagKind,
 	expectType: names.CloudCredentialTag{},
 	resultId:   "aws/admin/foo_bar",
+}, {
+	tag:        "caasmodel-f47ac10b-58cc-4372-a567-0e02b2c3d479",
+	expectKind: names.CAASModelTagKind,
+	expectType: names.CAASModelTag{},
+	resultId:   "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+}, {
+	tag:        "caasmodel-/",
+	expectKind: names.CAASModelTagKind,
+	expectType: names.CAASModelTag{},
+	resultErr:  `"caasmodel-/" is not a valid caasmodel tag`,
 }}
 
 var makeTag = map[string]func(string) names.Tag{
@@ -255,6 +266,7 @@ var makeTag = map[string]func(string) names.Tag{
 	names.SpaceTagKind:            func(tag string) names.Tag { return names.NewSpaceTag(tag) },
 	names.CloudTagKind:            func(tag string) names.Tag { return names.NewCloudTag(tag) },
 	names.CloudCredentialTagKind:  func(tag string) names.Tag { return names.NewCloudCredentialTag(tag) },
+	names.CAASModelTagKind:        func(tag string) names.Tag { return names.NewCAASModelTag(tag) },
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
