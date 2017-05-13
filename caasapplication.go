@@ -9,11 +9,7 @@ import (
 
 const CAASApplicationTagKind = "caasapplication"
 
-const (
-	CAASApplicationSnippet = "(?:[a-z][a-z0-9]*(?:-[a-z0-9]*[a-z][a-z0-9]*)*)"
-)
-
-var validCAASApplication = regexp.MustCompile("^" + CAASApplicationSnippet + "$")
+var validCAASApplication = regexp.MustCompile("^" + ApplicationSnippet + "$")
 
 // IsValidCAASApplication returns whether name is a valid application name.
 func IsValidCAASApplication(name string) bool {

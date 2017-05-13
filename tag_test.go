@@ -46,7 +46,9 @@ var tagKindTests = []struct {
 	{tag: "cloud-aws", kind: names.CloudTagKind},
 	{tag: "cloudcred", err: `"cloudcred" is not a valid tag`},
 	{tag: "cloudcred-aws_admin_foo", kind: names.CloudCredentialTagKind},
+	{tag: "caasapplication-57", kind: names.CAASApplicationTagKind},
 	{tag: "caasmodel-57", kind: names.CAASModelTagKind},
+	{tag: "caasunit-57", kind: names.CAASUnitTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -246,6 +248,31 @@ var parseTagTests = []struct {
 	expectKind: names.CAASModelTagKind,
 	expectType: names.CAASModelTag{},
 	resultErr:  `"caasmodel-/" is not a valid caasmodel tag`,
+}, {
+	tag:        "caasunit-wordpress-0",
+	expectKind: names.CAASUnitTagKind,
+	expectType: names.CAASUnitTag{},
+	resultId:   "wordpress/0",
+}, {
+	tag:        "caasunit-rabbitmq-server-0",
+	expectKind: names.CAASUnitTagKind,
+	expectType: names.CAASUnitTag{},
+	resultId:   "rabbitmq-server/0",
+}, {
+	tag:        "caasunit-#",
+	expectKind: names.CAASUnitTagKind,
+	expectType: names.CAASUnitTag{},
+	resultErr:  `"caasunit-#" is not a valid caasunit tag`,
+}, {
+	tag:        "caasapplication-wordpress",
+	expectKind: names.CAASApplicationTagKind,
+	expectType: names.CAASApplicationTag{},
+	resultId:   "wordpress",
+}, {
+	tag:        "caasapplication-#",
+	expectKind: names.CAASApplicationTagKind,
+	expectType: names.CAASApplicationTag{},
+	resultErr:  `"caasapplication-#" is not a valid caasapplication tag`,
 }}
 
 var makeTag = map[string]func(string) names.Tag{
@@ -267,6 +294,8 @@ var makeTag = map[string]func(string) names.Tag{
 	names.CloudTagKind:            func(tag string) names.Tag { return names.NewCloudTag(tag) },
 	names.CloudCredentialTagKind:  func(tag string) names.Tag { return names.NewCloudCredentialTag(tag) },
 	names.CAASModelTagKind:        func(tag string) names.Tag { return names.NewCAASModelTag(tag) },
+	names.CAASApplicationTagKind:  func(tag string) names.Tag { return names.NewCAASApplicationTag(tag) },
+	names.CAASUnitTagKind:         func(tag string) names.Tag { return names.NewCAASUnitTag(tag) },
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
