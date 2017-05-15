@@ -3,19 +3,12 @@
 
 package names
 
-import (
-	"regexp"
-)
-
 const CAASModelTagKind = "caasmodel"
 
 // CAASModelTag represents a tag used to describe a model.
 type CAASModelTag struct {
 	uuid string
 }
-
-// Lowercase letters, digits and (non-leading) hyphens, as per LP:1568944 #5.
-var validCAASModelName = regexp.MustCompile(`^[a-z0-9]+[a-z0-9-]*$`)
 
 // NewCAASModelTag returns the tag of a CAAS model with the given CAAS model UUID.
 func NewCAASModelTag(uuid string) CAASModelTag {
@@ -46,5 +39,5 @@ func IsValidCAASModel(id string) bool {
 
 // IsValidCAASModelName returns whether name is a valid string safe for a CAAS model name.
 func IsValidCAASModelName(name string) bool {
-	return validCAASModelName.MatchString(name)
+	return validModelName.MatchString(name)
 }
