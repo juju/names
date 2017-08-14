@@ -28,6 +28,12 @@ func (s *cloudCredentialSuite) TestCloudCredentialTag(c *gc.C) {
 			owner:  names.NewUserTag("bob"),
 			name:   "foo",
 		}, {
+			input:  "manual_cloud/bob/foo",
+			string: "cloudcred-manual%5fcloud_bob_foo",
+			cloud:  names.NewCloudTag("manual_cloud"),
+			owner:  names.NewUserTag("bob"),
+			name:   "foo",
+		}, {
 			input:  "aws/bob@remote/foo",
 			string: "cloudcred-aws_bob@remote_foo",
 			cloud:  names.NewCloudTag("aws"),
@@ -70,6 +76,7 @@ func (s *cloudCredentialSuite) TestIsValidCloudCredential(c *gc.C) {
 	}{
 		{"", false},
 		{"aws/bob/foo", true},
+		{"manual_cloud/bob/foo", true},
 		{"aws/bob@local/foo", true},
 		{"google/bob+bob@local/foo", true},
 		{"/bob/foo", false},
@@ -112,6 +119,9 @@ func (s *cloudCredentialSuite) TestParseCloudCredentialTag(c *gc.C) {
 	}, {
 		tag:      "cloudcred-aws_bob_foo",
 		expected: names.NewCloudCredentialTag("aws/bob/foo"),
+	}, {
+		tag:      "cloudcred-manual%5fcloud_bob_foo",
+		expected: names.NewCloudCredentialTag("manual_cloud/bob/foo"),
 	}, {
 		tag:      "cloudcred-aws-china_bob_foo-manchu",
 		expected: names.NewCloudCredentialTag("aws-china/bob/foo-manchu"),

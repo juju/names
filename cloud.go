@@ -11,7 +11,7 @@ import (
 const CloudTagKind = "cloud"
 
 var (
-	cloudSnippet = "[a-zA-Z0-9][a-zA-Z0-9.-]*"
+	cloudSnippet = "[a-zA-Z0-9][a-zA-Z0-9._-]*"
 	validCloud   = regexp.MustCompile("^" + cloudSnippet + "$")
 )
 
