@@ -36,6 +36,16 @@ func (t MachineTag) String() string { return t.Kind() + "-" + t.id }
 func (t MachineTag) Kind() string   { return MachineTagKind }
 func (t MachineTag) Id() string     { return machineTagSuffixToId(t.id) }
 
+// Parent returns the machineTag for the host of the container if the machineTag
+// is a container, otherwise it returns nil.
+func (t MachineTag) Parent() Tag {
+	parts := strings.Split(t.id, "-")
+	if len(parts) < 3 {
+		return nil
+	}
+	return MachineTag{id: strings.Join(parts[:len(parts)-2], "-")}
+}
+
 // NewMachineTag returns the tag for the machine with the given id.
 func NewMachineTag(id string) MachineTag {
 	id = strings.Replace(id, "/", "-", -1)
