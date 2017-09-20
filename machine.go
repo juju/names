@@ -46,6 +46,17 @@ func (t MachineTag) Parent() Tag {
 	return MachineTag{id: strings.Join(parts[:len(parts)-2], "-")}
 }
 
+// ContainerType returns the type of container for this machine.
+// If the machine isn't a container, then the empty string is returned.
+func (t MachineTag) ContainerType() string {
+	parts := strings.Split(t.id, "-")
+	size := len(parts)
+	if size < 3 {
+		return ""
+	}
+	return parts[size-2]
+}
+
 // NewMachineTag returns the tag for the machine with the given id.
 func NewMachineTag(id string) MachineTag {
 	id = strings.Replace(id, "/", "-", -1)

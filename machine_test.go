@@ -26,10 +26,11 @@ func (s *machineSuite) TestMachineTag(c *gc.C) {
 }
 
 var machineIdTests = []struct {
-	pattern   string
-	valid     bool
-	container bool
-	parent    names.Tag
+	pattern       string
+	valid         bool
+	container     bool
+	parent        names.Tag
+	containerType string
 }{
 	{pattern: "42", valid: true},
 	{pattern: "042", valid: false},
@@ -39,7 +40,7 @@ var machineIdTests = []struct {
 	{pattern: "55/", valid: false},
 	{pattern: "1/foo", valid: false},
 	{pattern: "2/foo/", valid: false},
-	{pattern: "3/lxc/42", valid: true, container: true, parent: names.NewMachineTag("3")},
+	{pattern: "3/lxc/42", valid: true, container: true, parent: names.NewMachineTag("3"), containerType: "lxc"},
 	{pattern: "3/lxc-nodash/42", valid: false},
 	{pattern: "0/lxc/00", valid: false},
 	{pattern: "0/lxc/0/", valid: false},
@@ -47,7 +48,7 @@ var machineIdTests = []struct {
 	{pattern: "3/lxc/042", valid: false},
 	{pattern: "4/foo/bar", valid: false},
 	{pattern: "5/lxc/42/foo", valid: false},
-	{pattern: "6/lxc/42/kvm/0", valid: true, container: true, parent: names.NewMachineTag("6/lxc/42")},
+	{pattern: "6/lxc/42/kvm/0", valid: true, container: true, parent: names.NewMachineTag("6/lxc/42"), containerType: "kvm"},
 	{pattern: "06/lxc/42/kvm/0", valid: false},
 	{pattern: "6/lxc/042/kvm/0", valid: false},
 	{pattern: "6/lxc/42/kvm/00", valid: false},
@@ -62,6 +63,7 @@ func (s *machineSuite) TestMachineIdFormats(c *gc.C) {
 		if test.valid {
 			machine := names.NewMachineTag(test.pattern)
 			c.Check(machine.Parent(), gc.Equals, test.parent)
+			c.Check(machine.ContainerType(), gc.Equals, test.containerType)
 		}
 	}
 }
