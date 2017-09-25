@@ -57,6 +57,12 @@ func (t MachineTag) ContainerType() string {
 	return parts[size-2]
 }
 
+// ChildId returns just the last segment of the ID.
+func (t MachineTag) ChildId() string {
+	parts := strings.Split(t.id, "-")
+	return parts[len(parts)-1]
+}
+
 // NewMachineTag returns the tag for the machine with the given id.
 func NewMachineTag(id string) MachineTag {
 	id = strings.Replace(id, "/", "-", -1)
