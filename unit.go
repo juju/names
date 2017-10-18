@@ -6,6 +6,7 @@ package names
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -20,6 +21,16 @@ type UnitTag struct {
 func (t UnitTag) String() string { return t.Kind() + "-" + t.name }
 func (t UnitTag) Kind() string   { return UnitTagKind }
 func (t UnitTag) Id() string     { return unitTagSuffixToId(t.name) }
+
+// Number returns the unit number from the tag, effectively the NumberSnippet from the
+// validUnit regular expression.
+func (t UnitTag) Number() int {
+	if i := strings.LastIndex(t.name, "-"); i > 0 {
+		num, _ := strconv.Atoi(t.name[i+1:])
+		return num
+	}
+	return 0
+}
 
 // NewUnitTag returns the tag for the unit with the given name.
 // It will panic if the given unit name is not valid.
