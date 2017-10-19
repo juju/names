@@ -54,6 +54,13 @@ func (s *unitSuite) TestInvalidUnitTagFormats(c *gc.C) {
 	}
 }
 
+func (s *unitSuite) TestNumber(c *gc.C) {
+	u := names.UnitTag{}
+	c.Assert(u.Number(), gc.Equals, 0)
+	u = names.NewUnitTag("foo-t4/5")
+	c.Assert(u.Number(), gc.Equals, 5)
+}
+
 func (s *applicationSuite) TestUnitApplication(c *gc.C) {
 	for i, test := range unitNameTests {
 		c.Logf("test %d: %q", i, test.pattern)
