@@ -15,10 +15,11 @@ const (
 )
 
 var validApplication = regexp.MustCompile("^" + ApplicationSnippet + "$")
+var maxApplicationLength = 48
 
 // IsValidApplication returns whether name is a valid application name.
 func IsValidApplication(name string) bool {
-	return validApplication.MatchString(name)
+	return validApplication.MatchString(name) && len(name) <= maxApplicationLength
 }
 
 type ApplicationTag struct {
