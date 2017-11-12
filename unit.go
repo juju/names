@@ -5,12 +5,17 @@ package names
 
 import (
 	"fmt"
+	"hash/crc32"
 	"regexp"
 	"strconv"
 	"strings"
 )
 
 const UnitTagKind = "unit"
+
+// minShortenedLength defines minimum size of shortened unit tag, other things depend
+// on that value so change it carefully.
+const minShortenedLength = 21
 
 var validUnit = regexp.MustCompile("^(" + ApplicationSnippet + ")/" + NumberSnippet + "$")
 
@@ -87,4 +92,33 @@ func unitTagSuffixToId(s string) string {
 		s = s[:i] + "/" + s[i+1:]
 	}
 	return s
+}
+
+// ShortenedString returns the length-limited string for the tag.
+// It can be used in places where there are strict length requirements, e.g. for
+// a service name. It uses a hash so the resulting name should be unique.
+// It will panic if maxLength is less than minShortenedLength.
+func (t UnitTag) ShortenedString(maxLength int) (string, error) {
+	if maxLength < minShortenedLength {
+		return "", fmt.Errorf("max length must be at least %d, not %d", minShortenedLength, maxLength)
+	}
+	i := strings.LastIndex(t.name, "-")
+	if i <= 0 {
+		return "", fmt.Errorf("invalid tag %s", t.name)
+	}
+	// To keep unit 'name' the same on all units we reserve 4 chars for ID.
+	name, id := t.name[:i], t.name[i+1:]
+	idLen := len(id)
+	if idLen < 4 {
+		idLen = 4
+	}
+	var hashString string
+	// 8 for hash, 2 for two dashes
+	maxNameLength := maxLength - idLen - len(UnitTagKind) - 8 - 2
+	if len(name) > maxNameLength {
+		hash := crc32.Checksum([]byte(name), crc32.IEEETable)
+		hashString = fmt.Sprintf("%0.8x", hash)
+		name = name[:maxNameLength]
+	}
+	return "unit-" + name + hashString + "-" + id, nil
 }

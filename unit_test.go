@@ -109,3 +109,53 @@ func (s *unitSuite) TestParseUnitTag(c *gc.C) {
 		c.Check(got, gc.Equals, t.expected)
 	}
 }
+
+var unitTagShortenedStringTests = []struct {
+	unitName     string
+	maxLength    int
+	errorOutput  string
+	expectedName string
+}{{
+	unitName:    "foobar/0",
+	maxLength:   15,
+	errorOutput: "max length must be at least 21, not 15",
+}, {
+	unitName:     "foobar/0",
+	maxLength:    30,
+	expectedName: "unit-foobar-0",
+}, {
+	unitName:     "veryveryverylonglongone/0",
+	maxLength:    25,
+	expectedName: "unit-veryverf4fa59c6-0",
+}, {
+	unitName:     "veryveryverylonglongone/20",
+	maxLength:    25,
+	expectedName: "unit-veryverf4fa59c6-20",
+}, {
+	unitName:     "veryveryverylonglongone/300",
+	maxLength:    25,
+	expectedName: "unit-veryverf4fa59c6-300",
+}, {
+	unitName:     "veryveryverylonglongone/4000",
+	maxLength:    25,
+	expectedName: "unit-veryverf4fa59c6-4000",
+}, {
+	unitName:     "veryveryverylonglongone/50000",
+	maxLength:    25,
+	expectedName: "unit-veryvef4fa59c6-50000",
+}}
+
+func (s *unitSuite) TestUnitTagShortenedString(c *gc.C) {
+	for i, t := range unitTagShortenedStringTests {
+		c.Logf("test %d: %s %d", i, t.unitName, t.maxLength)
+		tag := names.NewUnitTag(t.unitName)
+		tagString, err := tag.ShortenedString(t.maxLength)
+		if t.errorOutput != "" {
+			c.Check(tagString, gc.Equals, "")
+			c.Check(err, gc.ErrorMatches, t.errorOutput)
+		} else {
+			c.Check(tagString, gc.Equals, t.expectedName)
+			c.Check(err, gc.IsNil)
+		}
+	}
+}
