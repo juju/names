@@ -39,6 +39,37 @@ var validCharmURLs = []string{"charm",
 	"series/charm-1",
 }
 
+var validDisplayNames = []string{
+	"ABC",
+	"My Awesome Charm",
+	"my-charm-name",
+	"1-abc-2",
+	"underscores_allowed",
+}
+
+var invalidDisplayNames = []string{
+	" bad name",
+	"big  space",
+	"bigger    space",
+	"tabs	not	allowed",
+	"no\nnewlines",
+	"no\r\nnewlines",
+}
+
+func (s *charmSuite) TestValidDisplayNames(c *gc.C) {
+	for _, displayName := range validDisplayNames {
+		c.Logf("Checking name %q", displayName)
+		c.Assert(names.IsValidDisplayName(displayName), jc.IsTrue)
+	}
+}
+
+func (s *charmSuite) TestInvalidDisplayNames(c *gc.C) {
+	for _, displayName := range invalidDisplayNames {
+		c.Logf("Checking invalid name %q", displayName)
+		c.Assert(names.IsValidDisplayName(displayName), jc.IsFalse)
+	}
+}
+
 func (s *charmSuite) TestValidCharmURLs(c *gc.C) {
 	for _, url := range validCharmURLs {
 		c.Logf("Processing tag %q", url)
