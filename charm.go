@@ -28,9 +28,15 @@ var (
 	// CharmNameSnippet is a regular expression representing charm name
 	CharmNameSnippet = "[a-z][a-z0-9]*(-[a-z0-9]*[a-z][a-z0-9]*)*"
 
+	// DisplayNameSnippet is a regular expression representing a valid
+	// display-name for the charm and bundle metadata.
+	DisplayNameSnippet = `^[A-Za-z0-9]+( [-A-Za-z0-9_]|[-A-Za-z0-9_])*$`
+
 	localSchemaSnippet      = "local:"
 	charmStoreSchemaSnippet = "cs:(~" + validUserPart + "/)?"
 	revisionSnippet         = "(-1|0|[1-9][0-9]*)"
+
+	validDispayNameRegEx = regexp.MustCompile(DisplayNameSnippet)
 
 	validCharmRegEx = regexp.MustCompile("^(" +
 		localSchemaSnippet + "|" +
@@ -85,4 +91,9 @@ func ParseCharmTag(charmTag string) (CharmTag, error) {
 // IsValidCharm returns whether name is a valid charm url.
 func IsValidCharm(url string) bool {
 	return validCharmRegEx.MatchString(url)
+}
+
+// IsValidDisplayName returns whether a display-name is valid.
+func IsValidDisplayName(name string) bool {
+	return validDispayNameRegEx.MatchString(name)
 }
