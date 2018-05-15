@@ -1,4 +1,4 @@
-// Copyright 2013 Canonical Ltd.
+// Copyright 2013-2018 Canonical Ltd.
 // Licensed under the LGPLv3, see LICENCE file for details.
 
 package names_test
@@ -53,6 +53,11 @@ func (tagSetSuite) TestInitialStringValues(c *gc.C) {
 	t, err := names.NewSetFromStrings("unit-wordpress-0", "unit-rabbitmq-server-0")
 	c.Assert(err, gc.IsNil)
 	c.Assert(t.Size(), gc.Equals, 2)
+}
+
+func (tagSetSuite) TestInitialStringValuesBad(c *gc.C) {
+	_, err := names.NewSetFromStrings("not-a-tag")
+	c.Assert(err, gc.ErrorMatches, `"not-a-tag" is not a valid tag`)
 }
 
 func (tagSetSuite) TestSize(c *gc.C) {
