@@ -21,7 +21,7 @@ type VolumeTag struct {
 
 func (t VolumeTag) String() string { return t.Kind() + "-" + t.id }
 func (t VolumeTag) Kind() string   { return VolumeTagKind }
-func (t VolumeTag) Id() string     { return volumeTagSuffixToId(t.id) }
+func (t VolumeTag) Id() string     { return filesystemOrVolumeTagSuffixToId(t.id) }
 
 // NewVolumeTag returns the tag for the volume with the given ID.
 // It will panic if the given volume ID is not valid.
@@ -89,18 +89,4 @@ func tagFromVolumeId(id string) (VolumeTag, bool) {
 	}
 	id = strings.Replace(id, "/", "-", -1)
 	return VolumeTag{id}, true
-}
-
-func volumeTagSuffixToId(s string) string {
-	if validMachineSuffix.MatchString(s) {
-		return strings.Replace(s, "-", "/", -1)
-	}
-	// Replace only the last 2 "-" with "/", as it is valid for unit
-	// names to contain hyphens
-	for x := 0; x < 2; x++ {
-		if i := strings.LastIndex(s, "-"); i > 0 {
-			s = s[:i] + "/" + s[i+1:]
-		}
-	}
-	return s
 }

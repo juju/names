@@ -21,7 +21,7 @@ type FilesystemTag struct {
 
 func (t FilesystemTag) String() string { return t.Kind() + "-" + t.id }
 func (t FilesystemTag) Kind() string   { return FilesystemTagKind }
-func (t FilesystemTag) Id() string     { return filesystemTagSuffixToId(t.id) }
+func (t FilesystemTag) Id() string     { return filesystemOrVolumeTagSuffixToId(t.id) }
 
 // NewFilesystemTag returns the tag for the filesystem with the given name.
 // It will panic if the given filesystem name is not valid.
@@ -93,7 +93,7 @@ func tagFromFilesystemId(id string) (FilesystemTag, bool) {
 
 var validMachineSuffix = regexp.MustCompile("^(" + MachineSnippet + "-).*")
 
-func filesystemTagSuffixToId(s string) string {
+func filesystemOrVolumeTagSuffixToId(s string) string {
 	if validMachineSuffix.MatchString(s) {
 		return strings.Replace(s, "-", "/", -1)
 	}
