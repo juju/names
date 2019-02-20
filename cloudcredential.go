@@ -81,14 +81,14 @@ func (t CloudCredentialTag) Name() string {
 
 // NewCloudCredentialTag returns the tag for the cloud with the given ID.
 // It will panic if the given cloud ID is not valid.
-func NewCloudCredentialTag(id string) CloudCredentialTag {
+func NewCloudCredentialTag(id string) (CloudCredentialTag, error) {
 	parts := validCloudCredential.FindStringSubmatch(id)
 	if len(parts) != 4 {
-		panic(fmt.Sprintf("%q is not a valid cloud credential ID", id))
+		return CloudCredentialTag{}, fmt.Errorf("%q is not a valid cloud credential ID", id)
 	}
 	cloud := NewCloudTag(parts[1])
 	owner := NewUserTag(parts[2])
-	return CloudCredentialTag{cloud, owner, parts[3]}
+	return CloudCredentialTag{cloud, owner, parts[3]}, nil
 }
 
 // ParseCloudCredentialTag parses a cloud tag string.

@@ -265,8 +265,14 @@ var makeTag = map[string]func(string) names.Tag{
 	names.SubnetTagKind:           func(tag string) names.Tag { return names.NewSubnetTag(tag) },
 	names.SpaceTagKind:            func(tag string) names.Tag { return names.NewSpaceTag(tag) },
 	names.CloudTagKind:            func(tag string) names.Tag { return names.NewCloudTag(tag) },
-	names.CloudCredentialTagKind:  func(tag string) names.Tag { return names.NewCloudCredentialTag(tag) },
 	names.CAASModelTagKind:        func(tag string) names.Tag { return names.NewCAASModelTag(tag) },
+	names.CloudCredentialTagKind: func(tag string) names.Tag {
+		t, err := names.NewCloudCredentialTag(tag)
+		if err != nil {
+			panic(err)
+		}
+		return t
+	},
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {

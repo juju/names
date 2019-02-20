@@ -196,7 +196,7 @@ func ParseTag(tag string) (Tag, error) {
 		if !IsValidCloudCredential(id) {
 			return nil, invalidTagError(tag, kind)
 		}
-		return NewCloudCredentialTag(id), nil
+		return NewCloudCredentialTag(id)
 	case CAASModelTagKind:
 		if !IsValidCAASModel(id) {
 			return nil, invalidTagError(tag, kind)
