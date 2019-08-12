@@ -4,6 +4,8 @@
 package names_test
 
 import (
+	"strconv"
+
 	gc "gopkg.in/check.v1"
 
 	"gopkg.in/juju/names.v2"
@@ -47,6 +49,8 @@ var tagKindTests = []struct {
 	{tag: "cloudcred", err: `"cloudcred" is not a valid tag`},
 	{tag: "cloudcred-aws_admin_foo", kind: names.CloudCredentialTagKind},
 	{tag: "caasmodel-57", kind: names.CAASModelTagKind},
+	{tag: "controller-f47ac10b-58cc-4372-a567-0e02b2c3d479", kind: names.ControllerTagKind},
+	{tag: "controller-123", kind: names.ControllerAgentTagKind},
 }
 
 func (*tagSuite) TestTagKind(c *gc.C) {
@@ -246,6 +250,21 @@ var parseTagTests = []struct {
 	expectKind: names.CAASModelTagKind,
 	expectType: names.CAASModelTag{},
 	resultErr:  `"caasmodel-/" is not a valid caasmodel tag`,
+}, {
+	tag:        "controller-f47ac10b-58cc-4372-a567-0e02b2c3d479",
+	expectKind: names.ControllerTagKind,
+	expectType: names.ControllerTag{},
+	resultId:   "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+}, {
+	tag:        "controller-123",
+	expectKind: names.ControllerAgentTagKind,
+	expectType: names.ControllerAgentTag{},
+	resultId:   "123",
+}, {
+	tag:        "controller-invalid",
+	expectKind: names.ControllerTagKind,
+	expectType: names.ControllerTag{},
+	resultErr:  `"controller-invalid" is not a valid controller tag`,
 }}
 
 var makeTag = map[string]func(string) names.Tag{
@@ -267,6 +286,13 @@ var makeTag = map[string]func(string) names.Tag{
 	names.CloudTagKind:            func(tag string) names.Tag { return names.NewCloudTag(tag) },
 	names.CloudCredentialTagKind:  func(tag string) names.Tag { return names.NewCloudCredentialTag(tag) },
 	names.CAASModelTagKind:        func(tag string) names.Tag { return names.NewCAASModelTag(tag) },
+	names.ControllerTagKind: func(tag string) names.Tag {
+		id, err := strconv.Atoi(tag)
+		if err == nil {
+			return names.NewControllerAgentTag(id)
+		}
+		return names.NewControllerTag(tag)
+	},
 }
 
 func (*tagSuite) TestParseTag(c *gc.C) {
