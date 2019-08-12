@@ -5,6 +5,7 @@ package names
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/juju/errors"
@@ -123,10 +124,16 @@ func ParseTag(tag string) (Tag, error) {
 		}
 		return NewModelTag(id), nil
 	case ControllerTagKind:
-		if !IsValidController(id) {
-			return nil, invalidTagError(tag, kind)
+		// Controller and ControllerAgent tags use the same "controller" prefix.
+		// Controller ids are UUIDs, ControllerAgent ids are numbers.
+		if IsValidController(id) {
+			return NewControllerTag(id), nil
 		}
-		return NewControllerTag(id), nil
+		if IsValidControllerAgent(id) {
+			idNum, _ := strconv.Atoi(id)
+			return NewControllerAgentTag(idNum), nil
+		}
+		return nil, invalidTagError(tag, kind)
 
 	case RelationTagKind:
 		id = relationTagSuffixToKey(id)
