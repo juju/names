@@ -5,7 +5,6 @@ package names
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/juju/errors"
@@ -130,8 +129,7 @@ func ParseTag(tag string) (Tag, error) {
 			return NewControllerTag(id), nil
 		}
 		if IsValidControllerAgent(id) {
-			idNum, _ := strconv.Atoi(id)
-			return NewControllerAgentTag(idNum), nil
+			return NewControllerAgentTag(id), nil
 		}
 		return nil, invalidTagError(tag, kind)
 

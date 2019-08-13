@@ -287,9 +287,9 @@ var makeTag = map[string]func(string) names.Tag{
 	names.CloudCredentialTagKind:  func(tag string) names.Tag { return names.NewCloudCredentialTag(tag) },
 	names.CAASModelTagKind:        func(tag string) names.Tag { return names.NewCAASModelTag(tag) },
 	names.ControllerTagKind: func(tag string) names.Tag {
-		id, err := strconv.Atoi(tag)
+		_, err := strconv.Atoi(tag)
 		if err == nil {
-			return names.NewControllerAgentTag(id)
+			return names.NewControllerAgentTag(tag)
 		}
 		return names.NewControllerTag(tag)
 	},

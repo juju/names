@@ -15,7 +15,7 @@ type ControllerAgentSuite struct{}
 var _ = gc.Suite(&ControllerAgentSuite{})
 
 func (s *ControllerAgentSuite) TestControllerAgentTag(c *gc.C) {
-	c.Assert(names.NewControllerAgentTag(123).String(), gc.Equals, "controller-123")
+	c.Assert(names.NewControllerAgentTag("123").String(), gc.Equals, "controller-123")
 }
 
 func (s *ControllerAgentSuite) TestIdFormats(c *gc.C) {
@@ -27,7 +27,7 @@ func (s *ControllerAgentSuite) TestIdFormats(c *gc.C) {
 func (s *ControllerAgentSuite) TestNumber(c *gc.C) {
 	ca := names.ControllerAgentTag{}
 	c.Assert(ca.Number(), gc.Equals, 0)
-	ca = names.NewControllerAgentTag(5)
+	ca = names.NewControllerAgentTag("5")
 	c.Assert(ca.Number(), gc.Equals, 5)
 }
 
@@ -40,7 +40,7 @@ var parseControllerAgentTagTests = []struct {
 	err: names.InvalidTagError("", ""),
 }, {
 	tag:      "controller-0",
-	expected: names.NewControllerAgentTag(0),
+	expected: names.NewControllerAgentTag("0"),
 }, {
 	tag: "dave",
 	err: names.InvalidTagError("dave", ""),

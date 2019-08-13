@@ -4,6 +4,7 @@
 package names
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 )
@@ -19,8 +20,12 @@ type ControllerAgentTag struct {
 }
 
 // NewControllerAgentTag returns the tag of an controller agent with the given id.
-func NewControllerAgentTag(id int) ControllerAgentTag {
-	return ControllerAgentTag{id: strconv.Itoa(id)}
+func NewControllerAgentTag(id string) ControllerAgentTag {
+	_, err := strconv.Atoi(id)
+	if err != nil {
+		panic(fmt.Sprintf("%q is not a valid controller agent id", id))
+	}
+	return ControllerAgentTag{id: id}
 }
 
 // ParseControllerAgentTag parses a controller agent tag string.
