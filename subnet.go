@@ -5,34 +5,32 @@ package names
 
 import (
 	"fmt"
-	"net"
+	"regexp"
 )
 
 const SubnetTagKind = "subnet"
 
-// IsValidSubnet returns whether cidr is a valid subnet CIDR.
-func IsValidSubnet(cidr string) bool {
-	_, ipNet, err := net.ParseCIDR(cidr)
-	if err == nil && ipNet.String() == cidr {
-		return true
-	}
-	return false
+var validSubnet = regexp.MustCompile("^" + NumberSnippet + "$")
+
+// IsValidSubnet returns whether id is a valid subnet id.
+func IsValidSubnet(id string) bool {
+	return validSubnet.MatchString(id)
 }
 
 type SubnetTag struct {
-	cidr string
+	id string
 }
 
-func (t SubnetTag) String() string { return t.Kind() + "-" + t.cidr }
+func (t SubnetTag) String() string { return t.Kind() + "-" + t.id }
 func (t SubnetTag) Kind() string   { return SubnetTagKind }
-func (t SubnetTag) Id() string     { return t.cidr }
+func (t SubnetTag) Id() string     { return t.id }
 
-// NewSubnetTag returns the tag for subnet with the given CIDR.
-func NewSubnetTag(cidr string) SubnetTag {
-	if !IsValidSubnet(cidr) {
-		panic(fmt.Sprintf("%s is not a valid subnet CIDR", cidr))
+// NewSubnetTag returns the tag for subnet with the given ID.
+func NewSubnetTag(id string) SubnetTag {
+	if !IsValidSubnet(id) {
+		panic(fmt.Sprintf("%s is not a valid subnet ID", id))
 	}
-	return SubnetTag{cidr: cidr}
+	return SubnetTag{id: id}
 }
 
 // ParseSubnetTag parses a subnet tag string.
