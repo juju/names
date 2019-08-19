@@ -7,7 +7,7 @@ import (
 	gc "gopkg.in/check.v1"
 
 	jc "github.com/juju/testing/checkers"
-	"gopkg.in/juju/names.v2"
+	"gopkg.in/juju/names.v3"
 )
 
 type actionSuite struct{}
