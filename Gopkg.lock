@@ -10,12 +10,11 @@
   revision = "9c5c9712527c7986f012361e7d13756b4d99543d"
 
 [[projects]]
-  branch = "master"
-  digest = "1:217055446c25288d7802cd09c208724ea8d5f6a09057c5a5dbce5006dac25e43"
+  digest = "1:1261ccace00babbf02bb702e71c85c8e81f65bad7bdb98c12c7a409c14de1d86"
   name = "github.com/juju/errors"
   packages = ["."]
   pruneopts = "UT"
-  revision = "0232dcc7464d0c0037b619d6e10190301d01362f"
+  revision = "22422dad46e14561a0854ad42497a75af9b61909"
 
 [[projects]]
   branch = "master"
@@ -34,7 +33,6 @@
   revision = "9058e192b216b21e4741c2eeb20ac798ba1ea80a"
 
 [[projects]]
-  branch = "master"
   digest = "1:ccdd0820332e468c99da3cbceccd12c460a344113558ffa7b682d13b7797584f"
   name = "github.com/juju/testing"
   packages = [
@@ -45,7 +43,6 @@
   revision = "ce30eb24acd2c45a1bc42208835468ca619685a9"
 
 [[projects]]
-  branch = "master"
   digest = "1:449a76b82b8453dfa74bff12cbdeb391a18ca51d535f6882d386f07ba374e2b9"
   name = "github.com/juju/utils"
   packages = ["."]
@@ -59,22 +56,6 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "b64dbd566305c836274f0268fa59183a52906b36"
-
-[[projects]]
-  digest = "1:ca955a9cd5b50b0f43d2cc3aeb35c951473eeca41b34eb67507f1dbcc0542394"
-  name = "github.com/kr/pretty"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "73f6ac0b30a98e433b289500d779f50c1a6f0712"
-  version = "v0.1.0"
-
-[[projects]]
-  digest = "1:15b5cc79aad436d47019f814fde81a10221c740dc8ddf769221a65097fb6c2e9"
-  name = "github.com/kr/text"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "e2ffdb16a802fe2bb95e2e35ff34f0e53aeef34f"
-  version = "v0.1.0"
 
 [[projects]]
   branch = "master"
@@ -93,12 +74,11 @@
   revision = "74dc4d7220e7acc4e100824340f3e66577424772"
 
 [[projects]]
-  branch = "v1"
-  digest = "1:af715ae33cc1f5695c4b2a4e4b21d008add8802a99e15bb467ac7c32edb5000d"
+  digest = "1:13b80f4250e74ace3f1e4169128c56c403d402517320c5e15b7128e92d2e6a75"
   name = "gopkg.in/check.v1"
   packages = ["."]
   pruneopts = "UT"
-  revision = "788fd78401277ebd861206a03c884797c6ec5541"
+  revision = "4f90aeace3a26ad7021961c297b22c42160c7b25"
 
 [[projects]]
   branch = "v2"

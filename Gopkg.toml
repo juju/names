@@ -26,19 +26,19 @@
 
 
 [[constraint]]
-  branch = "master"
+  revision = "22422dad46e14561a0854ad42497a75af9b61909"
   name = "github.com/juju/errors"
 
 [[constraint]]
-  branch = "master"
+  revision = "ce30eb24acd2c45a1bc42208835468ca619685a9"
   name = "github.com/juju/testing"
 
 [[constraint]]
-  branch = "master"
+  revision = "bf9cc5bdd62dabc40b7f634b39a5e2dc44d44c45"
   name = "github.com/juju/utils"
 
 [[constraint]]
-  branch = "v1"
+  revision = "4f90aeace3a26ad7021961c297b22c42160c7b25"
   name = "gopkg.in/check.v1"
 
 [prune]
