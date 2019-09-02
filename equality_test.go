@@ -4,7 +4,6 @@
 package names
 
 import (
-	"github.com/juju/utils"
 	gc "gopkg.in/check.v1"
 )
 
@@ -21,7 +20,9 @@ var tagEqualityTests = []struct {
 	{NewUserTag("admin"), UserTag{name: "admin"}},
 	{NewUserTag("admin@local"), UserTag{name: "admin", domain: ""}},
 	{NewUserTag("admin@foobar"), UserTag{name: "admin", domain: "foobar"}},
-	{NewActionTag("01234567-aaaa-4bbb-8ccc-012345678901"), ActionTag{ID: stringToUUID("01234567-aaaa-4bbb-8ccc-012345678901")}},
+	{NewActionTag("01234567-aaaa-4bbb-8ccc-012345678901"), ActionTag{ID: "01234567-aaaa-4bbb-8ccc-012345678901"}},
+	{NewActionTag("mariadb-1"), ActionTag{ID: "mariadb-1"}},
+	{NewControllerAgentTag("1"), ControllerAgentTag{id: "1"}},
 }
 
 type equalitySuite struct{}
@@ -32,12 +33,4 @@ func (s *equalitySuite) TestTagEquality(c *gc.C) {
 	for _, tt := range tagEqualityTests {
 		c.Check(tt.want, gc.Equals, tt.expected)
 	}
-}
-
-func stringToUUID(id string) utils.UUID {
-	uuid, err := utils.UUIDFromString(id)
-	if err != nil {
-		panic(err)
-	}
-	return uuid
 }

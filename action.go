@@ -5,6 +5,7 @@ package names
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/juju/errors"
 	"github.com/juju/utils"
@@ -12,18 +13,31 @@ import (
 
 const ActionTagKind = "action"
 
+// ActionSnippet defines the regexp for a valid Action Id.
+// Actions are associated with applications, so we identify actions
+// in a human friendly way by naming them after their application,
+// with a unique, incrementing number.
+const ActionSnippet = "(" + ApplicationSnippet + ")-" + NumberSnippet
+
+var validActionV2 = regexp.MustCompile("^" + ActionSnippet + "$")
+
 type ActionTag struct {
 	// Tags that are serialized need to have fields exported.
-	ID utils.UUID
+	ID string
 }
 
 // NewActionTag returns the tag of an action with the given id (UUID).
 func NewActionTag(id string) ActionTag {
-	uuid, err := utils.UUIDFromString(id)
-	if err != nil {
-		panic(err)
+	// Actions v1 use a UUID for the id.
+	if uuid, err := utils.UUIDFromString(id); err == nil {
+		return ActionTag{ID: uuid.String()}
 	}
-	return ActionTag{ID: uuid}
+
+	// Actions v2 use <appname>-N.
+	if !validActionV2.MatchString(id) {
+		panic(fmt.Sprintf("invalid action id %q", id))
+	}
+	return ActionTag{ID: id}
 }
 
 // ParseActionTag parses an action tag string.
@@ -41,11 +55,14 @@ func ParseActionTag(actionTag string) (ActionTag, error) {
 
 func (t ActionTag) String() string { return t.Kind() + "-" + t.Id() }
 func (t ActionTag) Kind() string   { return ActionTagKind }
-func (t ActionTag) Id() string     { return t.ID.String() }
+func (t ActionTag) Id() string     { return t.ID }
 
-// IsValidAction returns whether id is a valid action id (UUID).
+// IsValidAction returns whether id is a valid action id.
 func IsValidAction(id string) bool {
-	return utils.IsValidUUIDString(id)
+	// UUID is for actions v1
+	// <appname>-N is for actions V2.
+	return utils.IsValidUUIDString(id) ||
+		validActionV2.MatchString(id)
 }
 
 // ActionReceiverTag returns an ActionReceiver Tag from a

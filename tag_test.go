@@ -34,6 +34,7 @@ var tagKindTests = []struct {
 	{tag: "network", err: `"network" is not a valid tag`},
 	{tag: "ab01cd23-0123-4edc-9a8b-fedcba987654", err: `"ab01cd23-0123-4edc-9a8b-fedcba987654" is not a valid tag`},
 	{tag: "action-ab01cd23-0123-4edc-9a8b-fedcba987654", kind: names.ActionTagKind},
+	{tag: "action-mariadb-1", kind: names.ActionTagKind},
 	{tag: "volume-0", kind: names.VolumeTagKind},
 	{tag: "storage-data-0", kind: names.StorageTagKind},
 	{tag: "filesystem-0", kind: names.FilesystemTagKind},
@@ -182,6 +183,11 @@ var parseTagTests = []struct {
 	expectKind: names.ActionTagKind,
 	expectType: names.ActionTag{},
 	resultId:   "abedaf33-3212-4fde-aeca-87356432deca",
+}, {
+	tag:        "action-mariadb-1",
+	expectKind: names.ActionTagKind,
+	expectType: names.ActionTag{},
+	resultId:   "mariadb-1",
 }, {
 	tag:        "volume-2",
 	expectKind: names.VolumeTagKind,
