@@ -21,6 +21,7 @@ var parseActionTagTests = []struct {
 }{
 	{tag: "", err: names.InvalidTagError("", "")},
 	{tag: "action-f47ac10b-58cc-4372-a567-0e02b2c3d479", expected: names.NewActionTag("f47ac10b-58cc-4372-a567-0e02b2c3d479")},
+	{tag: "action-mariadb-1", expected: names.NewActionTag("mariadb-1")},
 	{tag: "action-012345678", err: names.InvalidTagError("action-012345678", "action")},
 	{tag: "action-1234567", err: names.InvalidTagError("action-1234567", "action")},
 	{tag: "bob", err: names.InvalidTagError("bob", "")},
