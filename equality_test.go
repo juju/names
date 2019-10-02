@@ -21,7 +21,7 @@ var tagEqualityTests = []struct {
 	{NewUserTag("admin@local"), UserTag{name: "admin", domain: ""}},
 	{NewUserTag("admin@foobar"), UserTag{name: "admin", domain: "foobar"}},
 	{NewActionTag("01234567-aaaa-4bbb-8ccc-012345678901"), ActionTag{ID: "01234567-aaaa-4bbb-8ccc-012345678901"}},
-	{NewActionTag("mariadb-1"), ActionTag{ID: "mariadb-1"}},
+	{NewActionTag("1"), ActionTag{ID: "1"}},
 	{NewControllerAgentTag("1"), ControllerAgentTag{id: "1"}},
 }
 

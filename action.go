@@ -14,10 +14,8 @@ import (
 const ActionTagKind = "action"
 
 // ActionSnippet defines the regexp for a valid Action Id.
-// Actions are associated with applications, so we identify actions
-// in a human friendly way by naming them after their application,
-// with a unique, incrementing number.
-const ActionSnippet = "(" + ApplicationSnippet + ")-" + NumberSnippet
+// Actions are identified by a unique, incrementing number.
+const ActionSnippet = NumberSnippet
 
 var validActionV2 = regexp.MustCompile("^" + ActionSnippet + "$")
 
@@ -33,7 +31,7 @@ func NewActionTag(id string) ActionTag {
 		return ActionTag{ID: uuid.String()}
 	}
 
-	// Actions v2 use <appname>-N.
+	// Actions v2 use a number.
 	if !validActionV2.MatchString(id) {
 		panic(fmt.Sprintf("invalid action id %q", id))
 	}
@@ -60,7 +58,7 @@ func (t ActionTag) Id() string     { return t.ID }
 // IsValidAction returns whether id is a valid action id.
 func IsValidAction(id string) bool {
 	// UUID is for actions v1
-	// <appname>-N is for actions V2.
+	// N is for actions V2.
 	return utils.IsValidUUIDString(id) ||
 		validActionV2.MatchString(id)
 }
