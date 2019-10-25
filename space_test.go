@@ -34,6 +34,8 @@ var spaceNameTests = []struct {
 	{pattern: "also_not", valid: false},
 	{pattern: "a--", valid: false},
 	{pattern: "foo-2", valid: true},
+	{pattern: "_default", valid: true},
+	{pattern: "_foo", valid: false},
 }
 
 func (s *spaceSuite) TestSpaceNames(c *gc.C) {

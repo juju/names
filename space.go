@@ -17,6 +17,11 @@ var validSpace = regexp.MustCompile("^" + SpaceSnippet + "$")
 
 // IsValidSpace reports whether name is a valid space name.
 func IsValidSpace(name string) bool {
+	if name == "_default" {
+		// _default is a special case for the default name of
+		// juju's default space.
+		return true
+	}
 	return validSpace.MatchString(name)
 }
 
