@@ -9,6 +9,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/juju/errors"
 )
 
 const UnitTagKind = "unit"
@@ -18,7 +20,7 @@ const UnitTagKind = "unit"
 const minShortenedLength = 21
 
 // UnitSnippet defines the regexp for a valid Unit Id.
-const UnitSnippet = "(" + ApplicationSnippet + ")/" + NumberSnippet
+const UnitSnippet = "(" + ApplicationSnippet + ")/(" + NumberSnippet + ")"
 
 var validUnit = regexp.MustCompile("^" + UnitSnippet + "$")
 
@@ -76,6 +78,22 @@ func UnitApplication(unitName string) (string, error) {
 		return "", fmt.Errorf("%q is not a valid unit name", unitName)
 	}
 	return s[1], nil
+}
+
+// UnitNumber returns the number of the unit within the
+// application. It returns an error if unitName is not a valid unit
+// name.
+func UnitNumber(unitName string) (int, error) {
+	s := validUnit.FindStringSubmatch(unitName)
+	if s == nil {
+		return 0, fmt.Errorf("%q is not a valid unit name", unitName)
+	}
+	num, err := strconv.Atoi(s[2])
+	if err != nil {
+		// Shouldn't happen, the regexp checks for digits.
+		return 0, errors.Trace(err)
+	}
+	return num, nil
 }
 
 func tagFromUnitName(unitName string) (UnitTag, bool) {

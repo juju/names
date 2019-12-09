@@ -24,15 +24,16 @@ var unitNameTests = []struct {
 	pattern     string
 	valid       bool
 	application string
+	number      int
 }{
-	{pattern: "wordpress/42", valid: true, application: "wordpress"},
-	{pattern: "rabbitmq-server/123", valid: true, application: "rabbitmq-server"},
+	{pattern: "wordpress/42", valid: true, application: "wordpress", number: 42},
+	{pattern: "rabbitmq-server/123", valid: true, application: "rabbitmq-server", number: 123},
 	{pattern: "foo", valid: false},
 	{pattern: "foo/", valid: false},
 	{pattern: "bar/foo", valid: false},
 	{pattern: "20/20", valid: false},
 	{pattern: "foo-55", valid: false},
-	{pattern: "foo-bar/123", valid: true, application: "foo-bar"},
+	{pattern: "foo-bar/123", valid: true, application: "foo-bar", number: 123},
 	{pattern: "foo-bar/123/", valid: false},
 	{pattern: "foo-bar/123-not", valid: false},
 }
@@ -73,6 +74,21 @@ func (s *applicationSuite) TestUnitApplication(c *gc.C) {
 			result, err := names.UnitApplication(test.pattern)
 			c.Assert(err, gc.IsNil)
 			c.Assert(result, gc.Equals, test.application)
+		}
+	}
+}
+
+func (s *applicationSuite) TestUnitNumber(c *gc.C) {
+	for i, test := range unitNameTests {
+		c.Logf("test %d: %q", i, test.pattern)
+		if !test.valid {
+			expect := fmt.Sprintf("%q is not a valid unit name", test.pattern)
+			_, err := names.UnitNumber(test.pattern)
+			c.Assert(err, gc.ErrorMatches, expect)
+		} else {
+			result, err := names.UnitNumber(test.pattern)
+			c.Assert(err, gc.IsNil)
+			c.Assert(result, gc.Equals, test.number)
 		}
 	}
 }
