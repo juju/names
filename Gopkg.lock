@@ -43,11 +43,11 @@
   revision = "ce30eb24acd2c45a1bc42208835468ca619685a9"
 
 [[projects]]
-  digest = "1:449a76b82b8453dfa74bff12cbdeb391a18ca51d535f6882d386f07ba374e2b9"
+  digest = "0:"
   name = "github.com/juju/utils"
   packages = ["."]
   pruneopts = "UT"
-  revision = "bf9cc5bdd62dabc40b7f634b39a5e2dc44d44c45"
+  revision = "945c5cda3aa2a6986e89a4f32582c583cb776c9e"
 
 [[projects]]
   branch = "master"

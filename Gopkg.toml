@@ -34,7 +34,7 @@
   name = "github.com/juju/testing"
 
 [[constraint]]
-  revision = "bf9cc5bdd62dabc40b7f634b39a5e2dc44d44c45"
+  revision = "945c5cda3aa2a6986e89a4f32582c583cb776c9e"
   name = "github.com/juju/utils"
 
 [[constraint]]
