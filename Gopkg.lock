@@ -47,7 +47,7 @@
   name = "github.com/juju/utils"
   packages = ["."]
   pruneopts = "UT"
-  revision = "945c5cda3aa2a6986e89a4f32582c583cb776c9e"
+  revision = "d40c2fe1064788d512a6ed0f3c4fcaf0e42515c6"
 
 [[projects]]
   branch = "master"
