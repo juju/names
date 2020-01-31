@@ -35,6 +35,7 @@ var tagKindTests = []struct {
 	{tag: "ab01cd23-0123-4edc-9a8b-fedcba987654", err: `"ab01cd23-0123-4edc-9a8b-fedcba987654" is not a valid tag`},
 	{tag: "action-ab01cd23-0123-4edc-9a8b-fedcba987654", kind: names.ActionTagKind},
 	{tag: "action-1", kind: names.ActionTagKind},
+	{tag: "operation-1", kind: names.OperationTagKind},
 	{tag: "volume-0", kind: names.VolumeTagKind},
 	{tag: "storage-data-0", kind: names.StorageTagKind},
 	{tag: "filesystem-0", kind: names.FilesystemTagKind},
@@ -189,6 +190,11 @@ var parseTagTests = []struct {
 	expectType: names.ActionTag{},
 	resultId:   "1",
 }, {
+	tag:        "operation-1",
+	expectKind: names.OperationTagKind,
+	expectType: names.OperationTag{},
+	resultId:   "1",
+}, {
 	tag:        "volume-2",
 	expectKind: names.VolumeTagKind,
 	expectType: names.VolumeTag{},
@@ -277,6 +283,7 @@ var makeTag = map[string]func(string) names.Tag{
 	names.ModelTagKind:            func(tag string) names.Tag { return names.NewModelTag(tag) },
 	names.UserTagKind:             func(tag string) names.Tag { return names.NewUserTag(tag) },
 	names.ActionTagKind:           func(tag string) names.Tag { return names.NewActionTag(tag) },
+	names.OperationTagKind:        func(tag string) names.Tag { return names.NewOperationTag(tag) },
 	names.VolumeTagKind:           func(tag string) names.Tag { return names.NewVolumeTag(tag) },
 	names.FilesystemTagKind:       func(tag string) names.Tag { return names.NewFilesystemTag(tag) },
 	names.StorageTagKind:          func(tag string) names.Tag { return names.NewStorageTag(tag) },
