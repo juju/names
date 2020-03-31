@@ -10,11 +10,11 @@
   revision = "9c5c9712527c7986f012361e7d13756b4d99543d"
 
 [[projects]]
-  digest = "1:1261ccace00babbf02bb702e71c85c8e81f65bad7bdb98c12c7a409c14de1d86"
+  digest = "0:"
   name = "github.com/juju/errors"
   packages = ["."]
   pruneopts = "UT"
-  revision = "22422dad46e14561a0854ad42497a75af9b61909"
+  revision = "3fe23663418fc1d724868c84f21b7519bbac7441"
 
 [[projects]]
   branch = "master"
