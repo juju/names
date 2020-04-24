@@ -6,8 +6,8 @@ package names_test
 import (
 	gc "gopkg.in/check.v1"
 
+	"github.com/juju/names/v3"
 	jc "github.com/juju/testing/checkers"
-	"gopkg.in/juju/names.v3"
 )
 
 type actionSuite struct{}
