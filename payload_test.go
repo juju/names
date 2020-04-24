@@ -4,10 +4,9 @@
 package names_test
 
 import (
+	"github.com/juju/names/v4"
 	jc "github.com/juju/testing/checkers"
 	gc "gopkg.in/check.v1"
-
-	"github.com/juju/names/v3"
 )
 
 var _ = gc.Suite(&payloadSuite{})

@@ -7,9 +7,8 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/juju/names/v4"
 	gc "gopkg.in/check.v1"
-
-	"github.com/juju/names/v3"
 )
 
 type spaceSuite struct{}

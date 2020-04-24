@@ -6,9 +6,8 @@ package names_test
 import (
 	"strconv"
 
+	"github.com/juju/names/v4"
 	gc "gopkg.in/check.v1"
-
-	"github.com/juju/names/v3"
 )
 
 type tagSuite struct{}

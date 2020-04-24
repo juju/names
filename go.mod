@@ -1,4 +1,4 @@
-module github.com/juju/names/v3
+module github.com/juju/names/v4
 
 go 1.14
 
