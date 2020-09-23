@@ -4,7 +4,7 @@
 package names
 
 import (
-	"github.com/juju/utils"
+	"github.com/juju/utils/v2"
 )
 
 const IPAddressTagKind = "ipaddress"

@@ -8,7 +8,7 @@ import (
 	"regexp"
 
 	"github.com/juju/errors"
-	"github.com/juju/utils"
+	"github.com/juju/utils/v2"
 )
 
 const ActionTagKind = "action"
