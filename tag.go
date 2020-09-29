@@ -5,10 +5,24 @@ package names
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/juju/errors"
 	"github.com/juju/utils/v2"
+)
+
+const (
+	// UppercaseSnippet declares an non-compiled regex string for matching
+	// uppercase characters.
+	UppercaseSnippet = "[A-Z]"
+	// NumberSnippet is a non-compiled regexp that can be composed with other
+	// snippets for validating small number sequences.
+	NumberSnippet = "(?:0|[1-9][0-9]*)"
+)
+
+var (
+	uppercaseChar = regexp.MustCompile(UppercaseSnippet)
 )
 
 // A Tag tags things that are taggable. Its purpose is to uniquely

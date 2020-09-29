@@ -87,3 +87,28 @@ func (s *applicationSuite) TestParseApplicationTag(c *gc.C) {
 		c.Check(got, gc.Equals, t.expected)
 	}
 }
+
+func (s *applicationSuite) TestValidateApplicationName(c *gc.C) {
+	tests := []struct {
+		Name  string
+		Error string
+	}{
+		{
+			Name:  "application-1",
+			Error: `invalid application name "application-1", unexpected number\(s\) found after last hyphen`,
+		},
+		{
+			Name:  "Application",
+			Error: `invalid application name "Application", unexpected uppercase character`,
+		},
+		{
+			Name:  "app£name",
+			Error: `invalid application name "app£name", unexpected character £`,
+		},
+	}
+	for i, test := range tests {
+		c.Logf("test %d", i)
+		err := names.ValidateApplicationName(test.Name)
+		c.Assert(err, gc.ErrorMatches, test.Error)
+	}
+}
