@@ -13,7 +13,7 @@ import (
 const CloudCredentialTagKind = "cloudcred"
 
 var (
-	cloudCredentialNameSnippet = "[a-zA-Z][a-zA-Z0-9.@_+-]*"
+	cloudCredentialNameSnippet = "[a-zA-Z0-9][a-zA-Z0-9.@_+-]*"
 	validCloudCredentialName   = regexp.MustCompile("^" + cloudCredentialNameSnippet + "$")
 	validCloudCredential       = regexp.MustCompile(
 		"^" +
