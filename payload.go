@@ -6,7 +6,7 @@ package names
 import (
 	"regexp"
 
-	"github.com/juju/utils/v2"
+	"github.com/juju/utils/v3"
 )
 
 const (
