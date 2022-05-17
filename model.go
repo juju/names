@@ -7,7 +7,10 @@ import (
 	"regexp"
 )
 
-const ModelTagKind = "model"
+const (
+	ModelTagKind       = "model"
+	shortModelIdLength = 6
+)
 
 // ModelTag represents a tag used to describe a model.
 type ModelTag struct {
@@ -37,9 +40,10 @@ func ParseModelTag(modelTag string) (ModelTag, error) {
 	return et, nil
 }
 
-func (t ModelTag) String() string { return t.Kind() + "-" + t.Id() }
-func (t ModelTag) Kind() string   { return ModelTagKind }
-func (t ModelTag) Id() string     { return t.uuid }
+func (t ModelTag) String() string  { return t.Kind() + "-" + t.Id() }
+func (t ModelTag) Kind() string    { return ModelTagKind }
+func (t ModelTag) Id() string      { return t.uuid }
+func (t ModelTag) ShortId() string { return t.uuid[:shortModelIdLength] }
 
 // IsValidModel returns whether id is a valid model UUID.
 func IsValidModel(id string) bool {
