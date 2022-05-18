@@ -2,7 +2,7 @@
 # Makefile for juju/names
 #
 
-PROJECT := github.com/juju/names/v3
+PROJECT := github.com/juju/names/v4
 PROJECT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 PROJECT_PACKAGES := $(shell go list $(PROJECT)/... | grep -v /acceptancetests/)
 TEST_TIMEOUT := 600s
