@@ -2,7 +2,7 @@
 # Makefile for juju/names
 #
 
-PROJECT := github.com/juju/names/v3
+PROJECT := github.com/juju/names/v4
 PROJECT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 PROJECT_PACKAGES := $(shell go list $(PROJECT)/... | grep -v /acceptancetests/)
 TEST_TIMEOUT := 600s
@@ -19,4 +19,6 @@ go-build:
 	@go build $(PROJECT_PACKAGES)
 
 test: build
-	go test $(CHECK_ARGS) -test.timeout=$(TEST_TIMEOUT) $(PROJECT_PACKAGES) -check.v
+	go test -v $(CHECK_ARGS) -test.timeout=$(TEST_TIMEOUT) $(PROJECT_PACKAGES) -check.v
+
+check: test
