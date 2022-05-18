@@ -19,4 +19,6 @@ go-build:
 	@go build $(PROJECT_PACKAGES)
 
 test: build
-	go test $(CHECK_ARGS) -test.timeout=$(TEST_TIMEOUT) $(PROJECT_PACKAGES) -check.v
+	go test -v $(CHECK_ARGS) -test.timeout=$(TEST_TIMEOUT) $(PROJECT_PACKAGES) -check.v
+
+check: test
