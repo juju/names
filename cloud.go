@@ -15,13 +15,23 @@ var (
 	validCloud   = regexp.MustCompile("^" + cloudSnippet + "$")
 )
 
+// CloudTag is a names.Tag the represents a Cloud in the Juju domain.
 type CloudTag struct {
 	id string
 }
 
+// String implements Tag.String.
 func (t CloudTag) String() string { return t.Kind() + "-" + t.id }
-func (t CloudTag) Kind() string   { return CloudTagKind }
-func (t CloudTag) Id() string     { return t.id }
+
+// Kind implements Tag.Kind returning a CloudTag's unique kind value.
+func (t CloudTag) Kind() string { return CloudTagKind }
+
+// Id returns the id of this CloudTag. This is the name of the cloud as
+// represented by Juju. Examples:
+// aws
+// azure
+// kubernetes
+func (t CloudTag) Id() string { return t.id }
 
 // NewCloudTag returns the tag for the cloud with the given ID.
 // It will panic if the given cloud ID is not valid.
