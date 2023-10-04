@@ -13,6 +13,8 @@ import (
 )
 
 const (
+	ErrorNotValid = errors.ConstError("not a valid tag")
+
 	// UppercaseSnippet declares an non-compiled regex string for matching
 	// uppercase characters.
 	UppercaseSnippet = "[A-Z]"
@@ -233,9 +235,9 @@ func ParseTag(tag string) (Tag, error) {
 
 func invalidTagError(tag, kind string) error {
 	if kind != "" {
-		return fmt.Errorf("%q is not a valid %s tag", tag, kind)
+		return fmt.Errorf("%q is %w of kind %s", tag, ErrorNotValid, kind)
 	}
-	return fmt.Errorf("%q is not a valid tag", tag)
+	return fmt.Errorf("%q is %w", tag, ErrorNotValid)
 }
 
 // ReadableString returns a human-readable string from the tag passed in.

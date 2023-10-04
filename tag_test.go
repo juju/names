@@ -87,7 +87,7 @@ var parseTagTests = []struct {
 	tag:        "machine-#",
 	expectKind: names.MachineTagKind,
 	expectType: names.MachineTag{},
-	resultErr:  `"machine-#" is not a valid machine tag`,
+	resultErr:  `"machine-#" is not a valid tag of kind machine`,
 }, {
 	tag:        "unit-wordpress-0",
 	expectKind: names.UnitTagKind,
@@ -102,7 +102,7 @@ var parseTagTests = []struct {
 	tag:        "unit-#",
 	expectKind: names.UnitTagKind,
 	expectType: names.UnitTag{},
-	resultErr:  `"unit-#" is not a valid unit tag`,
+	resultErr:  `"unit-#" is not a valid tag of kind unit`,
 }, {
 	tag:        "application-wordpress",
 	expectKind: names.ApplicationTagKind,
@@ -112,7 +112,7 @@ var parseTagTests = []struct {
 	tag:        "application-#",
 	expectKind: names.ApplicationTagKind,
 	expectType: names.ApplicationTag{},
-	resultErr:  `"application-#" is not a valid application tag`,
+	resultErr:  `"application-#" is not a valid tag of kind application`,
 }, {
 	tag:        "applicationoffer-hosted-mysql",
 	expectKind: names.ApplicationOfferTagKind,
@@ -122,7 +122,7 @@ var parseTagTests = []struct {
 	tag:        "applicationoffer-#",
 	expectKind: names.ApplicationOfferTagKind,
 	expectType: names.ApplicationOfferTag{},
-	resultErr:  `"applicationoffer-#" is not a valid applicationoffer tag`,
+	resultErr:  `"applicationoffer-#" is not a valid tag of kind applicationoffer`,
 }, {
 	tag:        "environment-f47ac10b-58cc-4372-a567-0e02b2c3d479",
 	expectKind: names.EnvironTagKind,
@@ -147,12 +147,12 @@ var parseTagTests = []struct {
 	tag:        "environment-/",
 	expectKind: names.EnvironTagKind,
 	expectType: names.EnvironTag{},
-	resultErr:  `"environment-/" is not a valid environment tag`,
+	resultErr:  `"environment-/" is not a valid tag of kind environment`,
 }, {
 	tag:        "model-/",
 	expectKind: names.ModelTagKind,
 	expectType: names.ModelTag{},
-	resultErr:  `"model-/" is not a valid model tag`,
+	resultErr:  `"model-/" is not a valid tag of kind model`,
 }, {
 	tag:        "user-foo",
 	expectKind: names.UserTagKind,
@@ -167,17 +167,17 @@ var parseTagTests = []struct {
 	tag:        "user-/",
 	expectKind: names.UserTagKind,
 	expectType: names.UserTag{},
-	resultErr:  `"user-/" is not a valid user tag`,
+	resultErr:  `"user-/" is not a valid tag of kind user`,
 }, {
 	tag:        "action-00000000-abcd",
 	expectKind: names.ActionTagKind,
 	expectType: names.ActionTag{},
-	resultErr:  `"action-00000000-abcd" is not a valid action tag`,
+	resultErr:  `"action-00000000-abcd" is not a valid tag of kind action`,
 }, {
 	tag:        "action-00000033",
 	expectKind: names.ActionTagKind,
 	expectType: names.ActionTag{},
-	resultErr:  `"action-00000033" is not a valid action tag`,
+	resultErr:  `"action-00000033" is not a valid tag of kind action`,
 }, {
 	tag:        "action-abedaf33-3212-4fde-aeca-87356432deca",
 	expectKind: names.ActionTagKind,
@@ -213,7 +213,7 @@ var parseTagTests = []struct {
 	resultErr: `"foo" is not a valid tag`,
 }, {
 	tag:       "ipaddress-",
-	resultErr: `"ipaddress-" is not a valid ipaddress tag`,
+	resultErr: `"ipaddress-" is not a valid tag of kind ipaddress`,
 }, {
 	tag:        "ipaddress-42424242-1111-2222-3333-0123456789ab",
 	expectKind: names.IPAddressTagKind,
@@ -221,7 +221,7 @@ var parseTagTests = []struct {
 	resultId:   "42424242-1111-2222-3333-0123456789ab",
 }, {
 	tag:       "subnet-",
-	resultErr: `"subnet-" is not a valid subnet tag`,
+	resultErr: `"subnet-" is not a valid tag of kind subnet`,
 }, {
 	tag:        "subnet-16",
 	expectKind: names.SubnetTagKind,
@@ -229,7 +229,7 @@ var parseTagTests = []struct {
 	resultId:   "16",
 }, {
 	tag:       "space-",
-	resultErr: `"space-" is not a valid space tag`,
+	resultErr: `"space-" is not a valid tag of kind space`,
 }, {
 	tag:        "space-myspace1",
 	expectKind: names.SpaceTagKind,
@@ -254,7 +254,7 @@ var parseTagTests = []struct {
 	tag:        "caasmodel-/",
 	expectKind: names.CAASModelTagKind,
 	expectType: names.CAASModelTag{},
-	resultErr:  `"caasmodel-/" is not a valid caasmodel tag`,
+	resultErr:  `"caasmodel-/" is not a valid tag of kind caasmodel`,
 }, {
 	tag:        "controller-f47ac10b-58cc-4372-a567-0e02b2c3d479",
 	expectKind: names.ControllerTagKind,
@@ -269,7 +269,7 @@ var parseTagTests = []struct {
 	tag:        "controller-invalid",
 	expectKind: names.ControllerTagKind,
 	expectType: names.ControllerTag{},
-	resultErr:  `"controller-invalid" is not a valid controller tag`,
+	resultErr:  `"controller-invalid" is not a valid tag of kind controller`,
 }}
 
 var makeTag = map[string]func(string) names.Tag{

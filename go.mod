@@ -3,7 +3,7 @@ module github.com/juju/names/v4
 go 1.17
 
 require (
-	github.com/juju/errors v0.0.0-20220203013757-bd733f3c86b9
+	github.com/juju/errors v1.0.0
 	github.com/juju/testing v0.0.0-20220203020004-a0ff61f03494
 	github.com/juju/utils/v3 v3.0.0-20220203023959-c3fbc78a33b0
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
