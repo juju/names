@@ -3,21 +3,11 @@
 
 package names
 
-import (
-	"regexp"
-)
-
 const ApplicationOfferTagKind = "applicationoffer"
 
-const (
-	ApplicationOfferSnippet = "(?:[a-z][a-z0-9]*(?:-[a-z0-9]*[a-z][a-z0-9]*)*)"
-)
-
-var validApplicationOffer = regexp.MustCompile("^" + ApplicationOfferSnippet + "$")
-
 // IsValidApplicationOffer returns whether name is a valid application offer name.
-func IsValidApplicationOffer(name string) bool {
-	return validApplicationOffer.MatchString(name)
+func IsValidApplicationOffer(uuid string) bool {
+	return validUUID.MatchString(uuid)
 }
 
 type ApplicationOfferTag struct {

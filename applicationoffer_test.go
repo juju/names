@@ -6,7 +6,7 @@ package names_test
 import (
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names/v4"
+	"github.com/juju/names/v5"
 )
 
 type applicationOfferSuite struct{}
@@ -21,8 +21,8 @@ var parseApplicationOfferTagTests = []struct {
 	tag: "",
 	err: names.InvalidTagError("", ""),
 }, {
-	tag:      "applicationoffer-dave",
-	expected: names.NewApplicationOfferTag("dave"),
+	tag:      "applicationoffer-f47ac10b-58cc-4372-a567-0e02b2c3d479",
+	expected: names.NewApplicationOfferTag("f47ac10b-58cc-4372-a567-0e02b2c3d479"),
 }, {
 	tag: "dave",
 	err: names.InvalidTagError("dave", ""),

@@ -7,7 +7,7 @@ import (
 	"github.com/juju/utils/v3"
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names/v4"
+	"github.com/juju/names/v5"
 )
 
 type ipAddressSuite struct{}
