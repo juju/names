@@ -6,8 +6,9 @@ package names_test
 import (
 	"strconv"
 
-	"github.com/juju/names/v4"
 	gc "gopkg.in/check.v1"
+
+	"github.com/juju/names/v5"
 )
 
 type tagSuite struct{}
@@ -22,7 +23,7 @@ var tagKindTests = []struct {
 	{tag: "unit-wordpress-42", kind: names.UnitTagKind},
 	{tag: "machine-42", kind: names.MachineTagKind},
 	{tag: "application-foo", kind: names.ApplicationTagKind},
-	{tag: "applicationoffer-foo", kind: names.ApplicationOfferTagKind},
+	{tag: "applicationoffer-f47ac10b-58cc-4372-a567-0e02b2c3d479", kind: names.ApplicationOfferTagKind},
 	{tag: "environment-42", kind: names.EnvironTagKind},
 	{tag: "model-42", kind: names.ModelTagKind},
 	{tag: "user-admin", kind: names.UserTagKind},
@@ -114,10 +115,10 @@ var parseTagTests = []struct {
 	expectType: names.ApplicationTag{},
 	resultErr:  `"application-#" is not a valid application tag`,
 }, {
-	tag:        "applicationoffer-hosted-mysql",
+	tag:        "applicationoffer-f47ac10b-58cc-4372-a567-0e02b2c3d479",
 	expectKind: names.ApplicationOfferTagKind,
 	expectType: names.ApplicationOfferTag{},
-	resultId:   "hosted-mysql",
+	resultId:   "f47ac10b-58cc-4372-a567-0e02b2c3d479",
 }, {
 	tag:        "applicationoffer-#",
 	expectKind: names.ApplicationOfferTagKind,
