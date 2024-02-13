@@ -39,6 +39,12 @@ func (s *userSuite) TestUserTag(c *gc.C) {
 			name:     "bob",
 			domain:   "foo",
 			username: "bob@foo",
+		}, {
+			input:    "bob_bob@foo",
+			string:   "user-bob_bob@foo",
+			name:     "bob_bob",
+			domain:   "foo",
+			username: "bob_bob@foo",
 		},
 	} {
 		c.Logf("test %d: %s", i, t.input)
@@ -63,6 +69,10 @@ var withDomainTests = []struct {
 	id:       "bob@local",
 	domain:   "foo",
 	expectId: "bob@foo",
+}, {
+	id:       "jimm_bob",
+	domain:   "foo_bar",
+	expectId: "jimm_bob@foo_bar",
 }, {
 	id:     "bob@local",
 	domain: "",
@@ -115,7 +125,7 @@ func (s *userSuite) TestIsValidUser(c *gc.C) {
 		{"foo bar", false},
 		{"bar{}", false},
 		{"bar+foo", true},
-		{"bar_foo", false},
+		{"bar_foo", true},
 		{"bar!", false},
 		{"bar^", false},
 		{"bar*", false},
@@ -130,6 +140,7 @@ func (s *userSuite) TestIsValidUser(c *gc.C) {
 		{"bar@", false},
 		{"@local", false},
 		{"not/valid", false},
+		{"bob_bob@test.com", true},
 	} {
 		c.Logf("test %d: %s", i, t.string)
 		c.Assert(names.IsValidUser(t.string), gc.Equals, t.expect, gc.Commentf("%s", t.string))
@@ -162,7 +173,7 @@ func (s *userSuite) TestIsValidUserNameOrDomain(c *gc.C) {
 		{"foo bar", false},
 		{"bar{}", false},
 		{"bar+foo", true},
-		{"bar_foo", false},
+		{"bar_foo", true},
 		{"bar!", false},
 		{"bar^", false},
 		{"bar*", false},
@@ -203,6 +214,9 @@ func (s *userSuite) TestParseUserTag(c *gc.C) {
 	}, {
 		tag:      "user-dave@foobar",
 		expected: names.NewUserTag("dave@foobar"),
+	}, {
+		tag:      "user-dave_bob@foo_bar",
+		expected: names.NewUserTag("dave_bob@foo_bar"),
 	}, {
 		tag: "dave",
 		err: names.InvalidTagError("dave", ""),
