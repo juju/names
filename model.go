@@ -22,6 +22,9 @@ var validUUID = regexp.MustCompile(`[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]
 // Lowercase letters, digits and (non-leading) hyphens, as per LP:1568944 #5.
 var validModelName = regexp.MustCompile(`^[a-z0-9]+[a-z0-9-]*$`)
 
+// Maximum number of characters for the model name.
+const MaxCharactersModelName = 128
+
 // NewModelTag returns the tag of an model with the given model UUID.
 func NewModelTag(uuid string) ModelTag {
 	return ModelTag{uuid: uuid}
@@ -52,5 +55,5 @@ func IsValidModel(id string) bool {
 
 // IsValidModelName returns whether name is a valid string safe for a model name.
 func IsValidModelName(name string) bool {
-	return validModelName.MatchString(name)
+	return len(name) <= MaxCharactersModelName && validModelName.MatchString(name)
 }

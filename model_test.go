@@ -4,6 +4,8 @@
 package names_test
 
 import (
+	"strings"
+
 	"github.com/juju/names/v5"
 	gc "gopkg.in/check.v1"
 )
@@ -63,6 +65,14 @@ var modelNameTest = []struct {
 	name:     "foo-bar",
 	expected: true,
 }, {
+	test:     "Non-hyphenated true",
+	name:     "foobar",
+	expected: true,
+}, {
+	test:     "Start hyphenated false",
+	name:     "-foobar",
+	expected: false,
+}, {
 	test:     "Whitespsce false",
 	name:     "foo bar",
 	expected: false,
@@ -73,6 +83,14 @@ var modelNameTest = []struct {
 }, {
 	test:     "At sign false",
 	name:     "foo@bar",
+	expected: false,
+}, {
+	test:     "Longest model name true",
+	name:     strings.Repeat("a", names.MaxCharactersModelName),
+	expected: true,
+}, {
+	test:     "Longest+1 model name false",
+	name:     strings.Repeat("a", names.MaxCharactersModelName+1),
 	expected: false,
 }}
 
