@@ -8,7 +8,7 @@ import (
 
 	gc "gopkg.in/check.v1"
 
-	"github.com/juju/names/v5"
+	"github.com/juju/names/v6"
 )
 
 type machineSuite struct{}

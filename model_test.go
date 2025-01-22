@@ -4,7 +4,7 @@
 package names_test
 
 import (
-	"github.com/juju/names/v5"
+	"github.com/juju/names/v6"
 	gc "gopkg.in/check.v1"
 )
 
