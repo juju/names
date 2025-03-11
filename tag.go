@@ -19,6 +19,9 @@ const (
 	// NumberSnippet is a non-compiled regexp that can be composed with other
 	// snippets for validating small number sequences.
 	NumberSnippet = "(?:0|[1-9][0-9]*)"
+	// UUIDv7Snippet is a non-compiled regexp that can be composed with other
+	// snippets for validating UUID v7 strings.
+	UUIDv7Snippet = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 )
 
 var (
