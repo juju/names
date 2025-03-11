@@ -10,11 +10,16 @@ import (
 
 const SubnetTagKind = "subnet"
 
-var validSubnet = regexp.MustCompile("^" + NumberSnippet + "$")
+var (
+	validSubnet = regexp.MustCompile("^" + UUIDv7Snippet + "$")
+	// Deprecated: Juju 4.0 should have subnet IDs in the form of UUIDv7.
+	fallbackValidSubnet = regexp.MustCompile("^" + NumberSnippet + "$")
+)
 
 // IsValidSubnet returns whether id is a valid subnet id.
 func IsValidSubnet(id string) bool {
-	return validSubnet.MatchString(id)
+	return validSubnet.MatchString(id) ||
+		fallbackValidSubnet.MatchString(id)
 }
 
 type SubnetTag struct {
