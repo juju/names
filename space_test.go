@@ -58,11 +58,8 @@ var parseSpaceTagTests = []struct {
 	tag: "",
 	err: names.InvalidTagError("", ""),
 }, {
-	tag:      "space-1",
-	expected: names.NewSpaceTag("1"),
-}, {
-	tag:      "space-0195847b-95bb-7ca1-a7ee-2211d802d5b3",
-	expected: names.NewSpaceTag("0195847b-95bb-7ca1-a7ee-2211d802d5b3"),
+	tag:      "space-alpha",
+	expected: names.NewSpaceTag("alpha"),
 }, {
 	tag: "-space1",
 	err: names.InvalidTagError("-space1", ""),

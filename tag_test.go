@@ -42,7 +42,7 @@ var tagKindTests = []struct {
 	{tag: "ipaddress", err: `"ipaddress" is not a valid tag`},
 	{tag: "ipaddress-42424242-1111-2222-3333-0123456789ab", kind: names.IPAddressTagKind},
 	{tag: "subnet", err: `"subnet" is not a valid tag`},
-	{tag: "subnet-16", kind: names.SubnetTagKind},
+	{tag: "subnet-0195847b-95bb-7ca1-a7ee-2211d802d5b3", kind: names.SubnetTagKind},
 	{tag: "space", err: `"space" is not a valid tag`},
 	{tag: "space-42", kind: names.SpaceTagKind},
 	{tag: "cloud", err: `"cloud" is not a valid tag`},
@@ -224,10 +224,10 @@ var parseTagTests = []struct {
 	tag:       "subnet-",
 	resultErr: `"subnet-" is not a valid subnet tag`,
 }, {
-	tag:        "subnet-16",
+	tag:        "subnet-0195847b-95bb-7ca1-a7ee-2211d802d5b3",
 	expectKind: names.SubnetTagKind,
 	expectType: names.SubnetTag{},
-	resultId:   "16",
+	resultId:   "0195847b-95bb-7ca1-a7ee-2211d802d5b3",
 }, {
 	tag:       "space-",
 	resultErr: `"space-" is not a valid space tag`,
