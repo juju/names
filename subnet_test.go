@@ -36,6 +36,9 @@ var parseSubnetTagTests = []struct {
 	tag: "",
 	err: names.InvalidTagError("", ""),
 }, {
+	tag:      "subnet-16",
+	expected: names.NewSubnetTag("16"),
+}, {
 	tag:      "subnet-0195847b-95bb-7ca1-a7ee-2211d802d5b3",
 	expected: names.NewSubnetTag("0195847b-95bb-7ca1-a7ee-2211d802d5b3"),
 }, {

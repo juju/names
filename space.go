@@ -13,11 +13,18 @@ const (
 	SpaceSnippet = "(?:[a-z0-9]+(?:-[a-z0-9]+)*)"
 )
 
-var validSpace = regexp.MustCompile("^" + SpaceSnippet + "$")
+var (
+	validSpace = regexp.MustCompile("^" + UUIDv7Snippet + "$")
+	// Deprecated: Juju 4 should have space IDs in the form of UUIDv7, but we
+	// use this fallback to continue supporting the Juju 4+ client against
+	// Juju 3.x controllers.
+	fallbackValidSpace = regexp.MustCompile("^" + SpaceSnippet + "$")
+)
 
 // IsValidSpace reports whether name is a valid space name.
 func IsValidSpace(name string) bool {
-	return validSpace.MatchString(name)
+	return validSpace.MatchString(name) ||
+		fallbackValidSpace.MatchString(name)
 }
 
 type SpaceTag struct {
