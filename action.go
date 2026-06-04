@@ -8,7 +8,6 @@ import (
 	"regexp"
 
 	"github.com/juju/errors"
-	"github.com/juju/utils/v3"
 )
 
 const ActionTagKind = "action"
@@ -27,7 +26,7 @@ type ActionTag struct {
 // NewActionTag returns the tag of an action with the given id (UUID).
 func NewActionTag(id string) ActionTag {
 	// Actions v1 use a UUID for the id.
-	if uuid, err := utils.UUIDFromString(id); err == nil {
+	if uuid, err := uuidFromString(id); err == nil {
 		return ActionTag{ID: uuid.String()}
 	}
 
@@ -59,7 +58,7 @@ func (t ActionTag) Id() string     { return t.ID }
 func IsValidAction(id string) bool {
 	// UUID is for actions v1
 	// N is for actions V2.
-	return utils.IsValidUUIDString(id) ||
+	return isValidUUIDString(id) ||
 		validActionV2.MatchString(id)
 }
 

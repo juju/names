@@ -3,20 +3,16 @@
 
 package names
 
-import (
-	"github.com/juju/utils/v3"
-)
-
 const IPAddressTagKind = "ipaddress"
 
 // IsValidIPAddress returns whether id is a valid IP address ID.
 // Here it simply is checked if it is a valid UUID.
 func IsValidIPAddress(id string) bool {
-	return utils.IsValidUUIDString(id)
+	return isValidUUIDString(id)
 }
 
 type IPAddressTag struct {
-	id utils.UUID
+	id uuid
 }
 
 func (t IPAddressTag) String() string { return t.Kind() + "-" + t.id.String() }
@@ -25,11 +21,11 @@ func (t IPAddressTag) Id() string     { return t.id.String() }
 
 // NewIPAddressTag returns the tag for the IP address with the given ID (UUID).
 func NewIPAddressTag(id string) IPAddressTag {
-	uuid, err := utils.UUIDFromString(id)
+	u, err := uuidFromString(id)
 	if err != nil {
 		panic(err)
 	}
-	return IPAddressTag{id: uuid}
+	return IPAddressTag{id: u}
 }
 
 // ParseIPAddressTag parses an IP address tag string.
