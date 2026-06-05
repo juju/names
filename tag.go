@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/juju/errors"
-	"github.com/juju/utils/v3"
 )
 
 const (
@@ -185,7 +184,7 @@ func ParseTag(tag string) (Tag, error) {
 		}
 		return NewFilesystemTag(id), nil
 	case IPAddressTagKind:
-		uuid, err := utils.UUIDFromString(id)
+		uuid, err := uuidFromString(id)
 		if err != nil {
 			return nil, invalidTagError(tag, kind)
 		}

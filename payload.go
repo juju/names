@@ -5,8 +5,6 @@ package names
 
 import (
 	"regexp"
-
-	"github.com/juju/utils/v3"
 )
 
 const (
@@ -28,7 +26,7 @@ func IsValidPayload(id string) bool {
 
 // For compatibility with Juju 1.25, UUIDs are also supported.
 func isValidPayload(id string) bool {
-	return IsValidPayload(id) || utils.IsValidUUIDString(id)
+	return IsValidPayload(id) || isValidUUIDString(id)
 }
 
 // PayloadTag represents a charm payload.

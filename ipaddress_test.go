@@ -4,7 +4,6 @@
 package names_test
 
 import (
-	"github.com/juju/utils/v3"
 	gc "gopkg.in/check.v1"
 
 	"github.com/juju/names/v6"
@@ -15,13 +14,13 @@ type ipAddressSuite struct{}
 var _ = gc.Suite(&ipAddressSuite{})
 
 func (s *ipAddressSuite) TestNewIPAddressTag(c *gc.C) {
-	uuid := utils.MustNewUUID()
-	tag := names.NewIPAddressTag(uuid.String())
+	uuidStr := "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+	tag := names.NewIPAddressTag(uuidStr)
 	parsed, err := names.ParseIPAddressTag(tag.String())
 	c.Assert(err, gc.IsNil)
 	c.Assert(parsed.Kind(), gc.Equals, names.IPAddressTagKind)
-	c.Assert(parsed.Id(), gc.Equals, uuid.String())
-	c.Assert(parsed.String(), gc.Equals, names.IPAddressTagKind+"-"+uuid.String())
+	c.Assert(parsed.Id(), gc.Equals, uuidStr)
+	c.Assert(parsed.String(), gc.Equals, names.IPAddressTagKind+"-"+uuidStr)
 
 	f := func() {
 		tag = names.NewIPAddressTag("42")
